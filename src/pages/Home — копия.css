@@ -1,0 +1,46 @@
+.container {
+  background-color: black;
+  color: yellow;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.button {
+  background-color: yellow;
+  color: black;
+  border: none;
+  padding: 15px 30px;
+  margin: 10px 0;
+  width: 220px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.footer {
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Mobil moslashuv */
+@media (max-width: 500px) {
+  .title {
+    font-size: 28px;
+  }
+  .button {
+    width: 100%;
+  }
+}
