@@ -1,0 +1,21 @@
+.ishchi-kerak-container { padding: 16px; background-color: #111; min-height: 100vh; color: white; font-family: sans-serif; }
+
+.top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+.tarix-button { padding: 6px 12px; font-size: 14px; background-color: #333; color: white; border: 1px solid #666; border-radius: 6px; cursor: pointer; }
+
+.filter-section { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+
+.filter-section label { font-size: 14px; margin-right: 4px; }
+
+.filter-section select { padding: 4px 8px; border-radius: 6px; border: 1px solid #888; }
+
+.workers-list { display: flex; flex-direction: column; gap: 16px; }
+
+.worker-card { background-color: #222; border-radius: 8px; padding: 12px; display: flex; gap: 12px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.05); }
+
+.worker-card .avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #555; }
+
+.worker-info h3 { margin: 0; font-size: 16px; color: #fff; }
+
+.worker-info p { margin: 2px 0; font-size: 14px; color: #ccc; }

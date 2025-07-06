@@ -29,7 +29,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 15x;
+  gap: 15px;
 }
 
 .user-name {
@@ -76,6 +76,8 @@
 .status-btn.band {
   background-color: gray;
   color: white;
+  font-weight: bold;
+  cursor: pointer
 }
 
 .timer {
@@ -94,4 +96,17 @@
   color: white;
   font-weight: bold;
   cursor: pointer;
+}
+
+.status-btn.expired {
+  background-color: #ff4444; /* qizil */
+  color: white;
+  cursor: pointer;
+  pointer-events: auto; /* ❗️Bosilishini ta'minlaydi */
+  font-weight: bold;
+  border: none;
+  padding: 14px 28px;
+  font-size: 18px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
 }

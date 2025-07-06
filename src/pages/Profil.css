@@ -1,0 +1,27 @@
+/* Profil.css */
+
+.profil-container { max-width: 400px; margin: 0 auto; background-color: #1f2937; padding: 20px; border-radius: 12px; color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); }
+
+.avatar-wrapper { display: flex; justify-content: center; position: relative; margin-bottom: 20px; }
+
+.avatar-wrapper img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
+
+.avatar-wrapper span { position: absolute; bottom: 0; right: 0; background-color: #374151; color: #d1d5db; padding: 2px 6px; font-size: 12px; border-radius: 6px; }
+
+.info-box { background-color: #374151; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+
+.info-box label { font-size: 12px; color: #9ca3af; }
+
+.info-box p { font-size: 16px; font-weight: 600; }
+
+textarea { width: 100%; padding: 10px; border-radius: 8px; background-color: #1f2937; color: white; border: 1px solid #4b5563; min-height: 80px; }
+
+.save-button, .edit-button { width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
+
+.save-button { background-color: #10b981; margin-top: 10px; }
+
+.save-button:hover { background-color: #059669; }
+
+.edit-button { background-color: #3b82f6; }
+
+.edit-button:hover { background-color: #2563eb; }
