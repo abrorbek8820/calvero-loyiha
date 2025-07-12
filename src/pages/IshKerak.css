@@ -144,3 +144,12 @@ body { display: flex; justify-content: center; align-items: center; }
     box-sizing: border-box;
   }
 }
+
+.status-btn.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  background: #cccccc !important;
+  color: #666666 !important;
+  box-shadow: none;
+  cursor: not-allowed;
+}

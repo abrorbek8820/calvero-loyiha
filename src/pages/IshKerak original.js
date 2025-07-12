@@ -13,7 +13,6 @@ function IshKerak() {
   const navigate = useNavigate();
   const phone = localStorage.getItem('userPhone');
   const [theme, setTheme] = useState('light');
-  const [loadingUser, setLoadingUser] = useState(true);
   
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
   useEffect(() => { fetchUserData(); }, []);
@@ -53,7 +52,7 @@ if (data) {
     const remaining = Math.max(0, total - timePassed);
     setTimeLeft(remaining);
   }
-} setLoadingUser(false);
+}
 
 };
 
@@ -107,22 +106,14 @@ return ( <div className="ishkerak-container"> <div className="top-section"> <img
 
   <div className="center-section">
     {status === 'offline' ? (
-  <button
-    className={`status-btn start ${loadingUser ? 'disabled' : ''}`}
-    onClick={handleOnlineClick}
-    disabled={loadingUser}
-  >
-    {loadingUser ? 'START' : 'START'}
-  </button>
-) : (
-  <button
-    className={`status-btn ${isListed ? 'online' : 'band'}`}
-    onClick={toggleListed}
-    disabled={timeLeft <= 60}
-  >
-    {isListed ? 'ONLINE' : 'BAND'}
-  </button>
-)}
+      <button className="status-btn start" onClick={handleOnlineClick}>
+        START
+      </button>
+    ) : (
+      <button className={`status-btn ${isListed ? 'online' : 'band'}`} onClick={toggleListed} disabled={timeLeft <= 60}>
+        {isListed ? 'ONLINE' : 'BAND'}
+      </button>
+    )}
 
     {status === 'online' && (
       <div className="timer">
