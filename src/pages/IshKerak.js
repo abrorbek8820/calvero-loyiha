@@ -14,7 +14,16 @@ function IshKerak() {
   const phone = localStorage.getItem('userPhone');
   const [theme, setTheme] = useState('light');
   const [loadingUser, setLoadingUser] = useState(true);
-  
+  const statusRef = useRef(status);
+  const timeLeftRef = useRef(timeLeft);
+
+  useEffect(() => {
+  statusRef.current = status;
+}, [status]);
+
+useEffect(() => {
+  timeLeftRef.current = timeLeft;
+}, [timeLeft]);
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
   useEffect(() => { fetchUserData(); }, []);
   useEffect(() => {
@@ -34,7 +43,15 @@ useEffect(() => { if (timeLeft > 0) { const interval = setInterval(() => { setTi
 
 
 
-const fetchUserData = async () => { const { data } = await supabase .from('workers') .select('*') .eq('phone', phone) .maybeSingle();
+const fetchUserData = async () => { const { data, error } = await supabase .from('workers') .select('*') .eq('phone', phone) .maybeSingle();
+
+console.log("UPDATE NATIJASI:", data.status);
+
+if (!error && data) {
+  console.log("✅ YANGILANDI:", data);
+} else {
+  console.log("❌ SUPABASE XATOLIK:", error);
+}
 
 if (data) {
   setUserName(data.name);
@@ -81,9 +98,35 @@ if (!error) {
   setStatus('online');
   setIsListed(true);
   setTimeLeft(180);
+
+  setTimeout(() => {
+    fetchUserData();
+  }, 300);
+
+  
 }
 
 };
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log("🔍 Interval: ", {
+      status: statusRef.current,
+      timeLeft: timeLeftRef.current
+    });
+
+    if (statusRef.current === 'online' && timeLeftRef.current > 60) {
+      console.log("✅ fetchUserData chaqirildi");
+      fetchUserData();
+    } else {
+      console.log("⛔ Skip");
+    }
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, []);
+
+
 
 const toggleListed = async () => { if (status !== 'online') return;
 
@@ -97,6 +140,8 @@ if (!error) {
 }
 
 };
+
+
 
 return ( <div className="ishkerak-container"> <div className="top-section"> <img src={avatarUrl || "/user.png"} alt="Avatar" className="avatar" onClick={() => navigate("/profil")} /> <div className="user-info"> <div className="user-name">{userName}</div> <button className="balance-btn"> Balans: {balance !== null ? balance.toLocaleString() : '...'} </button> </div> </div>
 

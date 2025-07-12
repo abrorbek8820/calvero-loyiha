@@ -1,27 +1,174 @@
-/* Profil.css */
+/* Asosiy konteyner */
+.profil-container {
+  max-width: 500px;
+  margin: 24px auto;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, color 0.3s;
+}
 
-.profil-container { max-width: 400px; margin: 0 auto; background-color: #1f2937; padding: 20px; border-radius: 12px; color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); }
+.profil-container.dark-mode {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
 
-.avatar-wrapper { display: flex; justify-content: center; position: relative; margin-bottom: 20px; }
+.profil-container.light-mode {
+  background-color: #f9fafb;
+  color: #1e293b;
+}
 
-.avatar-wrapper img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
+/* Profil kartasi ichidagi elementlar */
+.profil-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-.avatar-wrapper span { position: absolute; bottom: 0; right: 0; background-color: #374151; color: #d1d5db; padding: 2px 6px; font-size: 12px; border-radius: 6px; }
+/* Avatar qismi */
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
 
-.info-box { background-color: #374151; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+.avatar-wrapper img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #94a3b8;
+  background-color: #cbd5e1;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 
-.info-box label { font-size: 12px; color: #9ca3af; }
+.avatar-wrapper span {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 12px;
+  background-color: #475569;
+  color: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
 
-.info-box p { font-size: 16px; font-weight: 600; }
+.avatar-wrapper span:hover {
+  background-color: #64748b;
+}
 
-textarea { width: 100%; padding: 10px; border-radius: 8px; background-color: #1f2937; color: white; border: 1px solid #4b5563; min-height: 80px; }
+/* Info bloki */
+.info-box {
+  border-radius: 12px;
+  padding: 16px;
+  transition: background-color 0.3s;
+}
 
-.save-button, .edit-button { width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
+.dark-mode .info-box {
+  background-color: #334155;
+}
 
-.save-button { background-color: #10b981; margin-top: 10px; }
+.light-mode .info-box {
+  background-color: #e2e8f0;
+}
 
-.save-button:hover { background-color: #059669; }
+.info-box label {
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: inherit;
+}
 
-.edit-button { background-color: #3b82f6; }
+.info-box p {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 4px;
+}
 
-.edit-button:hover { background-color: #2563eb; }
+/* Textarea */
+textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #94a3b8;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  font-size: 14px;
+  background-color: transparent;
+  color: inherit;
+}
+
+/* Tugmalar */
+button {
+  transition: background-color 0.2s ease;
+}
+
+.save-button,
+.edit-button,
+.logout-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  color: white;
+}
+
+.save-button {
+  background-color: #10b981;
+}
+.save-button:hover {
+  background-color: #059669;
+}
+
+.edit-button {
+  background-color: #3b82f6;
+}
+.edit-button:hover {
+  background-color: #2563eb;
+}
+
+.logout-button {
+  background-color: #ef4444;
+}
+.logout-button:hover {
+  background-color: #dc2626;
+}
+
+/* Tugmalar ketma-ket chiqishi uchun */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Mobil optimizatsiya */
+@media (max-width: 480px) {
+  .profil-container {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .avatar-wrapper img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatar-wrapper span {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  .save-button,
+  .edit-button,
+  .logout-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
