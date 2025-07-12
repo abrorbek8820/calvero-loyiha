@@ -16,8 +16,16 @@ function IshKerak() {
   
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
   useEffect(() => { fetchUserData(); }, []);
-  useEffect(() => { if (timeLeft <= 1 && timeLeft > 0 && !hasReloadedRef.current) { hasReloadedRef.current = true; setTimeout(() => window.location.reload(), 1000); } }, [timeLeft]);
-  
+  useEffect(() => {
+  if (timeLeft <= 1 && timeLeft > 0 && !hasReloadedRef.current) {
+    hasReloadedRef.current = true;
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+}, [timeLeft]);
+
 
  
 
