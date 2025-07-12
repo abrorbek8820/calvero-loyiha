@@ -1,112 +1,87 @@
+body.light { --bg-color: #f5f5f5; --text-color: #222; --card-bg: #ffffff; --accent: #007BFF; --online-gradient: linear-gradient(to right, #00ffcc, #00ccff); }
+
+body.dark { --bg-color: #121212; --text-color: #ffffff; --card-bg: #1e1e1e; --accent: #00FFCC; --online-gradient: linear-gradient(to right, #00ccff, #0077ff); }
+
+html, body { height: 100%; margin: 0; padding: 0; background-color: var(--bg-color); }
+
+body { display: flex; justify-content: center; align-items: center; }
+
 .ishkerak-container {
-  background-color: #000;
-  color: white;
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  font-family: sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    width: 300px !important;
+    max-width: auto !important;
+    background-color: var(--card-bg);
+    box-shadow: 0 10px 30px rgb(58, 87, 168);
+    border-radius: 24px;
+    border-bottom-left-radius: 180px;
+    border-bottom-right-radius: 180px;
+    padding: 24px 20px 80px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 600px;
 }
 
-.top-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+@media (max-width: 500px) { .ishkerak-container { width: 95%; margin: 5px auto; padding: 16px 10px 60px 10px; } }
 
-.avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #555;
-}
+.top-section { display: flex; align-items: center; justify-content: center; gap: 15px; flex-direction: column; margin-bottom: 10px; }
 
-.user-info {
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 15px;
-}
+.avatar { width: 130px !important; height: 130px !important; border-radius: 50% !important; object-fit: cover !important; border: 2px solid var(--accent) !important; }
 
-.user-name {
-  font-size: 30px;
-  font-weight: bold;
-}
+.user-info { display: flex; flex-direction: column; align-items: center; }
 
-.balance-wrapper {
-  margin-top: 55px;
-  align-self: flex-start;
-}
+.user-name { font-size: 30px; font-weight: bold; margin-bottom: 15px; }
 
-.balance-btn {
-  background-color: #2c293a;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  margin-top: 15px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+.balance-btn { background-color: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px 30px; border-radius: 8px; font-size: 20px; cursor: default; margin-top: 4px; }
 
-.center-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
+.stats-section { margin-top: 20px; display: flex; justify-content: column; padding: 12px; font-size: 15px; color: var(--text-color); border-radius: 12px; background-color: rgba(0,0,0,0.05); flex-direction: column }
+
+.stat-item { display: flex; align-items: center; gap: 6px; font-size: 15px; color: var(--text-color); }
+
+.center-section { margin-top: 18px; display: flex; flex-direction: column; align-items: center; }
 
 .status-btn {
-  border: none;
-  padding: 14px 28px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+    width: 200px;
+    padding: 20px;
+    border: none;
+    border-radius: 40px;
+    font-weight: bold;
+    font-size: 25px;
+    color: #000f85;
+    background: linear-gradient(to right, #00ff99, #00ccff);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 255, 204, 0.25), 0 4px 16px rgba(0,255,204,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 20px; }
+
+    @keyframes onlinePulse {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .status-btn.online {
-  background-color: #ffcc00;
+  background: linear-gradient(270deg, #00ffcc, #00ccff, #0084ff, #00ffcc);
+  background-size: 600% 600%;
+  animation: onlinePulse 3s ease infinite;
+  color: #000f85;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
 }
 
 .status-btn.band {
-  background-color: gray;
-  color: white;
+  background: linear-gradient(to right, #a8c1bd, #8da7ac); /* aynan o‘sha rang */
+  color: rgb(255, 0, 0);
   font-weight: bold;
-  cursor: pointer
+  box-shadow: 0 4px 16px rgba(0, 255, 204, 0.25); /* porlash yo‘q */
+  animation: none;
 }
 
-.timer {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffcc00;
-}
+.status-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 204, 255, 0.3); }
 
-.logout-btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  background-color: red;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+.timer { font-size: 30px; font-family: 'Courier New', monospace; color: var(--accent); margin-top: 35px; font-weight: bold; }
 
-.status-btn.expired {
-  background-color: #ff4444; /* qizil */
-  color: white;
-  cursor: pointer;
-  pointer-events: auto; /* ❗️Bosilishini ta'minlaydi */
-  font-weight: bold;
-  border: none;
-  padding: 14px 28px;
-  font-size: 18px;
-  border-radius: 30px;
-  transition: all 0.3s ease;
-}
+/* ===== END ===== */

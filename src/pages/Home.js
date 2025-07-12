@@ -1,8 +1,32 @@
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function Home() {
   const navigate = useNavigate();
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
+  const handleButtonClick = (action) => {
+    setClicked(true);
+    setTimeout(() =>{
+      setClicked(false);
+      action();
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const mode = localStorage.getItem("mode") || "light";
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(mode);
+  }, []);
+
+  const toggleMode = (mode) => {
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(mode);
+    localStorage.setItem("mode", mode);
+    setShowThemeMenu(false);
+  };
 
   const handleIshKerak = () => {
     const user = localStorage.getItem('user');
@@ -15,16 +39,32 @@ function Home() {
 
   return (
     <div className="container">
-      <h1 className="title">CALVERO WORK</h1>
-
-      <div style={{ marginTop: "50px" }}>
-        <button className="button" onClick={() => navigate('/ishchi-kerak')}>
-          ISHCHI KERAK
+      <div className="menu-wrapper">
+        <button
+          className="menu-button"
+          onClick={() => setShowThemeMenu(!showThemeMenu)}
+        >
+          ☰
         </button>
+
+        {showThemeMenu && (
+          <div className="theme-menu active">
+            <div onClick={() => toggleMode("light")}>🌞 Kunduzgi rejim</div>
+            <div onClick={() => toggleMode("dark")}>🌙 Kechgi rejim</div>
+          </div>
+        )}
       </div>
 
-      <div style={{ marginBottom: "auto" }}>
-        <button className="button" onClick={handleIshKerak}>
+      <div className="title-wrapper">
+        <h1 className="title">CALVERO WORK<span className="trademark sparkle">™</span></h1>
+      </div>
+
+      <div className="buttons-wrapper">
+        <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={(() => navigate('/ishchi-kerak'))}>
+          ISHCHI KERAK
+        </button>
+
+        <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleIshKerak}>
           ISH KERAK
         </button>
       </div>
