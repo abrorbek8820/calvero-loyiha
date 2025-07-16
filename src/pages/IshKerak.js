@@ -1,4 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'; import './IshKerak.css'; import { supabase } from '../supabaseClient'; import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import './IshKerak.css';
+import { supabase } from '../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 function IshKerak() {
   const [userName, setUserName] = useState('');
@@ -22,10 +25,48 @@ function IshKerak() {
 }, [status]);
 
 useEffect(() => {
+  const userPhone = localStorage.getItem('userPhone');
+  if (!userPhone) {
+    navigate('/register'); // agar ro‘yxatdan o‘tmagan bo‘lsa registerga yo‘naltirish
+  }
+}, [navigate]);
+
+useEffect(() => {
   timeLeftRef.current = timeLeft;
 }, [timeLeft]);
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
-  useEffect(() => { fetchUserData(); }, []);
+  
+  useEffect(() => {
+  const checkSessionToken = async () => {
+    const phone = localStorage.getItem('userPhone');
+    const localToken = localStorage.getItem('session_token');
+
+    if (!phone || !localToken) {
+      navigate('/register');
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('workers')
+      .select('session_token')
+      .eq('phone', phone)
+      .single();
+
+    if (error || !data || data.session_token !== localToken) {
+      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.");
+
+      await supabase.auth.signOut();
+      localStorage.removeItem('userPhone');
+      localStorage.removeItem('session_token');
+      navigate('/register');
+    } else {
+      fetchUserData(); // ✅ Faqat token to‘g‘ri bo‘lsa ishlaydi
+    }
+  };
+
+  checkSessionToken();
+}, []);
+
   useEffect(() => {
   if (timeLeft <= 1 && timeLeft > 0 && !hasReloadedRef.current) {
     hasReloadedRef.current = true;
@@ -43,35 +84,48 @@ useEffect(() => { if (timeLeft > 0) { const interval = setInterval(() => { setTi
 
 
 
-const fetchUserData = async () => { const { data, error } = await supabase .from('workers') .select('*') .eq('phone', phone) .maybeSingle();
+const fetchUserData = async () => {
+  const userPhone = localStorage.getItem('userPhone');
 
-console.log("UPDATE NATIJASI:", data.status);
+  if (!userPhone) {
+    navigate('/register');
+    return; // Agar telefon mavjud bo‘lmasa funksiyani to‘xtatamiz
+  }
 
-if (!error && data) {
-  console.log("✅ YANGILANDI:", data);
-} else {
-  console.log("❌ SUPABASE XATOLIK:", error);
-}
+  const { data, error } = await supabase
+    .from('workers')
+    .select('*')
+    .eq('phone', userPhone)
+    .limit(1);
 
-if (data) {
-  setUserName(data.name);
-  setAvatarUrl(data.avatar_url);
-  setBalance(data.balance);
-  setStatus(data.status);
-  setIsListed(data.is_listed);
-  setViews(data.views || 0);
-  setPhoneViews(data.phone_views || 0);
+  if (error || !data || data.length === 0) {
+    console.error("Foydalanuvchi topilmadi yoki xatolik:", error);
+    navigate('/register'); // Agar ma’lumot bo‘lmasa yoki xato bo‘lsa registerga yuboriladi
+    return;
+  }
 
-  if (data.status === 'online' && data.online_time) {
-    const onlineTime = new Date(data.online_time).getTime();
+  const userData = data[0]; // Birinchi natijani olish kerak
+
+  console.log("UPDATE NATIJASI:", userData.status); // faqat userData mavjud bo‘lsa ishlaydi
+
+  setUserName(userData.name);
+  setAvatarUrl(userData.avatar_url);
+  setBalance(userData.balance);
+  setStatus(userData.status);
+  setIsListed(userData.is_listed);
+  setViews(userData.views || 0);
+  setPhoneViews(userData.phone_views || 0);
+
+  if (userData.status === 'online' && userData.online_time) {
+    const onlineTime = new Date(userData.online_time).getTime();
     const now = Date.now();
     const timePassed = Math.floor((now - onlineTime) / 1000);
     const total = 180;
     const remaining = Math.max(0, total - timePassed);
     setTimeLeft(remaining);
   }
-} setLoadingUser(false);
 
+  setLoadingUser(false);
 };
 
 const handleOnlineClick = async () => { let location; try { location = await new Promise((resolve, reject) => { navigator.geolocation.getCurrentPosition( pos => resolve(pos.coords), reject ); }); } catch (err) { alert('GPS xatosi!'); return; }

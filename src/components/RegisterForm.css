@@ -1,58 +1,71 @@
-.register-container {
-  max-width: 500px;
-  margin: 0 auto;
+/*.register-container {
+  max-width: 450px;
+  margin: 30px auto;
   padding: 20px;
-  background: #1f2937;
-  color: #ffffff;
-  border-radius: 8px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: 'Arial', sans-serif;
+}*/
+.register-container {
+  max-height: 100vh; /* ekran balandligidan oshmaydi */
+  overflow-y: auto !important; /* vertikal scroll qo'shiladi */
+  padding-bottom: 20px; /* pastda qo'shimcha joy */
+}
+
+
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .register-container input,
 .register-container select {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.register-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
   border: none;
-  background-color: #374151;
-  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.register-container button:hover {
+  background-color: #45a049;
 }
 
 .checkbox-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.checkbox-label {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #374151;
-  padding: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: #fff;
-  font-size: 14px;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-.checkbox-label input {
-  margin-right: 10px;
+.checkbox-container label {
+  background-color: #f2f2f2;
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-button {
-  padding: 10px;
-  background-color: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 15px;
+.checkbox-container label:hover {
+  background-color: #ddd;
 }
 
-button:hover {
-  background-color: #2563eb;
+p.status-message {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
 }

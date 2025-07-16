@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
-import './RegisterForm.css';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { generateUniqueId } from '../utils';
 import { maleSkills, femaleSkills } from '../data/skills';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -11,116 +12,108 @@ function RegisterForm() {
   const [birthYear, setBirthYear] = useState('');
   const [gender, setGender] = useState('');
   const [skills, setSkills] = useState([]);
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [skillOptions, setSkillOptions] = useState([]);
+  const [phonePart, setPhonePart] = useState('');
+  const [status, setStatus] = useState('');
 
-  useEffect(() => {
-    if (gender === 'Erkak') setSkillOptions(maleSkills);
-    else if (gender === 'Ayol') setSkillOptions(femaleSkills);
-    else setSkillOptions([]);
-    setSkills([]); // gender o'zgarganda tanlangan skill'lar tozalanadi
-  }, [gender]);
-
-  const handleSkillChange = (e) => {
-    const selected = e.target.value;
-    if (selected === 'Barchasini tanlash') {
-      setSkills(skills.length === skillOptions.length ? [] : skillOptions);
-    } else {
-      setSkills(prev =>
-        prev.includes(selected)
-          ? prev.filter(skill => skill !== selected)
-          : [...prev, selected]
-      );
-    }
+  const toggleSkill = (skill) => {
+    setSkills(prev =>
+      prev.includes(skill)
+        ? prev.filter(s => s !== skill)
+        : [...prev, skill]
+    );
   };
 
-  const handleRegister = async () => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password: phone
-    });
+  const availableSkills =
+    gender === 'male' ? maleSkills : gender === 'female' ? femaleSkills : [];
 
-    if (error) {
-      alert('Xatolik yuz berdi: ' + error.message);
-      return;
-    }
+  const handleRegister = async () => { if (phonePart.length !== 9) { setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)'); return; }
 
-    const { error: insertError } = await supabase.from('workers').insert([
-      {
-        name,
-        birth_place: birthPlace + 'lik',
-        birth_year: birthYear,
-        gender,
-        skills,
-        email,
-        phone,
-        role: 'worker',
-        user_id: data.user?.id
-      }
-    ]);
+const phone = '998' + phonePart; const email = `${phone}@calvero.uz`; const password = phone; const sessionToken = uuidv4();
 
-    if (insertError) {
-      alert("Ma'lumotlarni saqlashda xatolik: " + insertError.message);
-    } else {
-      alert("Ro‘yxatdan muvaffaqiyatli o'tdingiz!");
-      localStorage.setItem('user', JSON.stringify({ name, email }));
-      localStorage.setItem('userPhone', phone);
-      navigate('/');
-    }
-  };
+localStorage.setItem('session_token', sessionToken);
 
-  const years = Array.from({ length: 2025 - 1950 + 1 }, (_, i) => 2025 - i);
+if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) { setStatus('❌ Barcha maydonlarni to‘ldiring.'); return; }
+
+try { const { data } = await axios.post('calvero-work-sms-backend.onrender.com/api/send-sms', { phone });
+
+if (!data.success) {
+  setStatus('❌ SMS yuborilmadi: ' + data.message);
+  return;
+}
+
+const registerData = {
+  name,
+  birthPlace,
+  birthYear,
+  gender,
+  skills,
+  phone,
+  email,
+  password,
+  sessionToken, // 🔐 session tokenni ham yuboramiz
+  customId: generateUniqueId()
+};
+
+localStorage.setItem('registerData', JSON.stringify(registerData));
+navigate('/verify-code');
+
+} catch (err) { setStatus('❌ Server xatosi: ' + err.message); } };
 
   return (
-    <div className="register-container">
-      <h2>Ro‘yxatdan o‘tish</h2>
+    <div style={{ maxWidth: 450, margin: '40px auto' }}>
+      <h2>📋 Ro‘yxatdan o‘tish</h2>
 
-      <input type="text" placeholder="Ismingiz" value={name} onChange={e => setName(e.target.value)} required />
-      <input type="text" placeholder="Tug‘ilgan joy" value={birthPlace} onChange={e => setBirthPlace(e.target.value)} required />
+      <input type="text" placeholder="Ismingiz" value={name} onChange={(e) => setName(e.target.value)} />
+      <input type="text" placeholder="Tug‘ilgan joy" value={birthPlace} onChange={(e) => setBirthPlace(e.target.value)} />
 
-      <select value={birthYear} onChange={e => setBirthYear(e.target.value)} required>
-        <option value="">Yoshingiz (tug'ilgan yil)</option>
-        {years.map(year => (
+      <select value={birthYear} onChange={(e) => setBirthYear(e.target.value)}>
+        <option value="">Tug‘ilgan yil</option>
+        {Array.from({ length: 2025 - 1950 + 1 }, (_, i) => 1950 + i).map((year) => (
           <option key={year} value={year}>{year}</option>
         ))}
       </select>
 
-      <select value={gender} onChange={e => setGender(e.target.value)} required>
-        <option value="">Jinsingiz</option>
-        <option value="Erkak">Erkak</option>
-        <option value="Ayol">Ayol</option>
+      <select value={gender} onChange={(e) => setGender(e.target.value)}>
+        <option value="">Jinsni tanlang</option>
+        <option value="male">Erkak</option>
+        <option value="female">Ayol</option>
       </select>
 
-      <div className="checkbox-container">
-        {skillOptions.map(skill => (
-          <label key={skill} style={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: '#374151',
-            padding: '8px',
-            borderRadius: '5px',
-            color: '#ffffff',
-            cursor: 'pointer',
-            userSelect: 'none',
-            width: '100%'
-          }}>
-            <input
-              type="checkbox"
-              value={skill}
-              checked={skills.includes(skill)}
-              onChange={handleSkillChange}
-              style={{ marginRight: '10px', cursor: 'pointer' }}
-            />
-            <span>{skill}</span>
-          </label>
-        ))}
+      {gender && (
+        <div>
+          <p>Kasblar:</p>
+          {availableSkills.map(skill => (
+            <label key={skill} style={{ display: 'inline-block', marginRight: 10 }}>
+              <input
+                type="checkbox"
+                checked={skills.includes(skill)}
+                onChange={() => toggleSkill(skill)}
+              /> {skill}
+            </label>
+          ))}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}>
+        <span style={{ fontWeight: 'bold' }}>+998</span>
+        <input
+          type="text"
+          placeholder="901234567"
+          maxLength={9}
+          value={phonePart}
+          onChange={(e) => {
+            const onlyNums = e.target.value.replace(/\D/g, '');
+            if (onlyNums.length <= 9) setPhonePart(onlyNums);
+          }}
+          style={{ marginLeft: 5 }}
+        />
       </div>
 
-      <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-      <input type="text" placeholder="Telefon raqamingiz" value={phone} onChange={e => setPhone(e.target.value)} required />
+      <button onClick={handleRegister}>📨 Kodni yuborish</button>
 
-      <button type="button" onClick={handleRegister}>Ro‘yhatdan o‘tish</button>
+      {status && (
+        <p style={{ marginTop: 15, color: status.startsWith('✅') ? 'green' : 'red' }}>{status}</p>
+      )}
     </div>
   );
 }

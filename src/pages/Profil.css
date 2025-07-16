@@ -1,11 +1,18 @@
 /* Asosiy konteyner */
-.profil-container {
+/*.profil-container {
   max-width: 500px;
   margin: 24px auto;
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s, color 0.3s;
+  overflow-y: auto;
+}*/
+
+.profil-container {
+  max-height: 100vh; /* ekran balandligidan oshmaydi */
+  overflow-y: auto; /* vertikal scroll qo'shiladi */
+  padding-bottom: 20px; /* pastda qo'shimcha joy */
 }
 
 .profil-container.dark-mode {

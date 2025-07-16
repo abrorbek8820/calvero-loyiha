@@ -1,10 +1,16 @@
-.edit-profile-container {
+/*.edit-profile-container {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   background-color: #111827;
   color: #fff;
   border-radius: 8px;
+}*/
+
+.edit-profile-container {
+  max-height: 100vh; /* ekran balandligidan oshmaydi */
+  overflow-y: auto; /* vertikal scroll qo'shiladi */
+  padding-bottom: 20px; /* pastda qo'shimcha joy */
 }
 
 .edit-profile-container input,
@@ -43,4 +49,25 @@
 
 .edit-profile-container button:hover {
   background-color: #1d4ed8;
+}
+
+.phone-input {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.phone-input .prefix {
+  font-weight: bold;
+  margin-right: 6px;
+  color: #333;
+}
+
+.phone-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
 }
