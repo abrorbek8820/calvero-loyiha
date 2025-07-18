@@ -120,7 +120,7 @@ const fetchUserData = async () => {
     const onlineTime = new Date(userData.online_time).getTime();
     const now = Date.now();
     const timePassed = Math.floor((now - onlineTime) / 1000);
-    const total = 17940;
+    const total = 18000;
     const remaining = Math.max(0, total - timePassed);
     setTimeLeft(remaining);
   }
@@ -148,7 +148,7 @@ const { error } = await supabase
   .eq('phone', phone);
 
 if (!error) {
-  setBalance(balance - 10000);
+  setBalance(balance - 5000);
   setStatus('online');
   setIsListed(true);
   setTimeLeft(18000);
