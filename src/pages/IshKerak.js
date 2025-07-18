@@ -120,7 +120,7 @@ const fetchUserData = async () => {
     const onlineTime = new Date(userData.online_time).getTime();
     const now = Date.now();
     const timePassed = Math.floor((now - onlineTime) / 1000);
-    const total = 180;
+    const total = 17940;
     const remaining = Math.max(0, total - timePassed);
     setTimeLeft(remaining);
   }
@@ -130,7 +130,7 @@ const fetchUserData = async () => {
 
 const handleOnlineClick = async () => { let location; try { location = await new Promise((resolve, reject) => { navigator.geolocation.getCurrentPosition( pos => resolve(pos.coords), reject ); }); } catch (err) { alert('GPS xatosi!'); return; }
 
-if (balance < 10000) {
+if (balance < 5000) {
   alert('Balans yetarli emas!');
   return;
 }
@@ -138,7 +138,7 @@ if (balance < 10000) {
 const { error } = await supabase
   .from('workers')
   .update({
-    balance: balance - 10000,
+    balance: balance - 5000,
     status: 'online',
     is_listed: true,
     online_time: new Date().toISOString(),
@@ -151,7 +151,7 @@ if (!error) {
   setBalance(balance - 10000);
   setStatus('online');
   setIsListed(true);
-  setTimeLeft(180);
+  setTimeLeft(18000);
 
   setTimeout(() => {
     fetchUserData();
@@ -197,7 +197,22 @@ if (!error) {
 
 
 
-return ( <div className="ishkerak-container"> <div className="top-section"> <img src={avatarUrl || "/user.png"} alt="Avatar" className="avatar" onClick={() => navigate("/profil")} /> <div className="user-info"> <div className="user-name">{userName}</div> <button className="balance-btn"> Balans: {balance !== null ? balance.toLocaleString() : '...'} </button> </div> </div>
+return ( <div className="ishkerak-container">
+  <div className="top-section">
+    <img src={avatarUrl || "/user.png"}
+    alt="Avatar"
+    className="avatar"
+    onClick={() => navigate("/profil")} />
+    <div className="user-info">
+      <div className="user-name">{userName}</div>
+      <button
+  className="balance-btn"
+  onClick={() => navigate("/balance")}
+>
+  Balans: {balance !== null ? balance.toLocaleString() : '...'}
+</button>
+        </div>
+        </div>
 
 <div className="stats-section">
     <div className="stat-item">👁 Ko‘rildi: {views} ta</div>

@@ -16,15 +16,21 @@ function RegisterForm() {
   const [status, setStatus] = useState('');
 
   const toggleSkill = (skill) => {
-    setSkills(prev =>
-      prev.includes(skill)
-        ? prev.filter(s => s !== skill)
-        : [...prev, skill]
+  if (skill === "Barchasini tanlash") {
+    if (skills.length === availableSkills.length - 1) {
+      setSkills([]);
+    } else {
+      setSkills(availableSkills.filter((s) => s !== "Barchasini tanlash"));
+    }
+  } else {
+    setSkills((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
-  };
+  }
+};
 
   const availableSkills =
-    gender === 'male' ? maleSkills : gender === 'female' ? femaleSkills : [];
+    gender === 'Erkak' ? maleSkills : gender === 'Ayol' ? femaleSkills : [];
 
   const handleRegister = async () => { if (phonePart.length !== 9) { setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)'); return; }
 
@@ -75,8 +81,8 @@ navigate('/verify-code');
 
       <select value={gender} onChange={(e) => setGender(e.target.value)}>
         <option value="">Jinsni tanlang</option>
-        <option value="male">Erkak</option>
-        <option value="female">Ayol</option>
+        <option value="Erkak">Erkak</option>
+        <option value="Ayol">Ayol</option>
       </select>
 
       {gender && (

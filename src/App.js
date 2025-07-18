@@ -14,6 +14,7 @@ import OtpForm from './components/OtpForm';
 import VerifyCodeForm from './components/VerifyCodeForm';
 import { RegisterProvider } from './contexts/RegisterContext';
 import VerifyNewPhone from './components/VerifyNewPhone';
+import Balance from "./pages/Balance";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function App() {
       <RegisterProvider>
       <Router>
         <Routes>
+          <Route path="/balance" element={<Balance />} />
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
           <Route path="/ishkerak" element={<IshKerak />} />
