@@ -55,6 +55,13 @@ return ( <div className="profile-container" style={{ backgroundColor: '#121212',
     <h2 className="profile-name">{worker.name}</h2>
   </div>
 
+  <button 
+  className="chat-button"
+  onClick={() => navigate(/chat/${worker.phone})}
+>
+  ✉️ Xabar yozish
+</button>
+
   <div className="profile-details">
     <p className="phone-link" onClick={handlePhoneClick}>
       <strong>📞 Telefon raqami:</strong> {worker.phone}

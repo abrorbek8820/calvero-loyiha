@@ -36,6 +36,8 @@ function RegisterForm() {
 
 const phone = '998' + phonePart; const email = `${phone}@calvero.uz`; const password = phone; const sessionToken = uuidv4();
 
+localStorage.setItem('is-worker', true);
+
 localStorage.setItem('session_token', sessionToken);
 
 if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) { setStatus('❌ Barcha maydonlarni to‘ldiring.'); return; }

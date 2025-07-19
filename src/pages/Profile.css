@@ -48,3 +48,18 @@
   font-size: 18px;
   color: #b8b8b8;
 }
+
+.chat-button {
+  background-color: #25D366; /* WhatsApp rangiga oʻxshash yashil rang */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.chat-button:hover {
+  background-color: #1ebd55;
+}

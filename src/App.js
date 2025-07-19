@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-
+import OnlineStatus from './components/OnlineStatus';
 import Home from './pages/Home';
 import RegisterForm from './components/RegisterForm';
 import IshKerak from './pages/IshKerak';
@@ -15,6 +15,7 @@ import VerifyCodeForm from './components/VerifyCodeForm';
 import { RegisterProvider } from './contexts/RegisterContext';
 import VerifyNewPhone from './components/VerifyNewPhone';
 import Balance from "./pages/Balance";
+import Chat from "./components/Chat/Chat";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function App() {
     <AppContext.Provider value={{ mode, setMode }}>
       <RegisterProvider>
       <Router>
+        <OnlineStatus />
         <Routes>
           <Route path="/balance" element={<Balance />} />
           <Route path="/" element={<Home />} />
@@ -51,6 +53,7 @@ function App() {
           <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
           <Route path="/verify-code" element={<VerifyCodeForm phone={phone} />} />
           <Route path="/verify-new-phone" element={<VerifyNewPhone />} />
+          <Route path="/chat/:phone" element={<Chat />} />
         </Routes>
       </Router>
       </RegisterProvider>
