@@ -57,7 +57,7 @@ return ( <div className="profile-container" style={{ backgroundColor: '#121212',
 
   <button 
   className="chat-button"
-  onClick={() => navigate(/chat/${worker.phone})}
+  onClick={() => navigate(`/chat/${worker.phone}`)}
 >
   ✉️ Xabar yozish
 </button>
