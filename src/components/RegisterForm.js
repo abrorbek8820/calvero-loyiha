@@ -8,7 +8,7 @@ import { supabase } from '../supabaseClient';
 function RegisterForm() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
-  const [birthPlace, setBirthPlace] = useState('');
+  const [birth_place, setBirthPlace] = useState('');
   const [birthYear, setBirthYear] = useState('');
   const [gender, setGender] = useState('');
   const [skills, setSkills] = useState([]);
@@ -46,14 +46,14 @@ function RegisterForm() {
     localStorage.setItem('is-worker', true);
     localStorage.setItem('session_token', sessionToken);
 
-    if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) {
+    if (!name || !birth_place || !birthYear || !gender || skills.length === 0) {
       setStatus('❌ Barcha maydonlarni to‘ldiring.');
       return;
     }
 
     const registerData = {
       name,
-      birthPlace,
+      birth_place,
       birthYear,
       gender,
       skills,
@@ -79,7 +79,7 @@ function RegisterForm() {
       <h2>📋 Ro‘yxatdan o‘tish</h2>
 
       <input type="text" placeholder="Ismingiz" value={name} onChange={(e) => setName(e.target.value)} />
-      <input type="text" placeholder="Tug‘ilgan joy" value={birthPlace} onChange={(e) => setBirthPlace(e.target.value)} />
+      <input type="text" placeholder="Tug‘ilgan joy" value={birth_place} onChange={(e) => setBirthPlace(e.target.value)} />
 
       <select value={birthYear} onChange={(e) => setBirthYear(e.target.value)}>
         <option value="">Tug‘ilgan yil</option>
