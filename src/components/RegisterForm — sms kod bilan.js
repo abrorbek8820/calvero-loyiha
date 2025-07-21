@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { generateUniqueId } from '../utils';
 import { maleSkills, femaleSkills } from '../data/skills';
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '../supabaseClient';
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -16,63 +16,56 @@ function RegisterForm() {
   const [status, setStatus] = useState('');
 
   const toggleSkill = (skill) => {
-    if (skill === "Barchasini tanlash") {
-      if (skills.length === availableSkills.length - 1) {
-        setSkills([]);
-      } else {
-        setSkills(availableSkills.filter((s) => s !== "Barchasini tanlash"));
-      }
+  if (skill === "Barchasini tanlash") {
+    if (skills.length === availableSkills.length - 1) {
+      setSkills([]);
     } else {
-      setSkills((prev) =>
-        prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
-      );
+      setSkills(availableSkills.filter((s) => s !== "Barchasini tanlash"));
     }
-  };
+  } else {
+    setSkills((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
+    );
+  }
+};
 
   const availableSkills =
     gender === 'Erkak' ? maleSkills : gender === 'Ayol' ? femaleSkills : [];
 
-  const handleRegister = async () => {
-    if (phonePart.length !== 9) {
-      setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)');
-      return;
-    }
+  const handleRegister = async () => { if (phonePart.length !== 9) { setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)'); return; }
 
-    const phone = '998' + phonePart;
-    const email = `${phone}@calvero.uz`;
-    const password = phone;
-    const sessionToken = uuidv4();
+const phone = '998' + phonePart; const email = `${phone}@calvero.uz`; const password = phone; const sessionToken = uuidv4();
 
-    localStorage.setItem('is-worker', true);
-    localStorage.setItem('session_token', sessionToken);
+localStorage.setItem('is-worker', true);
 
-    if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) {
-      setStatus('❌ Barcha maydonlarni to‘ldiring.');
-      return;
-    }
+localStorage.setItem('session_token', sessionToken);
 
-    const registerData = {
-      name,
-      birthPlace,
-      birthYear,
-      gender,
-      skills,
-      phone,
-      email,
-      password,
-      session_token: sessionToken,
-      customId: generateUniqueId()
-    };
+if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) { setStatus('❌ Barcha maydonlarni to‘ldiring.'); return; }
 
-    const { error } = await supabase.from('workers').insert([registerData]);
+try { const { data } = await axios.post('calvero-work-sms-backend.onrender.com/api/send-sms', { phone });
 
-    if (error) {
-      setStatus('❌ Server xatosi: ' + error.message);
-    } else {
-      localStorage.setItem('registerData', JSON.stringify(registerData));
-      navigate('/home');
-    }
-  };
+if (!data.success) {
+  setStatus('❌ SMS yuborilmadi: ' + data.message);
+  return;
+}
+
+const registerData = {
+  name,
+  birthPlace,
+  birthYear,
+  gender,
+  skills,
+  phone,
+  email,
+  password,
+  sessionToken, // 🔐 session tokenni ham yuboramiz
+  customId: generateUniqueId()
+};
+
+localStorage.setItem('registerData', JSON.stringify(registerData));
+navigate('/verify-code');
+
+} catch (err) { setStatus('❌ Server xatosi: ' + err.message); } };
 
   return (
     <div style={{ maxWidth: 450, margin: '40px auto' }}>
@@ -124,7 +117,7 @@ function RegisterForm() {
         />
       </div>
 
-      <button onClick={handleRegister}>✅ Ro‘yxatdan o‘tish</button>
+      <button onClick={handleRegister}>📨 Kodni yuborish</button>
 
       {status && (
         <p style={{ marginTop: 15, color: status.startsWith('✅') ? 'green' : 'red' }}>{status}</p>

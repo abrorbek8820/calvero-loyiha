@@ -1,0 +1,30 @@
+.message-icon-wrapper {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+}
+
+.message-icon {
+  width: 30px;
+  height: 30px;
+  color: #444;
+  transition: transform 0.2s ease;
+}
+
+.message-icon-wrapper:hover .message-icon {
+  transform: scale(1.1);
+}
+
+.message-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: crimson;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 3px black;
+}

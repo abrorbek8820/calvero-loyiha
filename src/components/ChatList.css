@@ -1,0 +1,51 @@
+.chat-list-container {
+  padding: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+}
+
+.chat-list-container h2 {
+  margin-bottom: 10px;
+}
+
+.chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #f59e0b;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.chat-item.unread {
+  background-color: #fbbf24;
+  font-weight: bold;
+}
+
+.chat-item:hover {
+  background-color: #facc15;
+}
+
+.chat-link {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.chat-delete {
+  color: #fff;
+  background-color: #dc2626;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.chat-delete:hover {
+  background-color: #b91c1c;
+}

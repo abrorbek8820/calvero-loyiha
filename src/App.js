@@ -16,6 +16,8 @@ import { RegisterProvider } from './contexts/RegisterContext';
 import VerifyNewPhone from './components/VerifyNewPhone';
 import Balance from "./pages/Balance";
 import Chat from "./components/Chat/Chat";
+import ChatList from "./components/ChatList";
+import ChatIcon from "./components/ChatIcon";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ function App() {
       <RegisterProvider>
       <Router>
         <OnlineStatus />
+        <ChatIcon />
         <Routes>
           <Route path="/balance" element={<Balance />} />
           <Route path="/" element={<Home />} />
@@ -54,6 +57,7 @@ function App() {
           <Route path="/verify-code" element={<VerifyCodeForm phone={phone} />} />
           <Route path="/verify-new-phone" element={<VerifyNewPhone />} />
           <Route path="/chat/:phone" element={<Chat />} />
+          <Route path="/chats" element={<ChatList />} />
         </Routes>
       </Router>
       </RegisterProvider>
