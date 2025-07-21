@@ -41,7 +41,10 @@ useEffect(() => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
 
+    console.log('Local storage:', { phone, localToken });
+
     if (!phone || !localToken) {
+      console.warn('Local token yoki phone mavjud emas!');
       navigate('/register');
       return;
     }
@@ -52,20 +55,26 @@ useEffect(() => {
       .eq('phone', phone)
       .single();
 
-    if (error || !data || data.session_token !== localToken) {
-      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.");
+    console.log('Supabase natijasi:', { data, error });
+
+    if (error||!data || data.session_token !== localToken) {
+      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.", {
+        supabaseToken: data?.session_token,
+        localToken,
+      });
 
       await supabase.auth.signOut();
       localStorage.removeItem('userPhone');
       localStorage.removeItem('session_token');
       navigate('/register');
     } else {
-      fetchUserData(); // ✅ Faqat token to‘g‘ri bo‘lsa ishlaydi
+      console.log('✅ Sessiya mos keldi.');
+      fetchUserData();
     }
   };
 
   checkSessionToken();
-}, []);
+}, [navigate]);
 
   useEffect(() => {
   if (timeLeft <= 1 && timeLeft > 0 && !hasReloadedRef.current) {
