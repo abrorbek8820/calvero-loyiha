@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import OnlineStatus from './components/OnlineStatus';
 import Home from './pages/Home';
 import RegisterForm from './components/RegisterForm';
@@ -18,6 +18,7 @@ import Balance from "./pages/Balance";
 import Chat from "./components/Chat/Chat";
 import ChatList from "./components/ChatList";
 import ChatIcon from "./components/ChatIcon";
+
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function App() {
   const [verified, setVerified] = useState(false);
 
   return (
+
     <AppContext.Provider value={{ mode, setMode }}>
       <RegisterProvider>
       <Router>
