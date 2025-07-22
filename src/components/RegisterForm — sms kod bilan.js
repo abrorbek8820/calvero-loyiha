@@ -9,7 +9,7 @@ function RegisterForm() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [birthPlace, setBirthPlace] = useState('');
-  const [birthYear, setBirthYear] = useState('');
+  const [birth_year, setBirthYear] = useState('');
   const [gender, setGender] = useState('');
   const [skills, setSkills] = useState([]);
   const [phonePart, setPhonePart] = useState('');
@@ -36,11 +36,13 @@ function RegisterForm() {
 
 const phone = '998' + phonePart; const email = `${phone}@calvero.uz`; const password = phone; const sessionToken = uuidv4();
 
+localStorage.setItem('userPhone', phone);
+
 localStorage.setItem('is-worker', true);
 
 localStorage.setItem('session_token', sessionToken);
 
-if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) { setStatus('❌ Barcha maydonlarni to‘ldiring.'); return; }
+if (!name || !birthPlace || !birth_year || !gender || skills.length === 0) { setStatus('❌ Barcha maydonlarni to‘ldiring.'); return; }
 
 try { const { data } = await axios.post('calvero-work-sms-backend.onrender.com/api/send-sms', { phone });
 
@@ -52,7 +54,7 @@ if (!data.success) {
 const registerData = {
   name,
   birthPlace,
-  birthYear,
+  birth_year,
   gender,
   skills,
   phone,
