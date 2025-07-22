@@ -49,3 +49,26 @@
 .chat-delete:hover {
   background-color: #b91c1c;
 }
+
+.chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-item:hover {
+  background-color: #f9f9f9;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.unread {
+  font-weight: bold;
+}

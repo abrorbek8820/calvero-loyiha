@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { supabase } from './supabaseClient';
 import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import OnlineStatus from './components/OnlineStatus';
 import Home from './pages/Home';
@@ -37,6 +38,38 @@ function App() {
   const [mode, setMode] = useState("light");
   const [phone, setPhone] = useState('');
   const [verified, setVerified] = useState(false);
+
+  useEffect(() => {
+  const updateLastSeen = async () => {
+    const userPhone = localStorage.getItem('userPhone');
+    if (!userPhone) return;
+
+    await supabase
+      .from('workers')
+      .update({ last_seen: new Date().toISOString() })
+      .eq('phone', userPhone);
+  };
+
+  // Ilova yuklanganda 1-marta
+  updateLastSeen();
+
+  // Har 60 soniyada yangilash
+  const interval = setInterval(updateLastSeen, 60000);
+
+  // Harakatga bogʻlash
+  const activityHandler = () => updateLastSeen();
+
+  window.addEventListener('click', activityHandler);
+  window.addEventListener('touchstart', activityHandler);
+  window.addEventListener('keydown', activityHandler);
+
+  return () => {
+    clearInterval(interval);
+    window.removeEventListener('click', activityHandler);
+    window.removeEventListener('touchstart', activityHandler);
+    window.removeEventListener('keydown', activityHandler);
+  };
+}, []);
 
   return (
 

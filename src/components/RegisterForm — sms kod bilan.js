@@ -36,7 +36,7 @@ function RegisterForm() {
 
 const phone = '998' + phonePart; const email = `${phone}@calvero.uz`; const password = phone; const sessionToken = uuidv4();
 
-localStorage.setItem('userPhone', phone);
+
 
 localStorage.setItem('is-worker', true);
 
@@ -53,7 +53,7 @@ if (!data.success) {
 
 const registerData = {
   name,
-  birthPlace,
+  birth_place,
   birth_year,
   gender,
   skills,

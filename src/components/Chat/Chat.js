@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
+import OnlineDot from '../OnlineDot';
 
 export default function Chat() {
   const { phone: receiver_phone } = useParams();
@@ -138,6 +139,7 @@ export default function Chat() {
     <div className="chat-container">
       <div className="chat-header">
         <span>💬 Chat ({receiver_phone})</span>
+        <OnlineDot lastSeen={Worker.last_seen}showTime={true} />
       </div>
 
       <div className="chat-messages">

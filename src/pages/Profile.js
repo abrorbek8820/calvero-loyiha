@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'; import { useParams, useNavigate } from 'react-router-dom'; import { supabase } from '../supabaseClient'; import './Profile.css';
+import OnlineDot from '../components/OnlineDot';
 
 export default function Profile() { const { phone } = useParams(); const navigate = useNavigate(); const [worker, setWorker] = useState(null); const [userLocation, setUserLocation] = useState(null); const [distance, setDistance] = useState(null); const hasUpdated = useRef(false);
 
@@ -52,7 +53,7 @@ return ( <div className="profile-container" style={{ backgroundColor: '#121212',
       alt="avatar"
       className="profile-avatar"
     />
-    <h2 className="profile-name">{worker.name}</h2>
+    <h2 className="profile-name">{worker.name}</h2><OnlineDot lastSeen={worker.last_seen}/>
   </div>
 
   <button 

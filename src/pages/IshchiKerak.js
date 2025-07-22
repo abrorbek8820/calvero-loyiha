@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"; import "./IshchiKerak.css"; import { useNavigate } from "react-router-dom"; import { supabase } from "../supabaseClient"; import { maleSkills, femaleSkills } from "../data/skills";
+import OnlineDot from '../components/OnlineDot';
 
 export default function IshchiKerak() { const navigate = useNavigate(); const [locationAllowed, setLocationAllowed] = useState(false); const [workers, setWorkers] = useState([]); const [userLocation, setUserLocation] = useState(null); const [genderFilter, setGenderFilter] = useState(""); const [skillFilter, setSkillFilter] = useState(""); const [skillOptions, setSkillOptions] = useState([]); const [visibleCount, setVisibleCount] = useState(30); const [loading, setLoading] = useState(true); const [theme, setTheme] = useState("light");
 
@@ -139,7 +140,7 @@ return (
             >
               <img src={worker.avatar_url || "/user.png"} alt="avatar" className="avatar" />
               <div className="worker-info">
-                <h3 className="worker-name">{worker.name}</h3>
+                <h3 className="worker-name">{worker.name}</h3><OnlineDot lastSeen={worker.last_seen} />
                 <p className="worker-skill">{worker.skills[0]}</p>
                 <p className="worker-distance">📍 Sizdan {worker.distance} km uzoqlikda</p>
                 <p className="worker-location">🏙 {worker.birth_place}</p>
