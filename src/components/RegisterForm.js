@@ -29,52 +29,61 @@ function RegisterForm() {
     }
   };
 
-  const availableSkills =
-    gender === 'Erkak' ? maleSkills : gender === 'Ayol' ? femaleSkills : [];
+  const availableSkills = gender === 'Erkak' ? maleSkills : gender === 'Ayol' ? femaleSkills : [];
 
-  const handleRegister = async () => {
-    if (phonePart.length !== 9) {
-      setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)');
-      return;
-    }
 
-    const phone = '998' + phonePart;
-    const email = `${phone}@calvero.uz`;
-    const password = phone;
-    const sessionToken = uuidv4();
+const handleRegister = async () => {
+  if (phonePart.length !== 9) {
+    setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)');
+    return;
+  }
 
-    localStorage.setItem('userPhone', phone);
+  const phone = '998' + phonePart;
+  const email = `${phone}@calvero.uz`;
+  const password = phone;
+  const sessionToken = uuidv4();
 
-    localStorage.setItem('is-worker', true);
-    localStorage.setItem('session_token', sessionToken);
+  if (!name || !birth_place || !birth_year || !gender || skills.length === 0) {
+    setStatus('❌ Barcha maydonlarni to‘ldiring.');
+    return;
+  }
 
-    if (!name || !birth_place || !birth_year || !gender || skills.length === 0) {
-      setStatus('❌ Barcha maydonlarni to‘ldiring.');
-      return;
-    }
+  // Supabase orqali foydalanuvchini ro‘yxatdan o‘tkazish
+  const { error: signUpError } = await supabase.auth.signUp({ email, password });
 
-    const registerData = {
-      name,
-      birth_place,
-      birth_year,
-      gender,
-      skills,
-      phone,
-      email,
-      password,
-      session_token: sessionToken,
-      custom_id: generateUniqueId()
-    };
+  if (signUpError) {
+    setStatus('❌ Auth xatosi: ' + signUpError.message);
+    return;
+  }
 
-    const { error } = await supabase.from('workers').insert([registerData]);
+  localStorage.setItem('userPhone', phone);
+  localStorage.setItem('is-worker', true);
+  localStorage.setItem('session_token', sessionToken);
 
-    if (error) {
-      setStatus('❌ Server xatosi: ' + error.message);
-    } else {
-      localStorage.setItem('registerData', JSON.stringify(registerData));
-      navigate('/home');
-    }
+  const registerData = {
+    name,
+    birth_place: birth_place,
+    birth_year: birth_year,
+    gender,
+    skills,
+    phone,
+    email,
+    session_token: sessionToken,
+    custom_id: generateUniqueId()
   };
+
+  const { error } = await supabase.from('workers').insert([registerData]);
+
+  if (error) {
+    setStatus('❌ Server xatosi: ' + error.message);
+  } else {
+    localStorage.setItem('registerData', JSON.stringify(registerData));
+    navigate('/home');
+  }
+};
+
+
+
 
   return (
     <div style={{ maxWidth: 450, margin: '40px auto' }}>
