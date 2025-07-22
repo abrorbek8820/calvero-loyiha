@@ -43,6 +43,8 @@ function RegisterForm() {
     const password = phone;
     const sessionToken = uuidv4();
 
+    localStorage.setItem('userPhone', phone);
+
     localStorage.setItem('is-worker', true);
     localStorage.setItem('session_token', sessionToken);
 
