@@ -92,3 +92,32 @@
   border-radius: 10px;
   margin-top: 4px;
 }
+
+.check-icon {
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 4px;
+  color: #888; /* default: yuborilgan, lekin o‘qilmagan */
+}
+
+.check-icon.read {
+  color: #4caf50; /* o‘qilgan bo‘lsa yashil */
+}
+
+.message-bubble.media-bubble {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.message-bubble.media-bubble img.chat-image {
+  max-width: 220px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+}
+
+.check-icon {
+  font-family: Arial, sans-serif !important;
+}

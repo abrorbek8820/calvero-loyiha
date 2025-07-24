@@ -10,6 +10,9 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
   const sender_phone = localStorage.getItem('userPhone');
+  const { phone } = useParams();
+  const otherPhone = phone;
+  
 
   // Xabarlarni yuklash funksiyasi
   const fetchMessages = async () => {
@@ -108,6 +111,24 @@ export default function Chat() {
     }
   };
 
+  const [otherLastSeen, setOtherLastSeen] = useState(null);
+
+useEffect(() => {
+  const fetchLastSeen = async () => {
+    const { data, error } = await supabase
+      .from('workers')
+      .select('last_seen')
+      .eq('phone', otherPhone)
+      .single();
+
+    if (!error && data) setOtherLastSeen(data.last_seen);
+  };
+
+  fetchLastSeen();
+}, [otherPhone]);
+
+
+
   // Xabarlarni o‘qilgan deb belgilash
   useEffect(() => {
     const markAsRead = async () => {
@@ -139,49 +160,87 @@ export default function Chat() {
     <div className="chat-container">
       <div className="chat-header">
         <span>💬 Chat ({receiver_phone})</span>
-        <OnlineDot lastSeen={Worker.last_seen}showTime={true} />
+        <OnlineDot lastSeen={otherLastSeen}showTime={true} />
       </div>
 
       <div className="chat-messages">
-        {messages.map((msg) =>
-          msg.image_url ? (
-            <div
-              key={msg.id}
-              className={`message-bubble ${
-                msg.sender_phone === sender_phone ? 'right' : 'left'
-              }`}
-            >
-              <img src={msg.image_url} alt="rasm" className="chat-image" />
-              <div className="message-time">
-                {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
-            </div>
-          ) : msg.location ? (
-            <a
-              key={msg.id}
-              href={`https://www.google.com/maps?q=${msg.location.lat},${msg.location.lng}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`message-bubble ${
-                msg.sender_phone === sender_phone ? 'right' : 'left'
-              }`}
-            >
-              📍 Joylashuvni ochish
-            </a>
-          ) : (
-            <div
-              key={msg.id}
-              className={`message-bubble ${
-                msg.sender_phone === sender_phone ? 'right' : 'left'
-              }`}
-            >
-              {msg.message}
-              <div className="message-time">
-                {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
-            </div>
-          )
+        {messages.map((msg) => {
+  const isOwn = msg.sender_phone === sender_phone;
+
+  const time = (() => {
+    const utcDate = new Date(msg.created_at);
+    const tashkentDate = new Date(utcDate.getTime() + 5 * 60 * 60 * 1000);
+    return tashkentDate.toLocaleTimeString('uz-UZ', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+  })();
+
+  const bubbleClass = `message-bubble ${isOwn ? 'right' : 'left'} ${
+    msg.image_url || msg.location ? 'media-bubble' : ''
+  }`;
+
+  // ”9х8 Rasmli xabar
+  if (msg.image_url) {
+    return (
+      <div key={msg.id} className={bubbleClass}>
+        <img src={msg.image_url} alt="rasm" className="chat-image" />
+        <div className="message-time">
+          {time}
+          {isOwn && (
+            <span className={`check-icon ${msg.read ? 'read' : ''}`}>
+  {msg.read ? '\u2713\u2713' : '\u2713'}
+</span>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ”9Э9 Lokatsiya
+  if (msg.location) {
+    return (
+      <a
+        key={msg.id}
+        href={`https://www.google.com/?q=${msg.location.lat},${msg.location.lng}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={bubbleClass}
+      >
+        <img
+          src="/assets/map-icon.png"
+          alt="joylashuv"
+          className="chat-image"
+          style={{ width: '80px', height: '80px', borderRadius: '8px' }}
+        />
+        <div className="message-time">
+          {time}
+          {isOwn && (
+            <span className={`check-icon ${msg.read ? 'read' : ''}`}>
+              {msg.read ? '\u2713\u2713' : '\u2713'}
+            </span>
+          )}
+        </div>
+      </a>
+    );
+  }
+
+  // ”9Я5 Oddiy matnli xabar
+  return (
+    <div key={msg.id} className={bubbleClass}>
+      {msg.message}
+      <div className="message-time">
+        {time}
+        {isOwn && (
+          <span className={`check-icon ${msg.read ? 'read' : ''}`}>
+            {msg.read ? '\u2713\u2713' : '\u2713'}
+          </span>
         )}
+      </div>
+    </div>
+  );
+})}
         <div ref={messagesEndRef} />
       </div>
 
@@ -198,9 +257,12 @@ export default function Chat() {
           📎
         </button>
 
-        <button className="chat-btn" onClick={sendLocation}>
-          📍
-        </button>
+        <img
+  src="/assets/send-location.png"
+  alt="joylashuv yuborish"
+  onClick={sendLocation}
+  style={{ width: '28px', height: '28px', cursor: 'pointer', margin: '0 8px' }}
+/>
 
         <input
           type="text"

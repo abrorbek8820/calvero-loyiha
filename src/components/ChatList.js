@@ -3,7 +3,7 @@ import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import './ChatList.css';
 import { Trash2 } from 'lucide-react';
-import OnlineDot from './OnlineDot';
+import OnlineDot from '../components/OnlineDot';
 
 export default function ChatList() {
   const [chats, setChats] = useState([]);
@@ -11,40 +11,54 @@ export default function ChatList() {
   const userPhone = localStorage.getItem('userPhone');
   const navigate = useNavigate();
 
-  const fetchChats = async () => {
-    const { data, error } = await supabase
-      .from('chats')
-      .select('id, sender_phone, receiver_phone, message, read, created_at')
-      .or(`sender_phone.eq.${userPhone},receiver_phone.eq.${userPhone}`)
-      .order('created_at', { ascending: false });
+  const getLastSeen = async (phone) => {
+  const { data, error } = await supabase
+    .from('workers')
+    .select('last_seen')
+    .eq('phone', phone)
+    .single();
 
-    if (error) {
-      console.error(error);
-      setChats([]);
-      return;
+  if (error) return null;
+  return data.last_seen;
+};
+
+  const fetchChats = async () => {
+  const { data, error } = await supabase
+    .from('chats')
+    .select('id, sender_phone, receiver_phone, message, read, created_at')
+    .or(`sender_phone.eq.${userPhone},receiver_phone.eq.${userPhone}`)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    setChats([]);
+    return;
+  }
+
+  const uniqueChats = {};
+  const unreadSet = new Set();
+
+  for (const chat of data) {
+    const otherPhone = chat.sender_phone === userPhone ? chat.receiver_phone : chat.sender_phone;
+
+    if (!uniqueChats[otherPhone]) {
+      const lastSeen = await getLastSeen(otherPhone); // ✅ qo‘shildi
+
+      uniqueChats[otherPhone] = {
+        id: chat.id,
+        phone: otherPhone,
+        last_seen: lastSeen, // ✅ saqlaymiz
+      };
     }
 
-    const uniqueChats = {};
-    const unreadSet = new Set();
+    if (chat.receiver_phone === userPhone && !chat.read) {
+      unreadSet.add(chat.id);
+    }
+  }
 
-    data.forEach(chat => {
-      const otherPhone = chat.sender_phone === userPhone ? chat.receiver_phone : chat.sender_phone;
-
-      if (!uniqueChats[otherPhone]) {
-        uniqueChats[otherPhone] = {
-          id: chat.id,
-          phone: otherPhone,
-        };
-      }
-
-      if (chat.receiver_phone === userPhone && !chat.read) {
-        unreadSet.add(chat.id);
-      }
-    });
-
-    setChats(Object.values(uniqueChats));
-    setUnreadChats([...unreadSet]);
-  };
+  setChats(Object.values(uniqueChats));
+  setUnreadChats([...unreadSet]);
+};
 
   const handleDeleteChat = async (phone) => {
   const isConfirmed = window.confirm('Ushbu raqam bilan bogʻliq barcha chatlarni oʻchirishni xohlaysizmi?');
