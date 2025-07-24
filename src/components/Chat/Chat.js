@@ -200,18 +200,23 @@ useEffect(() => {
 
   // ”9Э9 Lokatsiya
   if (msg.location) {
-  const googleMapsAppUrl = `geo:${msg.location.lat},${msg.location.lng}?q=${msg.location.lat},${msg.location.lng}`;
+  const universalMapsUrl = `https://maps.google.com/?q=${msg.location.lat},${msg.location.lng}`;
 
-  const openInMapsApp = (e) => {
+  const openMapExternally = (e) => {
     e.preventDefault();
-    window.location.href = googleMapsAppUrl;
+    const newWindow = window.open(universalMapsUrl, '_blank');
+    if (newWindow) {
+      newWindow.opener = null; // xavfsizlik uchun
+    } else {
+      window.location.href = universalMapsUrl; // fallback agar popup bloklangan bo‘lsa
+    }
   };
 
   return (
     <a
       key={msg.id}
-      href={googleMapsAppUrl}
-      onClick={openInMapsApp}
+      href={universalMapsUrl}
+      onClick={openMapExternally}
       className={bubbleClass}
     >
       <img
