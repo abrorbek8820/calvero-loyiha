@@ -200,31 +200,31 @@ useEffect(() => {
 
   // ”9Э9 Lokatsiya
   if (msg.location) {
-    return (
-      <a
-        key={msg.id}
-        href={`https://www.google.com/?q=${msg.location.lat},${msg.location.lng}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={bubbleClass}
-      >
-        <img
-          src="/assets/map-icon.png"
-          alt="joylashuv"
-          className="chat-image"
-          style={{ width: '80px', height: '80px', borderRadius: '8px' }}
-        />
-        <div className="message-time">
-          {time}
-          {isOwn && (
-            <span className={`check-icon ${msg.read ? 'read' : ''}`}>
-              {msg.read ? '\u2713\u2713' : '\u2713'}
-            </span>
-          )}
-        </div>
-      </a>
-    );
-  }
+  return (
+    <a
+      key={msg.id}
+      href={`https://www.google.com/maps/search/?api=1&query=${msg.location.lat},${msg.location.lng}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={bubbleClass}
+    >
+      <img
+        src="/assets/map-icon.png"
+        alt="joylashuv"
+        className="chat-image"
+        style={{ width: '80px', height: '80px', borderRadius: '8px' }}
+      />
+      <div className="message-time">
+        {time}
+        {isOwn && (
+          <span className={`check-icon ${msg.read ? 'read' : ''}`}>
+            {msg.read ? '\u2713\u2713' : '\u2713'}
+          </span>
+        )}
+      </div>
+    </a>
+  );
+}
 
   // ”9Я5 Oddiy matnli xabar
   return (
