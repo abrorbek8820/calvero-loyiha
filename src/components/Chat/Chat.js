@@ -200,12 +200,18 @@ useEffect(() => {
 
   // ”9Э9 Lokatsiya
   if (msg.location) {
+  const googleMapsAppUrl = `geo:${msg.location.lat},${msg.location.lng}?q=${msg.location.lat},${msg.location.lng}`;
+
+  const openInMapsApp = (e) => {
+    e.preventDefault();
+    window.location.href = googleMapsAppUrl;
+  };
+
   return (
     <a
       key={msg.id}
-      href={`https://www.google.com/maps/search/?api=1&query=${msg.location.lat},${msg.location.lng}`}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={googleMapsAppUrl}
+      onClick={openInMapsApp}
       className={bubbleClass}
     >
       <img
@@ -225,7 +231,6 @@ useEffect(() => {
     </a>
   );
 }
-
   // ”9Я5 Oddiy matnli xabar
   return (
     <div key={msg.id} className={bubbleClass}>
