@@ -46,40 +46,45 @@ const handleRegister = async () => {
   if (!name || !birth_place || !birth_year || !gender || skills.length === 0) {
     setStatus('❌ Barcha maydonlarni to‘ldiring.');
     return;
-  }
+  }localStorage.setItem('userPhone', phone);
+  localStorage.setItem('is-worker', true);
+  localStorage.setItem('session_token', sessionToken);
 
   // Supabase orqali foydalanuvchini ro‘yxatdan o‘tkazish
   const { error: signUpError } = await supabase.auth.signUp({ email, password });
 
   if (signUpError) {
-    setStatus('❌ Auth xatosi: ' + signUpError.message);
-    return;
-  }
+  setStatus('❌ Auth xatosi: ' + signUpError.message);
+  return;
+}
 
+const registerData = {
+  name,
+  birth_place: birth_place,
+  birth_year: birth_year,
+  gender,
+  skills,
+  phone,
+  email,
+  session_token: sessionToken,
+  custom_id: generateUniqueId()
+};
+
+const { error } = await supabase.from('workers').insert([registerData]);
+
+if (error) {
+  setStatus('❌ Server xatosi: ' + error.message);
+} else {
   localStorage.setItem('userPhone', phone);
   localStorage.setItem('is-worker', true);
   localStorage.setItem('session_token', sessionToken);
+  localStorage.setItem('registerData', JSON.stringify(registerData));
 
-  const registerData = {
-    name,
-    birth_place: birth_place,
-    birth_year: birth_year,
-    gender,
-    skills,
-    phone,
-    email,
-    session_token: sessionToken,
-    custom_id: generateUniqueId()
-  };
+  // ✅ Cookie orqali token saqlash
+  document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None;`;
 
-  const { error } = await supabase.from('workers').insert([registerData]);
-
-  if (error) {
-    setStatus('❌ Server xatosi: ' + error.message);
-  } else {
-    localStorage.setItem('registerData', JSON.stringify(registerData));
-    navigate('/home');
-  }
+  navigate('/home');
+}
 };
 
 
