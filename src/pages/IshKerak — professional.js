@@ -73,10 +73,8 @@ useEffect(() => {
     }
   };
 
-  const timeout = setTimeout(checkSessionToken, 1000);
-
-  return () => clearTimeout(timeout);
-}, [navigate]);
+  checkSessionToken();
+}, []);
 
   
   useEffect(() => {
