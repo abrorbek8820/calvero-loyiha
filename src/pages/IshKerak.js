@@ -41,8 +41,10 @@ useEffect(() => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
 
+    console.log('📦 Local storage:', { phone, localToken });
+
     if (!phone || !localToken) {
-      console.warn('⚠️ Telefon yoki token mavjud emas!');
+      console.warn('⚠️ Local token yoki phone mavjud emas!');
       navigate('/register');
       return;
     }
@@ -53,8 +55,10 @@ useEffect(() => {
       .eq('phone', phone)
       .single();
 
+    console.log('🛠 Supabase natijasi:', { data, error });
+
     if (error || !data || data.session_token !== localToken) {
-      console.warn("❌ Sessiya noto‘g‘ri. Logout qilindi.", {
+      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.", {
         supabaseToken: data?.session_token,
         localToken,
       });
@@ -69,15 +73,8 @@ useEffect(() => {
     }
   };
 
-  const delayCheck = () => {
-    setTimeout(() => {
-      checkSessionToken();
-    }, 1500); // ⏳ Tekshiruvni 1.5 soniya kechiktirish
-  };
-
-  window.addEventListener('load', delayCheck);
-  return () => window.removeEventListener('load', delayCheck);
-}, [navigate]);
+  checkSessionToken();
+}, []);
 
   
   useEffect(() => {
