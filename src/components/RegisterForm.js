@@ -80,8 +80,9 @@ if (error) {
   localStorage.setItem('session_token', sessionToken);
   localStorage.setItem('registerData', JSON.stringify(registerData));
 
-  // ✅ Cookie orqali token saqlash
-  document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None;`;
+  // ✅ Token va telefon raqamini Cookie orqali saqlash
+  document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
+  document.cookie = `userPhone=${phone}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
 
   navigate('/home');
 }
