@@ -91,7 +91,7 @@ function RegisterForm() {
     document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
     document.cookie = `userPhone=${phone}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
 
-    navigate('/home');
+    navigate('/');
   }
 };
 
