@@ -80,7 +80,7 @@ function App() {
         <ChatIcon />
         <Routes>
           <Route path="/balance" element={<Balance />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
           <Route path="/ishkerak" element={<IshKerak />} />
           <Route path="/profil" element={<Profil />} />

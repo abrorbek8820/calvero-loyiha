@@ -113,7 +113,7 @@ export default function Profil() {
 
     localStorage.removeItem("userPhone");
     await supabase.auth.signOut();
-    navigate("/home");
+    navigate("/");
   };
 
   if (loading)
