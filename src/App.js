@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from './supabaseClient';
-import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import OnlineStatus from './components/OnlineStatus';
 import Home from './pages/Home';
 import RegisterForm from './components/RegisterForm';
@@ -80,7 +80,7 @@ function App() {
         <ChatIcon />
         <Routes>
           <Route path="/balance" element={<Balance />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
           <Route path="/ishkerak" element={<IshKerak />} />
           <Route path="/profil" element={<Profil />} />

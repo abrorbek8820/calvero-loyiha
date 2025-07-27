@@ -8,8 +8,8 @@ import { supabase } from '../supabaseClient';
 function RegisterForm() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
-  const [birth_place, setBirthPlace] = useState('');
-  const [birth_year, setBirthYear] = useState('');
+  const [birthPlace, setBirthPlace] = useState('');
+  const [birthYear, setBirthYear] = useState('');
   const [gender, setGender] = useState('');
   const [skills, setSkills] = useState([]);
   const [phonePart, setPhonePart] = useState('');
@@ -31,8 +31,7 @@ function RegisterForm() {
 
   const availableSkills = gender === 'Erkak' ? maleSkills : gender === 'Ayol' ? femaleSkills : [];
 
-
-const handleRegister = async () => {
+  const handleRegister = async () => {
   if (phonePart.length !== 9) {
     setStatus('❌ Telefon raqam to‘liq emas (9 raqam kerak)');
     return;
@@ -40,65 +39,70 @@ const handleRegister = async () => {
 
   const phone = '998' + phonePart;
   const email = `${phone}@calvero.uz`;
-  const password = phone;
+  const password = phone; // oddiy holatda password = telefon raqam
   const sessionToken = uuidv4();
 
-  if (!name || !birth_place || !birth_year || !gender || skills.length === 0) {
+  if (!name || !birthPlace || !birthYear || !gender || skills.length === 0) {
     setStatus('❌ Barcha maydonlarni to‘ldiring.');
     return;
-  }localStorage.setItem('userPhone', phone);
-  localStorage.setItem('is-worker', true);
-  localStorage.setItem('session_token', sessionToken);
+  }
 
-  // Supabase orqali foydalanuvchini ro‘yxatdan o‘tkazish
-  const { error: signUpError } = await supabase.auth.signUp({ email, password });
+  const registerData = {
+    name,
+    birth_place: birthPlace,
+    birth_year: birthYear,
+    gender,
+    skills,
+    phone,
+    email,
+    session_token: sessionToken,
+    custom_id: generateUniqueId()
+  };
 
-  if (signUpError) {
-  setStatus('❌ Auth xatosi: ' + signUpError.message);
-  return;
-}
+  const { error } = await supabase.from('workers').insert([registerData]);
 
-const registerData = {
-  name,
-  birth_place: birth_place,
-  birth_year: birth_year,
-  gender,
-  skills,
-  phone,
-  email,
-  session_token: sessionToken,
-  custom_id: generateUniqueId()
+  if (error) {
+    setStatus('❌ Server xatosi: ' + error.message);
+  } else {
+
+    // Supabase orqali SIGN UP qilish (auth)
+    const { error: signUpError } = await supabase.auth.signUp({ email, password });
+
+    if (signUpError) {
+      setStatus('❌ Auth xatosi: ' + signUpError.message);
+      return;
+    }
+
+    // Supabase orqali SIGN IN qilish (darhol login qilish)
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (signInError) {
+      setStatus('❌ Login xatosi: ' + signInError.message);
+      return;
+    }
+
+    // Ma'lumotlarni localStorage va cookie'ga yozish
+    localStorage.setItem('userPhone', phone);
+    localStorage.setItem('is-worker', true);
+    localStorage.setItem('session_token', sessionToken);
+    localStorage.setItem('registerData', JSON.stringify(registerData));
+    localStorage.setItem('sms_verified', 'true');
+
+    document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
+    document.cookie = `userPhone=${phone}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
+
+    navigate('/home');
+  }
 };
-
-const { error } = await supabase.from('workers').insert([registerData]);
-
-if (error) {
-  setStatus('❌ Server xatosi: ' + error.message);
-} else {
-  localStorage.setItem('userPhone', phone);
-  localStorage.setItem('is-worker', true);
-  localStorage.setItem('session_token', sessionToken);
-  localStorage.setItem('registerData', JSON.stringify(registerData));
-
-  // ✅ Token va telefon raqamini Cookie orqali saqlash
-  document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
-  document.cookie = `userPhone=${phone}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
-
-  navigate('/home');
-}
-};
-
-
-
 
   return (
     <div style={{ maxWidth: 450, margin: '40px auto' }}>
       <h2>📋 Ro‘yxatdan o‘tish</h2>
 
       <input type="text" placeholder="Ismingiz" value={name} onChange={(e) => setName(e.target.value)} />
-      <input type="text" placeholder="Tug‘ilgan joy" value={birth_place} onChange={(e) => setBirthPlace(e.target.value)} />
+      <input type="text" placeholder="Tug‘ilgan joy" value={birthPlace} onChange={(e) => setBirthPlace(e.target.value)} />
 
-      <select value={birth_year} onChange={(e) => setBirthYear(e.target.value)}>
+      <select value={birthYear} onChange={(e) => setBirthYear(e.target.value)}>
         <option value="">Tug‘ilgan yil</option>
         {Array.from({ length: 2025 - 1950 + 1 }, (_, i) => 1950 + i).map((year) => (
           <option key={year} value={year}>{year}</option>

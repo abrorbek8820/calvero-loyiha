@@ -20,16 +20,6 @@ function IshKerak() {
   const statusRef = useRef(status);
   const timeLeftRef = useRef(timeLeft);
 
-  const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-};
-
-// localStorage'da yo'q bo'lsa, cookiedan olish
-const userPhone = localStorage.getItem('userPhone') || getCookie('userPhone');
-const sessionToken = localStorage.getItem('session_token') || getCookie('session_token');
-
   useEffect(() => {
   statusRef.current = status;
 }, [status]);
@@ -46,13 +36,15 @@ useEffect(() => {
 }, [timeLeft]);
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
   
-  /*useEffect(() => {
+  useEffect(() => {
   const checkSessionToken = async () => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
 
+    console.log('📦 Local storage:', { phone, localToken });
+
     if (!phone || !localToken) {
-      console.warn('⚠️ Telefon yoki token mavjud emas!');
+      console.warn('⚠️ Local token yoki phone mavjud emas!');
       navigate('/register');
       return;
     }
@@ -63,8 +55,10 @@ useEffect(() => {
       .eq('phone', phone)
       .single();
 
+    console.log('🛠 Supabase natijasi:', { data, error });
+
     if (error || !data || data.session_token !== localToken) {
-      console.warn("❌ Sessiya noto‘g‘ri. Logout qilindi.", {
+      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.", {
         supabaseToken: data?.session_token,
         localToken,
       });
@@ -79,15 +73,8 @@ useEffect(() => {
     }
   };
 
-  const delayCheck = () => {
-    setTimeout(() => {
-      checkSessionToken();
-    }, 1500); // ⏳ Tekshiruvni 1.5 soniya kechiktirish
-  };
-
-  window.addEventListener('load', delayCheck);
-  return () => window.removeEventListener('load', delayCheck);
-}, [navigate]);*/
+  checkSessionToken();
+}, []);
 
   
   useEffect(() => {
