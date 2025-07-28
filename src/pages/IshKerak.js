@@ -21,6 +21,24 @@ function IshKerak() {
   const timeLeftRef = useRef(timeLeft);
 
   useEffect(() => {
+  const timeout = setTimeout(() => {
+    const userPhone = localStorage.getItem('userPhone');
+    const token = localStorage.getItem('session_token');
+
+    console.log('📦 localStorage:', { userPhone, token });
+
+    if (userPhone && token) {
+      fetchUserData();
+    } else {
+      console.warn('❌ localStorage ma’lumotlar topilmadi.');
+      navigate('/register');
+    }
+  }, 3000); // 300-500ms yetarli
+
+  return () => clearTimeout(timeout);
+}, []);
+
+  useEffect(() => {
   statusRef.current = status;
 }, [status]);
 
@@ -95,46 +113,26 @@ useEffect(() => { if (timeLeft > 0) { const interval = setInterval(() => { setTi
 
 
 const fetchUserData = async () => {
-  // 1. localStorage'dan telefon raqam va sessiya tokenini olish
   const userPhone = localStorage.getItem('userPhone');
-  const sessionToken = localStorage.getItem('session_token');
+  const token = localStorage.getItem('session_token');
 
-  if (!userPhone || !sessionToken) {
-    console.warn("❌ Telefon yoki sessiya token topilmadi.");
-    navigate('/register');
-    return;
-  }
-
-  // 2. Supabase sessiyasini tekshirish
-  const { data: authData, error: authError } = await supabase.auth.getSession();
-
-  if (authError || !authData?.session) {
-    console.warn("❌ Supabase sessiyasi yo‘q:", authError);
-    navigate('/register');
-    return;
-  }
-
-  // 3. Supabase workers jadvalidan foydalanuvchini qidirish
   const { data, error } = await supabase
     .from('workers')
     .select('*')
     .eq('phone', userPhone)
-    .eq('session_token', sessionToken) // 💡 xavfsizlik uchun qo‘shildi
+    .eq('session_token', token)
     .limit(1);
 
   if (error) {
-    console.error("❌ Supabase so‘rov xatoligi:", error);
-    navigate('/register');
+    console.error("❌ Supabase xatolik:", error);
     return;
   }
 
   if (!data || data.length === 0) {
-    console.warn("❌ Bunday foydalanuvchi topilmadi.");
-    navigate('/register');
+    console.warn("❌ Foydalanuvchi topilmadi.");
     return;
   }
 
-  // 4. Ma'lumotni olish va foydalanish
   const userData = data[0];
   setUserName(userData.name);
   setBalance(userData.balance);
@@ -144,12 +142,11 @@ const fetchUserData = async () => {
   setViews(userData.views || 0);
   setPhoneViews(userData.phone_views || 0);
 
-  // 5. ONLINE bo‘lsa va vaqt bor bo‘lsa taymerni hisoblash
   if (userData.status === 'online' && userData.online_time) {
     const onlineTime = new Date(userData.online_time).getTime();
     const now = Date.now();
     const timePassed = Math.floor((now - onlineTime) / 1000);
-    const total = 18000; // 5 soat
+    const total = 18000;
     const remaining = Math.max(0, total - timePassed);
     setTimeLeft(remaining);
   }
