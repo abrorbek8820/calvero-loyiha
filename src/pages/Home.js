@@ -32,9 +32,9 @@ function Home() {
     const user = localStorage.getItem('user');
     if (user) {
       navigate('/ishkerak');
-    } else {
+    }/* else {
       navigate('/register');
-    }
+    }*/
   };
 
   return (
