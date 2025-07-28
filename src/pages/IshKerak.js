@@ -128,12 +128,14 @@ const fetchUserData = async () => {
 
   if (userData.status === 'online' && userData.online_time) {
     const onlineTime = new Date(userData.online_time).getTime();
-    const now = Date.now();
-    const timePassed = Math.floor((now - onlineTime) / 1000);
+    const nowUTC = new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000;
+
+    const timePassed = Math.floor((nowUTC - onlineTime) / 1000);
     const total = 18000;
     const remaining = Math.max(0, total - timePassed);
+
     setTimeLeft(remaining);
-  }
+}
 
   setLoadingUser(false);
 };
