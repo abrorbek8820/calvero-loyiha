@@ -174,7 +174,7 @@ if (!error) {
 
 };
 
-useEffect(() => {
+/*useEffect(() => {
   const interval = setInterval(() => {
     console.log("🔍 Interval: ", {
       status: statusRef.current,
@@ -190,7 +190,39 @@ useEffect(() => {
   }, 10000);
 
   return () => clearInterval(interval);
-}, []);
+}, []);*/
+
+useEffect(() => {
+  console.log("🕒 Foydalanuvchi holati tekshirilmoqda:", userData);
+
+  if (userData.status === 'online' && userData.online_time) {
+    console.log("✅ online_time mavjud:", userData.online_time);
+
+    const onlineTime = new Date(userData.online_time).getTime();
+    console.log("🕒 onlineTime (getTime):", onlineTime);
+
+    if (isNaN(onlineTime)) {
+      console.error("❌ onlineTime notoʻgʻri formatda! Qiymat:", userData.online_time);
+      setTimeLeft(0);
+      return;
+    }
+
+    const now = Date.now();
+    console.log("🕒 Hozirgi vaqt (now):", now);
+
+    const timePassed = Math.floor((now - onlineTime) / 1000);
+    console.log("⌛️ Oʻtgan vaqt (timePassed):", timePassed, "soniya");
+
+    const total = 18000;
+    const remaining = Math.max(0, total - timePassed);
+    console.log("⏳ Qolgan vaqt (remaining):", remaining, "soniya");
+
+    setTimeLeft(remaining);
+  } else {
+    console.warn("⚠️ Foydalanuvchi online emas yoki online_time yoʻq!", userData);
+    setTimeLeft(0);
+  }
+}, [userData]);
 
 
 
