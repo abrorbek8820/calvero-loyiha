@@ -51,10 +51,11 @@ function IshKerak() {
 
 useEffect(() => {
   timeLeftRef.current = timeLeft;
+  console.log('test push uchun log');
 }, [timeLeft]);
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
   
-  useEffect(() => {
+  /*useEffect(() => {
   const checkSessionToken = async () => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
@@ -85,7 +86,7 @@ useEffect(() => {
       await supabase.auth.signOut();
       localStorage.removeItem('userPhone');
       localStorage.removeItem('session_token');
-     /* navigate('/register');*/
+     /* navigate('/register');
     } else {
       console.log('✅ Sessiya mos keldi.');
       fetchUserData();
@@ -93,7 +94,7 @@ useEffect(() => {
   };
 
   checkSessionToken();
-}, []);
+}, []);*/
 
   
   useEffect(() => {
