@@ -31,7 +31,7 @@ function IshKerak() {
       fetchUserData();
     } else {
       console.warn('❌ localStorage ma’lumotlar topilmadi.');
-      navigate('/register');
+     /* navigate('/register');*/
     }
   }, 3000); // 300-500ms yetarli
 
@@ -42,12 +42,12 @@ function IshKerak() {
   statusRef.current = status;
 }, [status]);
 
-useEffect(() => {
+/*useEffect(() => {
   const userPhone = localStorage.getItem('userPhone');
   if (!userPhone) {
-    navigate('/register'); // agar ro‘yxatdan o‘tmagan bo‘lsa registerga yo‘naltirish
+    navigate('/register'); 
   }
-}, [navigate]);
+}, [navigate]);*/
 
 useEffect(() => {
   timeLeftRef.current = timeLeft;
@@ -60,10 +60,11 @@ useEffect(() => {
     const localToken = localStorage.getItem('session_token');
 
     console.log('📦 Local storage:', { phone, localToken });
+    console.log('test push uchun log');
 
     if (!phone || !localToken) {
       console.warn('⚠️ Local token yoki phone mavjud emas!');
-      navigate('/register');
+      
       return;
     }
 
@@ -84,7 +85,7 @@ useEffect(() => {
       await supabase.auth.signOut();
       localStorage.removeItem('userPhone');
       localStorage.removeItem('session_token');
-      navigate('/register');
+     /* navigate('/register');*/
     } else {
       console.log('✅ Sessiya mos keldi.');
       fetchUserData();
