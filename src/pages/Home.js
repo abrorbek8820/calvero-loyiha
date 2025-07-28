@@ -29,13 +29,15 @@ function Home() {
   };
 
   const handleIshKerak = () => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      navigate('/ishkerak');
-    }/* else {
-      navigate('/register');
-    }*/
-  };
+  const userPhone = localStorage.getItem('userPhone');
+  const sessionToken = localStorage.getItem('session_token');
+
+  if (userPhone && sessionToken) {
+    navigate('/ishkerak');
+  } else {
+    navigate('/register');
+  }
+};
 
   return (
     <div className="container">
