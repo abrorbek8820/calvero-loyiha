@@ -10,67 +10,63 @@ export default function ClientRegister() {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (!name || !phone) {
-      alert("Iltimos, barcha maydonlarni to‘ldiring.");
-      return;
-    }
+  if (!name || !phone) {
+    alert("Iltimos, barcha maydonlarni to‘ldiring.");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    const email = `1-${phone}@calvero.work`;
-    const defaultPassword = phone;
+  const email = `1-${phone}@calvero.work`;
+  const defaultPassword = phone;
 
-    // Avval mavjud foydalanuvchini tekshiramiz
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password: defaultPassword,
+  });
+
+  if (signInError) {
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password: defaultPassword,
     });
 
-    if (signInError) {
-      // Agar mavjud boʻlmasa, yangi yaratamiz
-      const { error: signUpError } = await supabase.auth.signUp({
+    if (signUpError) {
+      alert("Roʻyxatdan oʻtishda xatolik: " + signUpError.message);
+      setLoading(false);
+      return;
+    }
+  }
+
+  const { data: existingClient, error: selectError } = await supabase
+    .from("clients")
+    .select("id")
+    .eq("phone", phone)
+    .maybeSingle();
+
+  if (!existingClient) {
+    const { error: insertError } = await supabase.from("clients").insert([
+      {
+        name,
+        phone,
         email,
-        password: defaultPassword,
-      });
+        created_at: new Date().toISOString(),
+      },
+    ]);
 
-      if (signUpError) {
-        alert("Roʻyxatdan oʻtishda xatolik: " + signUpError.message);
-        setLoading(false);
-        return;
-      }
+    if (insertError) {
+      alert("Clientsga yozishda xatolik: " + insertError.message);
+      setLoading(false);
+      return;
     }
+  }
 
-    // Clients jadvaliga yozish yoki mavjudligini tekshirish
-    const { data: existingClient } = await supabase
-      .from("clients")
-      .select("id")
-      .eq("phone", phone)
-      .single();
+  localStorage.setItem("clientPhone", phone);
+  localStorage.setItem("is-worker", 'false');
 
-    if (!existingClient) {
-      const { error: insertError } = await supabase.from("clients").insert([
-        {
-          name,
-          phone,
-          email,
-          created_at: new Date().toISOString(),
-        },
-      ]);
-
-      if (insertError) {
-        alert("Clientsga yozishda xatolik: " + insertError.message);
-        setLoading(false);
-        return;
-      }
-    }
-
-    // localStorage ga saqlash
-    localStorage.setItem("userPhone", phone);
-    localStorage.setItem("is_worker", false);
-
-    setLoading(false);
-    navigate("/");
-  };
+  setLoading(false);
+  navigate("/");
+};
 
   return (
     <div className="client-register-container">

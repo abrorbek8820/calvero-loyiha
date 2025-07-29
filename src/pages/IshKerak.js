@@ -21,51 +21,31 @@ function IshKerak() {
   const timeLeftRef = useRef(timeLeft);
 
   useEffect(() => {
-  const timeout = setTimeout(() => {
-    const userPhone = localStorage.getItem('userPhone');
-    const token = localStorage.getItem('session_token');
-
-    console.log('📦 localStorage:', { userPhone, token });
-
-    if (userPhone && token) {
-      fetchUserData();
-    } else {
-      console.warn('❌ localStorage ma’lumotlar topilmadi.');
-     /* navigate('/register');*/
-    }
-  }, 3000); // 300-500ms yetarli
-
-  return () => clearTimeout(timeout);
-}, []);
-
-  useEffect(() => {
   statusRef.current = status;
 }, [status]);
 
-/*useEffect(() => {
+useEffect(() => {
   const userPhone = localStorage.getItem('userPhone');
   if (!userPhone) {
-    navigate('/register'); 
+    navigate('/register'); // agar ro‘yxatdan o‘tmagan bo‘lsa registerga yo‘naltirish
   }
-}, [navigate]);*/
+}, [navigate]);
 
 useEffect(() => {
   timeLeftRef.current = timeLeft;
-  console.log('test push uchun log');
 }, [timeLeft]);
   useEffect(() => { const mode = localStorage.getItem("mode") || "light"; document.body.classList.remove("light", "dark"); document.body.classList.add(mode); setTheme(mode); }, []);
   
-  /*useEffect(() => {
+  useEffect(() => {
   const checkSessionToken = async () => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
 
     console.log('📦 Local storage:', { phone, localToken });
-    console.log('test push uchun log');
 
     if (!phone || !localToken) {
       console.warn('⚠️ Local token yoki phone mavjud emas!');
-      
+      navigate('/register');
       return;
     }
 
@@ -86,7 +66,7 @@ useEffect(() => {
       await supabase.auth.signOut();
       localStorage.removeItem('userPhone');
       localStorage.removeItem('session_token');
-     /* navigate('/register');
+      navigate('/register');
     } else {
       console.log('✅ Sessiya mos keldi.');
       fetchUserData();
@@ -94,7 +74,7 @@ useEffect(() => {
   };
 
   checkSessionToken();
-}, []);*/
+}, []);
 
   
   useEffect(() => {
@@ -116,31 +96,33 @@ useEffect(() => { if (timeLeft > 0) { const interval = setInterval(() => { setTi
 
 const fetchUserData = async () => {
   const userPhone = localStorage.getItem('userPhone');
-  const token = localStorage.getItem('session_token');
+
+  if (!userPhone) {
+    navigate('/register');
+    return; // Agar telefon mavjud bo‘lmasa funksiyani to‘xtatamiz
+  }
 
   const { data, error } = await supabase
     .from('workers')
     .select('*')
     .eq('phone', userPhone)
-    .eq('session_token', token)
     .limit(1);
 
-  if (error) {
-    console.error("❌ Supabase xatolik:", error);
+  if (error || !data || data.length === 0) {
+    console.error("Foydalanuvchi topilmadi yoki xatolik:", error);
+    navigate('/register'); // Agar ma’lumot bo‘lmasa yoki xato bo‘lsa registerga yuboriladi
     return;
   }
 
-  if (!data || data.length === 0) {
-    console.warn("❌ Foydalanuvchi topilmadi.");
-    return;
-  }
+  const userData = data[0]; // Birinchi natijani olish kerak
 
-  const userData = data[0];
+  console.log("UPDATE NATIJASI:", userData.status); // faqat userData mavjud bo‘lsa ishlaydi
+
   setUserName(userData.name);
+  setAvatarUrl(userData.avatar_url);
   setBalance(userData.balance);
   setStatus(userData.status);
   setIsListed(userData.is_listed);
-  setAvatarUrl(userData.avatar_url || '');
   setViews(userData.views || 0);
   setPhoneViews(userData.phone_views || 0);
 
