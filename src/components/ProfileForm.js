@@ -30,6 +30,10 @@ if (error) {
   alert("Ma'lumotlar yangilandi!");
   localStorage.setItem('user', JSON.stringify({ name, phone: fullPhone }));
   localStorage.setItem('userPhone', fullPhone);
+
+  if (window.Android && window.Android.savePhone) {
+  window.Android.savePhone(fullPhone); // ilovaga yangi raqam uzatiladi
+}
   navigate('/');
 }
 

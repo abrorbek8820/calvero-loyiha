@@ -64,6 +64,10 @@ export default function ClientRegister() {
   localStorage.setItem("clientPhone", phone);
   localStorage.setItem("is-worker", 'false');
 
+  if (window.Android && window.Android.savePhone) {
+  window.Android.savePhone(phone);
+}
+
   setLoading(false);
   navigate("/");
 };
