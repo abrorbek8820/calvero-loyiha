@@ -88,6 +88,10 @@ function RegisterForm() {
     localStorage.setItem('registerData', JSON.stringify(registerData));
     localStorage.setItem('sms_verified', 'true');
 
+    if(window.Android && localStorage.getItem('userPhone')){
+  window.Android.savePhone(localStorage.getItem('userPhone'));
+}
+
     document.cookie = `session_token=${sessionToken}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
     document.cookie = `userPhone=${phone}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
 
