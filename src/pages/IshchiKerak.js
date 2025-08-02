@@ -54,18 +54,16 @@ useEffect(() => { if (locationAllowed && userLocation) fetchWorkers(); }, [locat
 const calculateDistance = (lat1, lon1, lat2, lon2) => { const R = 6371; const dLat = ((lat2 - lat1) * Math.PI) / 180; const dLon = ((lon2 - lon1) * Math.PI) / 180; const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2); const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); return R * c; };
 
 const fetchWorkers = async (showLoading = true) => {
-  if (showLoading) setLoading(true); // faqat kerakli joyda loading chiqadi
+  if (showLoading) setLoading(true);
 
-  let query = supabase
-    .from("workers")
-    .select("*, latitude, longitude")
-    .eq("status", "online")
-    .eq("is_listed", true);
-
-  if (genderFilter) query = query.eq("gender", genderFilter);
-  if (skillFilter) query = query.contains("skills", [skillFilter]);
-
-  const { data, error } = await query;
+  const { data, error } = await supabase.rpc("fetch_workers_conditional_js", {
+  client_lat: userLocation.latitude,
+  client_lon: userLocation.longitude,
+  radius_km: 10,
+  min_worker_count: 5,
+  filter_gender: genderFilter || null,
+  filter_skill: skillFilter || null
+});
 
   if (error) {
     alert("Xatolik yuz berdi: " + error.message);
@@ -73,29 +71,19 @@ const fetchWorkers = async (showLoading = true) => {
     return;
   }
 
-  const workersWithDistance = data.map((worker) => {
-    const dist = calculateDistance(
-      userLocation.latitude,
-      userLocation.longitude,
-      worker.latitude,
-      worker.longitude
-    );
-
-    return {
-      ...worker,
-      distance: isNaN(dist) ? 9999 : dist,
-    };
+  // Frontend filtrlar: jins va kasb
+  const filtered = data.filter((worker) => {
+    if (genderFilter && worker.gender !== genderFilter) return false;
+    if (skillFilter && !worker.skills.includes(skillFilter)) return false;
+    return true;
   });
 
-  workersWithDistance.sort((a, b) => a.distance - b.distance);
+  const sorted = filtered.map((w) => ({
+    ...w,
+    distance: Number(w.distance / 1000).toFixed(1), // metr -> km
+  }));
 
-  setWorkers(
-    workersWithDistance.map((w) => ({
-      ...w,
-      distance: Number(w.distance).toFixed(1),
-    }))
-  );
-
+  setWorkers(sorted);
   if (showLoading) setLoading(false);
 };
 
