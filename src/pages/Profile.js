@@ -66,7 +66,7 @@ return ( <div className="profile-container" style={{ backgroundColor: '#121212',
  <div className="profile-details">
   <p>
     <strong>📞 Telefon raqami:</strong>{' '}
-    <a className="phone-link" href={`tel:${worker.phone}`}>
+    <a className="phone-link" href={`tel:+${worker.phone}`}>
       {worker.phone}
     </a>
   </p>
