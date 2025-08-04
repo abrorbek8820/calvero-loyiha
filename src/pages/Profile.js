@@ -63,17 +63,20 @@ return ( <div className="profile-container" style={{ backgroundColor: '#121212',
   ✉️ Xabar yozish
 </button>
 
-  <div className="profile-details">
-    <p className="phone-link" onClick={handlePhoneClick}>
-      <strong>📞 Telefon raqami:</strong> {worker.phone}
-    </p>
-    <p><strong>👤 Jinsi:</strong> {worker.gender}</p>
-    <p><strong>🎂 Tug‘ilgan yil:</strong> {worker.birth_year}</p>
-    <p><strong>📍 Tug‘ilgan shahar:</strong> {worker.birth_place}</p>
-    <p><strong>🛠️ Kasblari:</strong> {worker.skills.join(', ')}</p>
-    <p><strong>ℹ️ O‘zi haqida:</strong> {worker.about_text || "Ma'lumot yo'q."}</p>
-    {distance && <p><strong>📌 Sizdan:</strong> {distance} km uzoqlikda</p>}
-  </div>
+ <div className="profile-details">
+  <p>
+    <strong>📞 Telefon raqami:</strong>{' '}
+    <a className="phone-link" href={`tel:${worker.phone}`}>
+      {worker.phone}
+    </a>
+  </p>
+  <p><strong>👤 Jinsi:</strong> {worker.gender}</p>
+  <p><strong>🎂 Tug‘ilgan yil:</strong> {worker.birth_year}</p>
+  <p><strong>📍 Tug‘ilgan shahar:</strong> {worker.birth_place}</p>
+  <p><strong>🛠 Kasblari:</strong> {worker.skills.join(', ')}</p>
+  <p><strong>ℹ️ O‘zi haqida:</strong> {worker.about_text || "Ma'lumot yo'q."}</p>
+  {distance && <p><strong>📌 Sizdan:</strong> {distance} km uzoqlikda</p>}
+</div>
 </div>
 
 ); }
