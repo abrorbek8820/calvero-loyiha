@@ -5,28 +5,90 @@ import { supabase } from '../../supabaseClient';
 import OnlineDot from '../OnlineDot';
 
 export default function Chat() {
-  const { phone: receiver_phone } = useParams();
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const messagesEndRef = useRef(null);
-  const sender_phone = localStorage.getItem('userPhone');
-  const { phone } = useParams();
-  const otherPhone = phone;
+  const { phone: otherPhone } = useParams(); // URL dan olamiz (receiver)
+const sender_phone = localStorage.getItem('userPhone'); // local foydalanuvchi
+const receiver_phone = otherPhone; // kontakt
+
+const [senderRole, setSenderRole] = useState(null);
+const [messages, setMessages] = useState([]);
+const [newMessage, setNewMessage] = useState('');
+const messagesEndRef = useRef(null);
+
+useEffect(() => {
+  const detectRole = async () => {
+    const { data: worker } = await supabase
+      .from("workers")
+      .select("role")
+      .eq("phone", sender_phone)
+      .maybeSingle();
+
+    if (worker) {
+      setSenderRole(worker.role); // "worker"
+      return;
+    }
+
+    const { data: client } = await supabase
+      .from("clients")
+      .select("role")
+      .eq("phone", sender_phone)
+      .maybeSingle();
+
+    if (client) {
+      setSenderRole(client.role); // "client"
+    }
+  };
+
+  detectRole();
+}, [sender_phone]);
+
+const [receiverRole, setReceiverRole] = useState(null);
+
+useEffect(() => {
+  const detectReceiverRole = async () => {
+    const { data: worker } = await supabase
+      .from("workers")
+      .select("role")
+      .eq("phone", receiver_phone)
+      .maybeSingle();
+
+    if (worker) {
+      setReceiverRole(worker.role);
+      return;
+    }
+
+    const { data: client } = await supabase
+      .from("clients")
+      .select("role")
+      .eq("phone", receiver_phone)
+      .maybeSingle();
+
+    if (client) {
+      setReceiverRole(client.role);
+    }
+  };
+
+  detectReceiverRole();
+}, [receiver_phone]);
   
 
   // Xabarlarni yuklash funksiyasi
   const fetchMessages = async () => {
-    const { data } = await supabase
-      .from('chats')
-      .select('*')
-      .or(
-        `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),` +
-        `and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
-      )
-      .order('created_at', { ascending: true });
+  if (!sender_phone || !receiver_phone) return;
 
-    setMessages(data || []);
-  };
+  const { data, error } = await supabase
+    .from("chats")
+    .select("*")
+    .or(
+      `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
+    )
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Xabarlarni olishda xatolik:", error);
+  }
+
+  setMessages(data || []);
+};
 
   // Xabar yuborish funksiyasi
   const sendMessage = async () => {
@@ -115,18 +177,33 @@ export default function Chat() {
 
 useEffect(() => {
   const fetchLastSeen = async () => {
-    const { data, error } = await supabase
+    // Avval workers ichidan qidiramiz
+    let { data, error } = await supabase
       .from('workers')
       .select('last_seen')
       .eq('phone', otherPhone)
       .single();
 
-    if (!error && data) setOtherLastSeen(data.last_seen);
+    // Agar topilmasa, clients dan qidiramiz
+    if (!data) {
+      const clientResult = await supabase
+        .from('clients')
+        .select('last_seen')
+        .eq('phone', otherPhone)
+        .single();
+
+      if (!clientResult.error && clientResult.data) {
+        data = clientResult.data;
+      }
+    }
+
+    if (data) {
+      setOtherLastSeen(data.last_seen);
+    }
   };
 
   fetchLastSeen();
 }, [otherPhone]);
-
 
 
   // Xabarlarni o‘qilgan deb belgilash
@@ -155,6 +232,10 @@ useEffect(() => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  if (!senderRole) {
+  return <p>⏳ Yuklanmoqda...</p>;
+}
 
   return (
     <div className="chat-container">

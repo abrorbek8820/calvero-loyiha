@@ -56,8 +56,7 @@ function RegisterForm() {
     phone,
     email,
     session_token: sessionToken,
-    custom_id: generateUniqueId(),
-    role: "worker"
+    custom_id: generateUniqueId()
   };
 
   const { error } = await supabase.from('workers').insert([registerData]);
