@@ -6,7 +6,7 @@ export default function IshchiKerak() { const navigate = useNavigate(); const [l
 useEffect(() => { const savedMode = localStorage.getItem("mode");
   setTheme(savedMode === "dark" ? "dark" : "light");
 
-const clientPhone = localStorage.getItem("userPhone");
+const clientPhone = localStorage.getItem("clientPhone");
 if (!clientPhone) {
   navigate("/client-register");
   return;

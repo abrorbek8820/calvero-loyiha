@@ -57,7 +57,6 @@ function RegisterForm() {
     email,
     session_token: sessionToken,
     custom_id: generateUniqueId(),
-    role: "worker"
   };
 
   const { error } = await supabase.from('workers').insert([registerData]);
@@ -84,7 +83,6 @@ function RegisterForm() {
 
     // Ma'lumotlarni localStorage va cookie'ga yozish
     localStorage.setItem('userPhone', phone);
-    localStorage.setItem('is-worker', true);
     localStorage.setItem('session_token', sessionToken);
     localStorage.setItem('registerData', JSON.stringify(registerData));
     localStorage.setItem('sms_verified', 'true');

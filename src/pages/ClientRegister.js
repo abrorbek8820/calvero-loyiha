@@ -44,17 +44,16 @@ export default function ClientRegister() {
     const { data: existingClient } = await supabase
       .from("clients")
       .select("id")
-      .eq("phone", phone)
-      .single();
+      .eq("client_phone", phone)
+      .maybeSingle();
 
     if (!existingClient) {
       const { error: insertError } = await supabase.from("clients").insert([
         {
           name,
-          phone,
+          client_phone: phone,
           email,
           created_at: new Date().toISOString(),
-          role: "client"
         },
       ]);
 
@@ -66,8 +65,7 @@ export default function ClientRegister() {
     }
 
     // localStorage ga saqlash
-    localStorage.setItem("userPhone", phone);
-    localStorage.setItem("is_worker", false);
+    localStorage.setItem("clientPhone", phone);
 
     setLoading(false);
     navigate("/");
