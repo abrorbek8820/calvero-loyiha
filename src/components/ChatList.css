@@ -17,12 +17,14 @@
 }
 
 body.light .chat-list-container {
+  color: #0f1a3c;
     box-shadow: 0 0px 30px
-    #ff9800;
+    #626262;
   }
   body.dark .chat-list-container {
+    background-color: #0f1a3c;
     box-shadow: 0px 0px 30px
-    #ff9800;
+    #b6b6b6;
   }
 
 /* Sarlavha */
@@ -32,6 +34,9 @@ body.light .chat-list-container {
   display: flex;
   align-items: center;
   color: #ffeb3b;
+}
+body.light .chat-list-container h2{
+  color: black;
 }
 
 /* Chat item */
@@ -44,12 +49,21 @@ body.light .chat-list-container {
   align-items: center;
   justify-content: space-between;
   transition: transform 0.1s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.292);
+
 
   /* 🆕 Uzun matn bo‘lsa */
   overflow-wrap: break-word;
   word-break: break-word;
 }
+
+body.light .chat-item{
+  background-color:rgb(255, 255, 255);
+}
+body.dark .chat-item{
+  background-color:rgb(255, 179, 0)
+}
+
 
 /* Hover effekti */
 .chat-item:hover {
@@ -58,21 +72,38 @@ body.light .chat-list-container {
 }
 
 /* O‘qilmagan xabar belgisi */
-@keyframes pulseGlow {
+@keyframes pulseGlow-dark {
   0% {
-    box-shadow: 0 0 5px 2px rgba(255, 23, 68, 0.6);
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.463);
   }
   50% {
-    box-shadow: 0 0 12px 6px rgba(255, 23, 68, 0.9);
+    box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.72);
   }
   100% {
-    box-shadow: 0 0 5px 2px rgba(255, 23, 68, 0.6);
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.332);
   }
 }
 
-.unread {
-  border: 2px solid #ff1744;
-  animation: pulseGlow 2s infinite;
+@keyframes pulseGlow-light {
+  0% {
+    box-shadow: 0 0 1px 1px rgba(139, 139, 139, 0.329);
+  }
+  50% {
+    box-shadow: 0 0 3px 3px rgba(100, 100, 100, 0.641);
+  }
+  100% {
+    box-shadow: 0 0 1px 1px rgba(83, 83, 83, 0.262);
+  }
+}
+
+body.dark .unread {
+  border: 2px solid #001aff;
+  animation: pulseGlow-dark 2s infinite;
+}
+
+body.light .unread {
+  border: 2px solid #000000;
+  animation: pulseGlow-light 2s infinite;
 }
 
 /* Delete tugmasi */
