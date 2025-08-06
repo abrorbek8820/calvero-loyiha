@@ -1,212 +1,146 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import OnlineDot from '../OnlineDot';
 
 export default function Chat() {
-  const { phone: otherPhone } = useParams(); // URL dan olamiz (receiver)
-const sender_phone = localStorage.getItem('userPhone'); // local foydalanuvchi
-const receiver_phone = otherPhone; // kontakt
+  const navigate = useNavigate();
+  const { phone: otherPhone } = useParams();
 
-const [senderRole, setSenderRole] = useState(null);
-const [messages, setMessages] = useState([]);
-const [newMessage, setNewMessage] = useState('');
-const messagesEndRef = useRef(null);
+  const sender_phone = localStorage.getItem('userPhone') || localStorage.getItem('clientPhone');
+  const receiver_phone = otherPhone;
 
-useEffect(() => {
-  const detectRole = async () => {
-    const { data: worker } = await supabase
-      .from("workers")
-      .select("role")
-      .eq("phone", sender_phone)
-      .maybeSingle();
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const messagesEndRef = useRef(null);
+  const [otherLastSeen, setOtherLastSeen] = useState(null);
 
-    if (worker) {
-      setSenderRole(worker.role); // "worker"
-      return;
+  // Redirect to register if sender not available
+  useEffect(() => {
+    if (!sender_phone) {
+      navigate("/register");
     }
+  }, [sender_phone]);
 
-    const { data: client } = await supabase
-      .from("clients")
-      .select("role")
-      .eq("phone", sender_phone)
-      .maybeSingle();
-
-    if (client) {
-      setSenderRole(client.role); // "client"
-    }
-  };
-
-  detectRole();
-}, [sender_phone]);
-
-const [receiverRole, setReceiverRole] = useState(null);
-
-useEffect(() => {
-  const detectReceiverRole = async () => {
-    const { data: worker } = await supabase
-      .from("workers")
-      .select("role")
-      .eq("phone", receiver_phone)
-      .maybeSingle();
-
-    if (worker) {
-      setReceiverRole(worker.role);
-      return;
-    }
-
-    const { data: client } = await supabase
-      .from("clients")
-      .select("role")
-      .eq("phone", receiver_phone)
-      .maybeSingle();
-
-    if (client) {
-      setReceiverRole(client.role);
-    }
-  };
-
-  detectReceiverRole();
-}, [receiver_phone]);
-  
-
-  // Xabarlarni yuklash funksiyasi
+  // Fetch chat messages
   const fetchMessages = async () => {
-  if (!sender_phone || !receiver_phone) return;
+    if (!sender_phone || !receiver_phone) return;
 
-  const { data, error } = await supabase
-    .from("chats")
-    .select("*")
-    .or(
-      `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
-    )
-    .order("created_at", { ascending: true });
+    const { data, error } = await supabase
+      .from("chats")
+      .select("*")
+      .or(
+        `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
+      )
+      .order("created_at", { ascending: true });
 
-  if (error) {
-    console.error("Xabarlarni olishda xatolik:", error);
-  }
+    if (!error) setMessages(data || []);
+    else console.error("Xabarlarni olishda xatolik:", error);
+  };
 
-  setMessages(data || []);
-};
-
-  // Xabar yuborish funksiyasi
+  // Send text message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
     const { error } = await supabase.from('chats').insert([
-      {
-        sender_phone,
-        receiver_phone,
-        message: newMessage,
-      },
+      { sender_phone, receiver_phone, message: newMessage }
     ]);
 
     if (!error) {
-      fetchMessages(); // darhol yangilanadi
+      fetchMessages();
       setNewMessage('');
     } else {
       console.error('Xabar yuborishda xatolik:', error);
     }
   };
 
-  // GPS yuborish funksiyasi
+  // Send location
   const sendLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         const location = {
           lat: position.coords.latitude,
-          lng: position.coords.longitude,
+          lng: position.coords.longitude
         };
 
         const { error } = await supabase.from('chats').insert([
-          {
-            sender_phone,
-            receiver_phone,
-            location,
-          },
+          { sender_phone, receiver_phone, location }
         ]);
 
-        if (!error) {
-          fetchMessages(); // GPS yuborilganda darhol yangilanadi
-        } else {
-          console.error('GPS yuborishda xatolik:', error);
-        }
-      }, (error) => {
-        console.error('Joylashuvni olishda xatolik:', error);
+        if (!error) fetchMessages();
+        else console.error('GPS yuborishda xatolik:', error);
       });
     } else {
       alert('Brauzer GPS ni qo‘llab-quvvatlamaydi.');
     }
   };
 
-  // Rasm yuborish funksiyasi
+  // Send image
   const sendImage = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const file = event.target.files[0];
+  if (!file) return;
 
-    const fileName = `${Date.now()}_${file.name}`;
+  const fileName = `${Date.now()}_${file.name}`;
+  console.log("Yuklanayotgan fayl:", fileName);
 
-    const { data, error } = await supabase.storage
-      .from('chat-images')
-      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+  const { data, error } = await supabase.storage
+    .from('chat-images')
+    .upload(fileName, file, { cacheControl: '3600', upsert: false });
 
-    if (error) {
-      console.error('Rasm yuklashda xatolik:', error);
-      return;
-    }
+  if (error) {
+    console.error('📛 Fayl yuklanmadi:', error);
+    return;
+  }
 
-    const imageUrl = supabase.storage.from('chat-images').getPublicUrl(fileName).data.publicUrl;
+  const imageUrl = supabase.storage
+    .from('chat-images')
+    .getPublicUrl(fileName).data.publicUrl;
 
-    const { error: insertError } = await supabase.from('chats').insert([
-      {
-        sender_phone,
-        receiver_phone,
-        image_url: imageUrl,
-      },
-    ]);
+  console.log("📸 Image URL:", imageUrl);
 
-    if (!insertError) {
-      fetchMessages(); // Rasm yuborilganda darhol yangilanadi
-    } else {
-      console.error('Rasm yuborishda xatolik:', insertError);
-    }
-  };
+  const { error: insertError } = await supabase.from('chats').insert([
+    {
+      sender_phone,
+      receiver_phone,
+      image_url: imageUrl,
+    },
+  ]);
 
-  const [otherLastSeen, setOtherLastSeen] = useState(null);
+  if (insertError) {
+    console.error('📛 Chatga yozishda xatolik:', insertError);
+  } else {
+    console.log("✅ Rasm yuborildi");
+    fetchMessages();
+  }
+};
 
-useEffect(() => {
-  const fetchLastSeen = async () => {
-    // Avval workers ichidan qidiramiz
-    let { data, error } = await supabase
-      .from('workers')
-      .select('last_seen')
-      .eq('phone', otherPhone)
-      .single();
-
-    // Agar topilmasa, clients dan qidiramiz
-    if (!data) {
-      const clientResult = await supabase
-        .from('clients')
+  // Fetch receiver's last seen
+  useEffect(() => {
+    const fetchLastSeen = async () => {
+      let { data, error } = await supabase
+        .from('workers')
         .select('last_seen')
-        .eq('phone', otherPhone)
-        .single();
+        .eq('phone', receiver_phone)
+        .maybeSingle();
 
-      if (!clientResult.error && clientResult.data) {
-        data = clientResult.data;
+      if (!data) {
+        const clientResult = await supabase
+          .from('clients')
+          .select('last_seen')
+          .eq('client_phone', receiver_phone)
+          .maybeSingle();
+
+        if (clientResult?.data) data = clientResult.data;
       }
-    }
 
-    if (data) {
-      setOtherLastSeen(data.last_seen);
-    }
-  };
+      if (data) setOtherLastSeen(data.last_seen);
+    };
 
-  fetchLastSeen();
-}, [otherPhone]);
+    fetchLastSeen();
+  }, [receiver_phone]);
 
-
-  // Xabarlarni o‘qilgan deb belgilash
+  // Mark messages as read
   useEffect(() => {
     const markAsRead = async () => {
       await supabase.from('chats')
@@ -219,141 +153,77 @@ useEffect(() => {
     markAsRead();
   }, [sender_phone, receiver_phone, messages]);
 
-  // Xabarlarni interval bilan yangilash (har 4 sekundda)
+  // Auto-refresh messages
   useEffect(() => {
     fetchMessages();
-
     const interval = setInterval(fetchMessages, 4000);
-
     return () => clearInterval(interval);
   }, [sender_phone, receiver_phone]);
 
-  // Eng pastga avtomatik scroll qilish
+  // Scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  if (!senderRole) {
-  return <p>⏳ Yuklanmoqda...</p>;
-}
 
   return (
     <div className="chat-container">
       <div className="chat-header">
         <span>💬 Chat ({receiver_phone})</span>
-        <OnlineDot lastSeen={otherLastSeen}showTime={true} />
+        <OnlineDot lastSeen={otherLastSeen} showTime={true} />
       </div>
 
       <div className="chat-messages">
         {messages.map((msg) => {
-  const isOwn = msg.sender_phone === sender_phone;
+          const isOwn = msg.sender_phone === sender_phone;
+          const time = new Date(new Date(msg.created_at).getTime() + 5 * 60 * 60 * 1000)
+            .toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-  const time = (() => {
-    const utcDate = new Date(msg.created_at);
-    const tashkentDate = new Date(utcDate.getTime() + 5 * 60 * 60 * 1000);
-    return tashkentDate.toLocaleTimeString('uz-UZ', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
-  })();
+          const bubbleClass = `message-bubble ${isOwn ? 'right' : 'left'} ${
+            msg.image_url || msg.location ? 'media-bubble' : ''
+          }`;
 
-  const bubbleClass = `message-bubble ${isOwn ? 'right' : 'left'} ${
-    msg.image_url || msg.location ? 'media-bubble' : ''
-  }`;
+          if (msg.image_url) {
+            return (
+              <div key={msg.id} className={bubbleClass}>
+                <img src={msg.image_url} alt="rasm" className="chat-image" />
+                <div className="message-time">{time}{isOwn && <span className={`check-icon ${msg.read ? 'read' : ''}`}>{msg.read ? '✓✓' : '✓'}</span>}</div>
+              </div>
+            );
+          }
 
-  // ”9х8 Rasmli xabar
-  if (msg.image_url) {
-    return (
-      <div key={msg.id} className={bubbleClass}>
-        <img src={msg.image_url} alt="rasm" className="chat-image" />
-        <div className="message-time">
-          {time}
-          {isOwn && (
-            <span className={`check-icon ${msg.read ? 'read' : ''}`}>
-  {msg.read ? '\u2713\u2713' : '\u2713'}
-</span>
-          )}
-        </div>
-      </div>
-    );
-  }
+          if (msg.location) {
+            const mapsUrl = `https://maps.google.com/?q=${msg.location.lat},${msg.location.lng}`;
+            return (
+              <a key={msg.id} href={mapsUrl} onClick={(e) => { e.preventDefault(); window.open(mapsUrl, '_blank') || (window.location.href = mapsUrl); }} className={bubbleClass}>
+                <img src="/assets/map-icon.png" alt="joylashuv" className="chat-image" style={{ width: '80px', height: '80px', borderRadius: '8px' }} />
+                <div className="message-time">{time}{isOwn && <span className={`check-icon ${msg.read ? 'read' : ''}`}>{msg.read ? '✓✓' : '✓'}</span>}</div>
+              </a>
+            );
+          }
 
-  // ”9Э9 Lokatsiya
-  if (msg.location) {
-  const universalMapsUrl = `https://maps.google.com/?q=${msg.location.lat},${msg.location.lng}`;
-
-  const openMapExternally = (e) => {
-    e.preventDefault();
-    const newWindow = window.open(universalMapsUrl, '_blank');
-    if (newWindow) {
-      newWindow.opener = null; // xavfsizlik uchun
-    } else {
-      window.location.href = universalMapsUrl; // fallback agar popup bloklangan bo‘lsa
-    }
-  };
-
-  return (
-    <a
-      key={msg.id}
-      href={universalMapsUrl}
-      onClick={openMapExternally}
-      className={bubbleClass}
-    >
-      <img
-        src="/assets/map-icon.png"
-        alt="joylashuv"
-        className="chat-image"
-        style={{ width: '80px', height: '80px', borderRadius: '8px' }}
-      />
-      <div className="message-time">
-        {time}
-        {isOwn && (
-          <span className={`check-icon ${msg.read ? 'read' : ''}`}>
-            {msg.read ? '\u2713\u2713' : '\u2713'}
-          </span>
-        )}
-      </div>
-    </a>
-  );
-}
-  // ”9Я5 Oddiy matnli xabar
-  return (
-    <div key={msg.id} className={bubbleClass}>
-      {msg.message}
-      <div className="message-time">
-        {time}
-        {isOwn && (
-          <span className={`check-icon ${msg.read ? 'read' : ''}`}>
-            {msg.read ? '\u2713\u2713' : '\u2713'}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-})}
+          return (
+            <div key={msg.id} className={bubbleClass}>
+              {msg.message}
+              <div className="message-time">{time}{isOwn && <span className={`check-icon ${msg.read ? 'read' : ''}`}>{msg.read ? '✓✓' : '✓'}</span>}</div>
+            </div>
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-footer">
-        <input
-          type="file"
-          id="imageUpload"
-          style={{ display: 'none' }}
-          onChange={sendImage}
-          accept="image/*"
-        />
+        <input type="file" id="imageUpload" style={{ display: 'none' }} onChange={sendImage} accept="image/*" />
 
         <button className="chat-btn" onClick={() => document.getElementById('imageUpload').click()}>
           📎
         </button>
 
         <img
-  src="/assets/send-location.png"
-  alt="joylashuv yuborish"
-  onClick={sendLocation}
-  style={{ width: '28px', height: '28px', cursor: 'pointer', margin: '0 8px' }}
-/>
+          src="/assets/send-location.png"
+          alt="joylashuv yuborish"
+          onClick={sendLocation}
+          style={{ width: '28px', height: '28px', cursor: 'pointer', margin: '0 8px' }}
+        />
 
         <input
           type="text"
