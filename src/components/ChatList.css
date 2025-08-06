@@ -1,74 +1,129 @@
+/* Asosiy konteyner */
 .chat-list-container {
-  padding: 15px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f1a3c; /* chuqur tun moviy */
   color: white;
+  padding: 20px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+
+  /* 🆕 Moslashuvchanlik */
+  max-width: 500px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
+/* Sarlavha */
 .chat-list-container h2 {
-  margin-bottom: 10px;
-}
-
-.chat-item {
+  font-size: 24px;
+  margin-bottom: 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background-color: #f59e0b;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
+  color: #ffeb3b;
 }
 
-.chat-item.unread {
-  background-color: #fbbf24;
-  font-weight: bold;
-}
-
-.chat-item:hover {
-  background-color: #facc15;
-}
-
-.chat-link {
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-.chat-delete {
-  color: #fff;
-  background-color: #dc2626;
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin-left: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-  transition: 0.2s ease;
-}
-
-.chat-delete:hover {
-  background-color: #b91c1c;
-}
-
+/* Chat item */
 .chat-item {
+  background-color: #ffa000;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  transition: transform 0.1s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
+  /* 🆕 Uzun matn bo‘lsa */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
+/* Hover effekti */
 .chat-item:hover {
-  background-color: #f9f9f9;
+  transform: scale(1.02);
+  cursor: pointer;
 }
 
-.delete-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
+/* O‘qilmagan xabar belgisi */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 5px 2px rgba(255, 23, 68, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 12px 6px rgba(255, 23, 68, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 5px 2px rgba(255, 23, 68, 0.6);
+  }
 }
 
 .unread {
-  font-weight: bold;
+  border: 2px solid #ff1744;
+  animation: pulseGlow 2s infinite;
+}
+
+/* Delete tugmasi */
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: black;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: rgb(255, 2, 2);
+}
+
+/* Chat raqami va status */
+.chat-item div {
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  width: 100%;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid #ff9800;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsivlik (mobilga moslashuv) */
+@media (max-width: 480px) {
+  .chat-item div {
+    font-size: 16px;
+  }
+
+  .chat-list-container h2 {
+    font-size: 20px;
+  }
+
+  .chat-item {
+    padding: 10px 12px;
+  }
+
+  .chat-list-container {
+    padding: 10px;
+  }
 }
