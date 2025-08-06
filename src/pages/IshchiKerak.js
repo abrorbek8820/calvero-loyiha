@@ -115,10 +115,13 @@ return (
     {/* Scroll bo‘ladigan ishchilar ro‘yxati */}
     <div className="scrollable-workers">
       {loading ? (
-        <p className="text-center p-4 text-xl">🔎 Qidiruv</p>
-      ) : workers.length === 0 ? (
-        <p className="text-center p-4 text-xl">❌ Barcha ishchilar band</p>
-      ) : (
+  <div className="spinner-wrapper">
+    <div className="spinner"></div>
+    <p>🔎 Qidirilmoqda...</p>
+  </div>
+) : workers.length === 0 ? (
+  <p className="text-center p-4 text-xl">❌ Barcha ishchilar band</p>
+) : (
         <>
           {workers.slice(0, visibleCount).map((worker) => (
             <div
@@ -128,10 +131,10 @@ return (
             >
               <img src={worker.avatar_url || "/user.png"} alt="avatar" className="avatar" />
               <div className="worker-info">
-                <h3 className="worker-name">{worker.name}</h3><OnlineDot lastSeen={worker.last_seen} />
+                <h3 className="worker-name">{worker.name}<OnlineDot lastSeen={worker.last_seen} /> </h3>
                 <p className="worker-skill">{worker.skills[0]}</p>
                 <p className="worker-distance">📍 Sizdan {worker.distance} km uzoqlikda</p>
-                <p className="worker-location">🏙 {worker.birth_place}</p>
+                <p className="worker-location">{worker.birth_place}lik</p>
               </div>
             </div>
           ))}
