@@ -1,17 +1,29 @@
 /* Asosiy konteyner */
 .chat-list-container {
-  background-color: #0f1a3c; /* chuqur tun moviy */
-  color: white;
-  padding: 20px;
-  min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
-
-  /* 🆕 Moslashuvchanlik */
-  max-width: 500px;
+  transition: box-shadow 0.3s ease-in-out;
+  
+  width: 95vw; max-width: 500px;
+  height: auto; min-height: 95vh;
   margin: 0 auto;
+  padding: 24px 16px 40px 20px;
+  background-color: var(--card-bg);
+  border-radius: 24px; border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
   box-sizing: border-box;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
+
+body.light .chat-list-container {
+    box-shadow: 0 0px 30px
+    #ff9800;
+  }
+  body.dark .chat-list-container {
+    box-shadow: 0px 0px 30px
+    #ff9800;
+  }
 
 /* Sarlavha */
 .chat-list-container h2 {
