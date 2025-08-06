@@ -131,6 +131,9 @@ body.light .title {
 }
 
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(to bottom, #4a90e2, #357ab7) !important;
   color: #ffffff !important;
   border: none;
@@ -142,6 +145,17 @@ body.light .title {
   cursor: pointer;
   box-shadow: 10px 10px 20px rgba(83, 115, 204, 0.548);
   transition: background-color 0.3s, transform 0.2s;
+
+  white-space: nowrap;   /* ✅ Matnni 1 qatorda saqla */
+  text-align: center;    /* ✅ Markazda */
+}
+
+@media (max-width: 500px) {
+  .button {
+    width: 90%;
+    font-size: 16px;
+    white-space: nowrap;  /* 🤝 Mobilda ham bitta qatorda saqlaymiz */
+  }
 }
 
 .button.clicked {
