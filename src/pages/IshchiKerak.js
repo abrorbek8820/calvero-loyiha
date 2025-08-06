@@ -120,7 +120,7 @@ return (
     <p>🔎 Qidirilmoqda...</p>
   </div>
 ) : workers.length === 0 ? (
-  <p className="text-center p-4 text-xl">❌ Barcha ishchilar band! Iltimos, keyinroq urunib ko'ring!</p>
+  <p className="text-center p-4 text-xl">❌ Xozirda barcha ishchilar band! Iltimos, keyinroq urunib ko'ring!</p>
 ) : (
         <>
           {workers.slice(0, visibleCount).map((worker) => (

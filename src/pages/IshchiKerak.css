@@ -29,12 +29,12 @@
 body.light .ishchi-kerak-container {
   color: #0f1a3c;
     box-shadow: 0 0px 30px
-    #626262;
+    rgba(0, 106, 255, 0.669);
   }
   body.dark .ishchi-kerak-container {
     background-color: #0f1a3c;
     box-shadow: 0px 0px 30px
-    #b6b6b6;
+    rgb(0, 136, 255);
   }
 
 .fixed-header {
@@ -90,7 +90,7 @@ body.light .ishchi-kerak-container {
   align-items: center;
   gap: 12px;
   background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.701);
+  box-shadow: 0 0 10px rgba(0, 106, 255, 0.669);
   padding: 0 5px;
   border-radius: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
