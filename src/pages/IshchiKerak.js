@@ -120,7 +120,7 @@ return (
     <p>🔎 Qidirilmoqda...</p>
   </div>
 ) : workers.length === 0 ? (
-  <p className="text-center p-4 text-xl">❌ Barcha ishchilar band</p>
+  <p className="text-center p-4 text-xl">❌ Barcha ishchilar band! Iltimos, keyinroq urunib ko'ring!</p>
 ) : (
         <>
           {workers.slice(0, visibleCount).map((worker) => (
@@ -133,7 +133,7 @@ return (
               <div className="worker-info">
                 <h3 className="worker-name">{worker.name}<OnlineDot lastSeen={worker.last_seen} /> </h3>
                 <p className="worker-skill">{worker.skills[0]}</p>
-                <p className="worker-distance">📍 Sizdan {worker.distance} km uzoqlikda</p>
+                <p className="worker-distance">📍 Sizdan {worker.distance} km</p>
                 <p className="worker-location">{worker.birth_place}lik</p>
               </div>
             </div>
