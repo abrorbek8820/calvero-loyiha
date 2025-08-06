@@ -51,8 +51,8 @@ function Home() {
 
         {showThemeMenu && (
           <div className="theme-menu active">
-            <div onClick={() => toggleMode("light")}>🌞 Kunduzgi rejim</div>
-            <div onClick={() => toggleMode("dark")}>🌙 Kechgi rejim</div>
+            <div onClick={() => toggleMode("light")}>🌞 Kungi rejim</div>
+            <div onClick={() => toggleMode("dark")}>🌙 Tungi rejim</div>
           </div>
         )}
       </div>
