@@ -13,6 +13,8 @@ export default function Chat() {
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [fromIndex, setFromIndex] = useState(0);
+  const pageSize = 15;
   const messagesEndRef = useRef(null);
   const [otherLastSeen, setOtherLastSeen] = useState(null);
   const [autoScroll, setAutoScroll] = useState(true);
@@ -52,7 +54,7 @@ useEffect(() => {
   }, [sender_phone]);
 
   // Fetch chat messages
-  const fetchMessages = async () => {
+  const fetchMessages = async (from = 0, to = pageSize - 1, append = false) => {
   if (!sender_phone || !receiver_phone) return;
 
   // 1. Xabarlarni olish
@@ -62,10 +64,19 @@ useEffect(() => {
     .or(
       `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
     )
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .range(from, to);
 
-  if (!error) setMessages(data || []);
-  else console.error("Xabarlarni olishda xatolik:", error);
+  if (!error) {
+    if (append) {
+      setMessages(prev => [...data, ...prev]); // eski ustiga yangi emas, yangi ustiga eski
+    } else {
+      setMessages(data); // birinchi marta yuklaganda
+     // setTimeout(() => scrollToBottom(), 100); // avtomatik pastga tushadi
+    }
+  } else {
+    console.error("Xabarlarni olishda xatolik:", error);
+  };
 
   // 2. Qarshi foydalanuvchining oxirgi ko‘rgan vaqtini olish
   const { data: userData, error: userError } = await supabase
@@ -78,6 +89,17 @@ useEffect(() => {
     setOtherLastSeen(userData.last_seen); // dot uchun
   }
 };
+
+const loadMoreMessages = () => {
+  const newFrom = fromIndex + pageSize;
+  const newTo = newFrom + pageSize - 1;
+  setFromIndex(newFrom); // indeksni yangilaymiz
+  fetchMessages(newFrom, newTo, true); // append true bo‘lishi kerak
+};
+
+useEffect(() => {
+  fetchMessages(); // 0 dan 14 gacha olib keladi
+}, []);
 
 const checkOnlineStatus = async () => {
   const { data, error } = await supabase
@@ -225,6 +247,11 @@ const checkOnlineStatus = async () => {
       </div>
 
       <div className="chat-messages" ref={chatRef}>
+        {messages.length >= pageSize && (
+  <button onClick={loadMoreMessages} className="load-more-btn">
+    🔁 Yana yuklash
+  </button>
+)}
         {messages.map((msg) => {
           const isOwn = msg.sender_phone === sender_phone;
           const time = new Date(new Date(msg.created_at).getTime() + 5 * 60 * 60 * 1000)
