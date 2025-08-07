@@ -57,12 +57,16 @@ body.light .chat-container {
   border-radius: 20px;
   margin-bottom: 12px;
   position: relative;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .message-bubble.right {
   margin-left: auto;
   background-color: #0088cc;
   color: #fff;
+  align-self: flex-end;
 }
 
 .message-bubble.left {
@@ -71,9 +75,9 @@ body.light .chat-container {
   color: #000;
 }
 
-body.dark .message-bubble.left {
+/*body.dark .message-bubble.left {
   background-color: #bcbcbc;
-}
+}*/
 
 .message-time {
   font-size: 10px;
@@ -90,8 +94,8 @@ body.dark .message-bubble.left {
   background-color: #9d9d9d;
   border-top: 1px solid #02669b;
 
-  width: 97%;
-  max-width: 97%;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 
   position: sticky;
@@ -168,12 +172,25 @@ body.dark .chat-footer input {
   color: #4caf50; /* o‘qilgan bo‘lsa yashil */
 }
 
-.message-bubble.media-bubble {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  border: none !important;
+/*.message-bubble.media-bubble {
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+}*/
+
+.message-bubble.right.media-bubble {
+  background-color: transparent;
+  margin-left: auto;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.message-bubble.left.media-bubble {
+  background-color: transparent;
+  margin-right: auto;
+  align-self: flex-start;
+  text-align: left;
 }
 
 .message-bubble.media-bubble img.chat-image {
@@ -210,4 +227,17 @@ body.dark .chat-footer input {
 .chat-location-btn img {
   width: 25px;
   height: 25px;
+}
+
+.chat-input {
+  resize: none;
+  overflow-y: hidden;
+  max-height: 150px;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  flex-grow: 1;
+  box-sizing: border-box;
+  font-size: 16px;
 }

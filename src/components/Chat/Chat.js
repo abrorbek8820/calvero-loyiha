@@ -15,6 +15,29 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
   const [otherLastSeen, setOtherLastSeen] = useState(null);
+  const [autoScroll, setAutoScroll] = useState(true);
+  const chatRef = useRef();
+
+const handleScroll = () => {
+  const container = chatRef.current;
+  const isAtBottom =
+    container.scrollHeight - container.scrollTop - container.clientHeight < 20;
+  setAutoScroll(isAtBottom);
+};
+
+useEffect(() => {
+  const container = chatRef.current;
+  if (container) {
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }
+}, []);
+
+useEffect(() => {
+  if (autoScroll) {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [messages]);
 
   // Redirect to register if sender not available
   useEffect(() => {
@@ -161,9 +184,9 @@ export default function Chat() {
   }, [sender_phone, receiver_phone]);
 
   // Scroll to bottom
-  useEffect(() => {
+  /*useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages]);*/
 
   return (
     <div className="chat-container">
@@ -172,7 +195,7 @@ export default function Chat() {
         <OnlineDot lastSeen={otherLastSeen} showTime={true} />
       </div>
 
-      <div className="chat-messages">
+      <div className="chat-messages" ref={chatRef}>
         {messages.map((msg) => {
           const isOwn = msg.sender_phone === sender_phone;
           const time = new Date(new Date(msg.created_at).getTime() + 5 * 60 * 60 * 1000)
@@ -192,14 +215,32 @@ export default function Chat() {
           }
 
           if (msg.location) {
-            const mapsUrl = `https://maps.google.com/?q=${msg.location.lat},${msg.location.lng}`;
-            return (
-              <a key={msg.id} href={mapsUrl} onClick={(e) => { e.preventDefault(); window.open(mapsUrl, '_blank') || (window.location.href = mapsUrl); }} className={bubbleClass}>
-                <img src="/assets/map-icon.png" alt="joylashuv" className="chat-image" style={{ width: '80px', height: '80px', borderRadius: '8px' }} />
-                <div className="message-time">{time}{isOwn && <span className={`check-icon ${msg.read ? 'read' : ''}`}>{msg.read ? '✓✓' : '✓'}</span>}</div>
-              </a>
-            );
-          }
+  const mapsUrl = `https://maps.google.com/?q=${msg.location.lat},${msg.location.lng}`;
+  return (
+    <div key={msg.id} className={`message-bubble ${isOwn ? 'right' : 'left'} media-bubble`}>
+      <a
+        href={mapsUrl}
+        onClick={(e) => {
+          e.preventDefault();
+          window.open(mapsUrl, '_blank') || (window.location.href = mapsUrl);
+        }}
+      >
+        <img
+          src="/assets/map-icon.png"
+          alt="joylashuv"
+          className="chat-image"
+          style={{ width: '80px', height: '80px', borderRadius: '8px', border: '2px solid #4fc3f7' }}
+        />
+      </a>
+      <div className="message-time">
+        {time}
+        {isOwn && (
+          <span className={`check-icon ${msg.read ? 'read' : ''}`}>{msg.read ? '✓✓' : '✓'}</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
           return (
             <div key={msg.id} className={bubbleClass}>
@@ -222,12 +263,17 @@ export default function Chat() {
   <img src="/assets/send-location.png" alt="lokatsiya" />
 </button>
 
-        <input
-          type="text"
-          placeholder="Xabar yozing..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
+        <textarea
+  className="chat-input"
+  rows={1}
+  value={newMessage}
+  onChange={(e) => {
+    setNewMessage(e.target.value);
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  }}
+  placeholder="Xabar yozing..."
+/>
 
         <button className="chat-send-btn" onClick={sendMessage}>
           ➤
