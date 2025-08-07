@@ -14,7 +14,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [fromIndex, setFromIndex] = useState(0);
-  const pageSize = 15;
+  const pageSize = 12;
   const messagesEndRef = useRef(null);
   const [otherLastSeen, setOtherLastSeen] = useState(null);
   const [autoScroll, setAutoScroll] = useState(true);
