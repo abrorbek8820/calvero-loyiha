@@ -83,14 +83,23 @@ body.dark .message-bubble.left {
 }
 
 .chat-footer {
-  width: 96%;
-  align-items: center;
-  overflow: hidden;
   display: flex;
-  padding: 10px;
-  gap: 6px;
-  background-color: #fff;
-  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+  align-items: left;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #0288d1;
+  border-top: 1px solid #02669b;
+
+  width: 97%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto; /* 👈 elementlar sig‘masa scrollga o‘tsin */
 }
 
 body.dark .chat-footer {
@@ -98,12 +107,14 @@ body.dark .chat-footer {
 }
 
 .chat-footer input {
-  flex: 1;
-  padding: 8px;
+  flex-grow: 1;
+  padding: 10px 12px;
   border-radius: 20px;
-  border: 1px solid #ddd;
+  border: none;/*1px solid #ddd;*/
   outline: none;
   background-color: #ddd;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 body.dark .chat-footer input {
