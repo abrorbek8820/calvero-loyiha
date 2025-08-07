@@ -91,7 +91,7 @@ body.dark .message-bubble.left {
   border-top: 1px solid #02669b;
 
   width: 97%;
-  max-width: 100%;
+  max-width: 97%;
   box-sizing: border-box;
 
   position: sticky;
@@ -107,6 +107,7 @@ body.dark .chat-footer {
 }
 
 .chat-footer input {
+  height: auto;
   flex-grow: 1;
   padding: 10px 12px;
   border-radius: 20px;
