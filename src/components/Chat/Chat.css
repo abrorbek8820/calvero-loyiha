@@ -108,6 +108,7 @@ body.dark .chat-footer {
 
 .chat-footer input {
   height: auto;
+  max-width: 60%;
   flex-grow: 1;
   padding: 10px 12px;
   border-radius: 20px;
