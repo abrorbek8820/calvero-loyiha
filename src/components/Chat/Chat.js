@@ -218,12 +218,9 @@ export default function Chat() {
           📎
         </button>
 
-        <img
-          src="/assets/send-location.png"
-          alt="joylashuv yuborish"
-          onClick={sendLocation}
-          style={{ width: '28px', height: '28px', cursor: 'pointer', margin: '0 8px' }}
-        />
+        <button className="chat-location-btn" onClick={sendLocation}>
+  <img src="/assets/send-location.png" alt="lokatsiya" />
+</button>
 
         <input
           type="text"
