@@ -84,7 +84,7 @@ body.dark .message-bubble.left {
 
 .chat-footer {
   display: flex;
-  align-items: left;
+  align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
   background-color: #9d9d9d;
@@ -107,8 +107,9 @@ body.dark .chat-footer {
 }
 
 .chat-footer input {
-  max-width: 55%;
+  /*max-width: 55%;*/
   flex-grow: 1;
+  min-width: 0;
   padding: 10px 12px;
   border-radius: 20px;
   border: none;/*1px solid #ddd;*/
