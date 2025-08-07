@@ -17,6 +17,7 @@ export default function Chat() {
   const [otherLastSeen, setOtherLastSeen] = useState(null);
   const [autoScroll, setAutoScroll] = useState(true);
   const chatRef = useRef();
+  const [isOnline, setIsONnline] = useState(false);
 
   const textareaRef = useRef(null); const handleInputChange = (e) => { const value = e.target.value; setNewMessage(value); // Dynamic height: 
    const el = textareaRef.current; el.style.height = "auto";
@@ -52,19 +53,43 @@ useEffect(() => {
 
   // Fetch chat messages
   const fetchMessages = async () => {
-    if (!sender_phone || !receiver_phone) return;
+  if (!sender_phone || !receiver_phone) return;
 
-    const { data, error } = await supabase
-      .from("chats")
-      .select("*")
-      .or(
-        `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
-      )
-      .order("created_at", { ascending: true });
+  // 1. Xabarlarni olish
+  const { data, error } = await supabase
+    .from("chats")
+    .select("*")
+    .or(
+      `and(sender_phone.eq.${sender_phone},receiver_phone.eq.${receiver_phone}),and(sender_phone.eq.${receiver_phone},receiver_phone.eq.${sender_phone})`
+    )
+    .order("created_at", { ascending: true });
 
-    if (!error) setMessages(data || []);
-    else console.error("Xabarlarni olishda xatolik:", error);
-  };
+  if (!error) setMessages(data || []);
+  else console.error("Xabarlarni olishda xatolik:", error);
+
+  // 2. Qarshi foydalanuvchining oxirgi ko‘rgan vaqtini olish
+  const { data: userData, error: userError } = await supabase
+    .from("workers") // yoki "clients" — o‘zingga qarab
+    .select("last_seen")
+    .eq("phone", receiver_phone)
+    .single();
+
+  if (!userError && userData?.last_seen) {
+    setOtherLastSeen(userData.last_seen); // dot uchun
+  }
+};
+
+const checkOnlineStatus = async () => {
+  const { data, error } = await supabase
+    .from("workers")
+    .select("is_online")
+    .eq("phone", receiver_phone)
+    .single();
+
+  if (!error && data) {
+    setOtherLastSeen(data.is_online);
+  }
+};
 
   // Send text message
   const sendMessage = async () => {
