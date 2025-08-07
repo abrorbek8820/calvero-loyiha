@@ -18,6 +18,10 @@ export default function Chat() {
   const [autoScroll, setAutoScroll] = useState(true);
   const chatRef = useRef();
 
+  const textareaRef = useRef(null); const handleInputChange = (e) => { const value = e.target.value; setNewMessage(value); // Dynamic height: 
+   const el = textareaRef.current; el.style.height = "auto";
+   el.style.height = el.scrollHeight + "px"; };
+
 const handleScroll = () => {
   const container = chatRef.current;
   const isAtBottom =
@@ -264,14 +268,12 @@ useEffect(() => {
 </button>
 
         <textarea
+  ref={textareaRef}
   className="chat-input"
   rows={1}
+  style={{ height: newMessage ? undefined : "32px" }} // kichik balandlik bo‘sh paytida
   value={newMessage}
-  onChange={(e) => {
-    setNewMessage(e.target.value);
-    e.target.style.height = "auto";
-    e.target.style.height = e.target.scrollHeight + "px";
-  }}
+  onChange={handleInputChange}
   placeholder="Xabar yozing..."
 />
 
