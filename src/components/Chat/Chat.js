@@ -105,6 +105,27 @@ export default function Chat() {
     fetchLastSeen();
   };
 
+  useEffect(() => {
+  const markAsRead = async () => {
+    if (!sender_phone || !receiver_phone) return;
+
+    const { error } = await supabase
+      .from('chats')
+      .update({ read: true })
+      .match({
+        receiver_phone: sender_phone, // hozir chat ochgan foydalanuvchi
+        sender_phone: receiver_phone, // boshqa taraf
+        read: false
+      });
+
+    if (error) {
+      console.error("O'qilgan deb belgilashda xatolik:", error);
+    }
+  };
+
+  markAsRead();
+}, [sender_phone, receiver_phone, messages]);
+
   // Polling
   useEffect(() => {
     if (!sender_phone) navigate("/register");
