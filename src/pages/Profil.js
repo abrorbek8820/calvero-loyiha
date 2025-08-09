@@ -121,44 +121,49 @@ export default function Profil() {
     return <p className="text-white text-center mt-10">Yuklanmoqda...</p>;
 
   return (
-    <div className={`profil-container ${mode === "dark" ? "dark-mode" : "light-mode"}`}>
-  <div className="profil-card profil-top">
-    <div className="avatar-wrapper">
-      <img
-        src={avatarUrl || "/user.png"}
-        alt="Avatar"
-        className="avatar-img avatar-clickable"
-        onClick={() => fileInputRef.current?.click()}
-      />
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleAvatarChange}
-        className="hidden"
-      />
+  <div className={`profil-container ${mode === "dark" ? "dark-mode" : "light-mode"}`}>
+    {/* Yuqori va o‘rta qism */}
+    <div className="profile-content">
+      {/* Avatar + ism */}
+      <div className="profil-card profil-top">
+        <div className="avatar-wrapper">
+          <img
+            src={avatarUrl || "/user.png"}
+            alt="Avatar"
+            className="avatar-img avatar-clickable"
+            onClick={() => fileInputRef.current?.click()}
+          />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="hidden"
+          />
+        </div>
+
+        <div className="profile-ident">
+          <h2 className="profile-name">{name || "Ishchi"}</h2>
+        </div>
+      </div>
+
+      {/* O'zingiz haqingizda */}
+      <div className="info-box">
+        <label>O‘zingiz haqingizda:</label>
+        <textarea
+          value={about}
+          onChange={(e) => setAbout(e.target.value)}
+          placeholder="O‘zingiz haqingizda qisqacha yozing..."
+        />
+      </div>
     </div>
 
-    <div className="profile-ident">
-      <h2 className="profile-name">{name || "Ishchi"}</h2>
-      {/* istasang bu yerga job/status chip qo‘shamiz */}
+    {/* Pastki tugmalar */}
+    <div className="profile-actions">
+      <button onClick={handleAboutSave} className="save-button">Saqlash</button>
+      <button onClick={() => navigate("/edit-profile")} className="edit-button">Tahrirlash</button>
+      <button onClick={handleLogout} className="logout-button">Chiqish</button>
     </div>
   </div>
-
-  <div className="info-box">
-    <label>O‘zingiz haqingizda:</label>
-    <textarea
-      value={about}
-      onChange={(e) => setAbout(e.target.value)}
-      placeholder="O‘zingiz haqingizda qisqacha yozing..."
-    />
-    <button onClick={handleAboutSave} className="save-button">Saqlash</button>
-  </div>
-
-  <div className="button-group">
-    <button onClick={() => navigate("/edit-profile")} className="edit-button">Tahrirlash</button>
-    <button onClick={handleLogout} className="logout-button">Chiqish</button>
-  </div>
-</div>
-
-  );}
+);
+}
