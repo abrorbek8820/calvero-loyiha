@@ -1,25 +1,57 @@
+/* Tematik o'zgaruvchilar */
+:root {
+  --bg: #121212;
+  --card-bg: #171a1f;
+  --text: #e8e8e8;
+  --muted: #b8b8b8;
+  --primary: #2665b1;
+  --accent: #25D366; /* chat (WhatsApp uslubi) */
+  --name: #e3ff12;  /* mavjud dizayn bo‘yicha nom rangi */
+  --ring: rgba(38, 101, 177, 0.25);
+  --shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
 .profile-container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 680px;
+  margin: 16px auto;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  background-color: var(--card-bg); /* avval #ffffff edi */
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  font-family: "Arial", sans-serif;
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
+}
+
+/* dekorativ yumshoq gradient "halo" */
+.profile-container::before {
+  content: "";
+  position: absolute;
+  inset: -40% -40% auto -40%;
+  height: 180px;
+  background: radial-gradient(120px 120px at 10% 90%, var(--ring), transparent 60%),
+              radial-gradient(200px 200px at 90% 10%, rgba(227,255,18,0.2), transparent 60%);
+  filter: blur(20px);
+  pointer-events: none;
 }
 
 .back-button {
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 16px;
+  background: #1c1f25;
+  color: var(--text);
+  border: 1px solid #2a2f39;
+  border-radius: 8px;
+  padding: 8px 14px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  transition: transform .1s ease, background .2s ease, border-color .2s ease;
 }
+.back-button:hover { background: #222631; border-color: #3a4251; }
+.back-button:active { transform: translateY(1px); }
 
 .profile-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .profile-avatar {
@@ -27,39 +59,128 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #2665b1;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 0 6px var(--ring);
 }
 
 .profile-name {
-  margin-top: 10px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #e3ff12;
+  margin-top: 12px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--name); /* avval ham #e3ff12 edi */
+  letter-spacing: 0.3px;
 }
 
-.profile-details p {
-  margin: 10px 0;
-  font-size: 16px;
-  color: #dbdbdb;
+/* onlayn nuqta yonma-yon turishi uchun */
+.name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.loading {
-  text-align: center;
-  font-size: 18px;
-  color: #b8b8b8;
+/* Asosiy amallar qatori */
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 14px 0 6px;
 }
 
-.chat-button {
-  background-color: #25D366; /* WhatsApp rangiga oʻxshash yashil rang */
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
+.action-button {
+  background: #20242c;
+  color: var(--text);
+  border: 1px solid #2a2f39;
+  padding: 10px 14px;
+  border-radius: 12px;
   font-size: 14px;
   cursor: pointer;
-  margin-top: 12px;
+  transition: transform .1s ease, background .2s ease, border-color .2s ease;
+}
+.action-button:hover { background: #262b36; border-color: #3a4251; }
+.action-button:active { transform: translateY(1px); }
+
+.action-button.primary {
+  background: var(--primary);
+  border-color: transparent;
+  color: #fff;
+}
+.action-button.primary:hover { filter: brightness(1.05); }
+
+/* Chat tugmasi — mavjud yashil uslubni saqlaymiz */
+.chat-button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform .1s ease, filter .2s ease;
+}
+.chat-button:hover { filter: brightness(1.05); }
+.chat-button:active { transform: translateY(1px); }
+
+/* Badge (masofa, yosh va h.k.) */
+.badges {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.badge {
+  background: #1b1f27;
+  border: 1px solid #2a2f39;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
 }
 
-.chat-button:hover {
-  background-color: #1ebd55;
+/* Ma'lumotlar */
+.profile-details {
+  margin-top: 18px;
+}
+.profile-details p {
+  margin: 10px 0;
+  font-size: 15px;
+  color: var(--muted); /* avval #dbdbdb edi */
+}
+.profile-details strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Telefon link ko‘rinishidagi tugma */
+.phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  margin-left: 6px;
+  background: #1c212a;
+  border: 1px dashed #3a4251;
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.phone-link:hover { background: #222836; }
+
+/* Skills → chiplar */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.skill-chip {
+  background: #1c212a;
+  color: var(--text);
+  border: 1px solid #2a2f39;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
 }
