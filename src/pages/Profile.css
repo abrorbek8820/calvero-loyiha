@@ -1,186 +1,158 @@
-/* Tematik o'zgaruvchilar */
+/* ============ Theme tokens ============ */
 :root {
-  --bg: #121212;
-  --card-bg: #171a1f;
-  --text: #e8e8e8;
-  --muted: #b8b8b8;
-  --primary: #2665b1;
-  --accent: #25D366; /* chat (WhatsApp uslubi) */
-  --name: #e3ff12;  /* mavjud dizayn bo‘yicha nom rangi */
-  --ring: rgba(38, 101, 177, 0.25);
-  --shadow: 0 8px 32px rgba(0,0,0,0.35);
+  --radius: 14px;
+  --shadow: 0 12px 40px rgba(0,0,0,.28);
+
+  --primary: #2665b1;  /* brend ko'k */
+  --on-primary: #ffffff;
+
+  --accent: #25D366;   /* chat (WhatsApp) yashili */
+  /* Muhim: oq matn o'rniga to'q yozuv — kontrast yuqori bo'ladi */
+  --on-accent: #0b1f0e;
+
+  --name: #e3ff12;     /* ism rangi (xush ko'rganingiz) */
 }
 
+/* Dark */
+[data-theme="dark"] {
+  --bg: #0f1115;
+  --card-bg: #171a1f;
+  --text: #e9eef5;
+  --muted: #b8c0cc;
+  --border: #2a2f39;
+
+  --chip-bg: #1b1f27;
+  --chip-border: #2a2f39;
+  --badge-bg: #1b1f27;
+
+  --btn-bg: #20242c;
+  --btn-hover: #262b36;
+}
+
+/* Light */
+[data-theme="light"] {
+  --bg: #f7f9fc;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+
+  --chip-bg: #f2f6fb;
+  --chip-border: #e2e8f0;
+  --badge-bg: #eef2f7;
+
+  --btn-bg: #eff3f9;
+  --btn-hover: #e7edf6;
+}
+
+/* ============ Container ============ */
 .profile-container {
   max-width: 680px;
   margin: 16px auto;
   padding: 20px;
-  background-color: var(--card-bg); /* avval #ffffff edi */
-  border-radius: 14px;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
-  font-family: "Arial", sans-serif;
   color: var(--text);
-  position: relative;
-  overflow: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* dekorativ yumshoq gradient "halo" */
-.profile-container::before {
-  content: "";
-  position: absolute;
-  inset: -40% -40% auto -40%;
-  height: 180px;
-  background: radial-gradient(120px 120px at 10% 90%, var(--ring), transparent 60%),
-              radial-gradient(200px 200px at 90% 10%, rgba(227,255,18,0.2), transparent 60%);
-  filter: blur(20px);
-  pointer-events: none;
-}
-
+/* Back */
 .back-button {
-  background: #1c1f25;
+  background: var(--btn-bg);
   color: var(--text);
-  border: 1px solid #2a2f39;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
   padding: 8px 14px;
   cursor: pointer;
-  margin-bottom: 16px;
-  transition: transform .1s ease, background .2s ease, border-color .2s ease;
 }
-.back-button:hover { background: #222631; border-color: #3a4251; }
-.back-button:active { transform: translateY(1px); }
+.back-button:hover { background: var(--btn-hover); }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
+/* Header */
+.profile-header { text-align: center; margin-bottom: 12px; }
 .profile-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--primary);
-  box-shadow: 0 0 0 6px var(--ring);
+  width: 120px; height: 120px; border-radius: 50%;
+  object-fit: cover; border: 3px solid var(--primary);
+  box-shadow: 0 0 0 6px rgba(38,101,177,.25);
 }
-
 .profile-name {
-  margin-top: 12px;
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--name); /* avval ham #e3ff12 edi */
-  letter-spacing: 0.3px;
+  margin-top: 12px; font-size: 26px; font-weight: 800; color: var(--name);
 }
+.name-row { display: inline-flex; align-items: center; gap: 8px; }
 
-/* onlayn nuqta yonma-yon turishi uchun */
-.name-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Asosiy amallar qatori */
-.profile-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin: 14px 0 6px;
-}
-
-.action-button {
-  background: #20242c;
-  color: var(--text);
-  border: 1px solid #2a2f39;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: transform .1s ease, background .2s ease, border-color .2s ease;
-}
-.action-button:hover { background: #262b36; border-color: #3a4251; }
-.action-button:active { transform: translateY(1px); }
-
-.action-button.primary {
-  background: var(--primary);
-  border-color: transparent;
-  color: #fff;
-}
-.action-button.primary:hover { filter: brightness(1.05); }
-
-/* Chat tugmasi — mavjud yashil uslubni saqlaymiz */
-.chat-button {
-  background-color: var(--accent);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: transform .1s ease, filter .2s ease;
-}
-.chat-button:hover { filter: brightness(1.05); }
-.chat-button:active { transform: translateY(1px); }
-
-/* Badge (masofa, yosh va h.k.) */
+/* Badges */
 .badges {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 8px;
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px;
 }
 .badge {
-  background: #1b1f27;
-  border: 1px solid #2a2f39;
-  color: var(--muted);
-  font-size: 12px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  background: var(--badge-bg); border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; padding: 6px 10px; border-radius: 999px;
 }
 
-/* Ma'lumotlar */
-.profile-details {
-  margin-top: 18px;
-}
-.profile-details p {
-  margin: 10px 0;
-  font-size: 15px;
-  color: var(--muted); /* avval #dbdbdb edi */
-}
-.profile-details strong {
-  color: var(--text);
-  font-weight: 700;
-}
-
-/* Telefon link ko‘rinishidagi tugma */
-.phone-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  margin-left: 6px;
-  background: #1c212a;
-  border: 1px dashed #3a4251;
-  border-radius: 10px;
-  color: var(--text);
+/* ============ Buttons (unified) ============ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 10px 14px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid transparent;
   text-decoration: none;
-  cursor: pointer;
 }
-.phone-link:hover { background: #222836; }
+.btn:active { transform: translateY(1px); }
 
-/* Skills → chiplar */
-.skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 6px;
+.btn--primary   { background: var(--primary); color: var(--on-primary); }
+.btn--accent    { background: var(--accent);  color: var(--on-accent);  }
+.btn--neutral   { background: var(--btn-bg);  color: var(--text); border-color: var(--border); }
+.btn--outline   { background: transparent;    color: var(--text); border-color: var(--border); }
+.btn--primary:hover { filter: brightness(1.05); }
+.btn--accent:hover  { filter: brightness(1.03); }
+.btn--neutral:hover,
+.btn--outline:hover { background: var(--btn-hover); }
+
+/* Actions layout: mobil 2 ustun (qo'ng'iroq katta), keng ekranda 3 ustun */
+.profile-actions {
+  display: grid; gap: 10px; grid-template-columns: 1fr 1fr; margin: 14px 0 6px;
 }
+.btn-call { grid-column: 1 / -1; } /* mobil — butun qatorni egallaydi */
+@media (min-width: 560px) {
+  .profile-actions { grid-template-columns: repeat(3, 1fr); }
+  .btn-call { grid-column: auto; }
+}
+
+/* Details */
+.profile-details { margin-top: 14px; }
+.profile-details p { margin: 10px 0; font-size: 15px; color: var(--muted); }
+.profile-details strong { color: var(--text); font-weight: 700; }
+
+/* Phone link ko'rinishi */
+.phone-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; margin-left: 6px;
+  background: var(--btn-bg); border: 1px dashed var(--border); border-radius: 10px;
+  color: var(--text); cursor: pointer; text-decoration: none;
+}
+.phone-link:hover { background: var(--btn-hover); }
+
+/* Skills → chips */
+.skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .skill-chip {
-  background: #1c212a;
-  color: var(--text);
-  border: 1px solid #2a2f39;
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 12px;
+  background: var(--chip-bg); color: var(--text);
+  border: 1px solid var(--chip-border); border-radius: 999px;
+  padding: 6px 10px; font-size: 12px; line-height: 1;
 }
+.skill-chip.more { cursor: pointer; opacity: .9; }
+
+/* About → clamp + expand */
+.about-wrapper { position: relative; }
+.about {
+  white-space: pre-line; color: var(--muted); font-size: 15px; line-height: 1.5;
+}
+.about.clamped {
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;
+  overflow: hidden; max-height: 7.6em;
+}
+.moreless {
+  margin-top: 6px; border: none; background: transparent; color: var(--primary);
+  font-weight: 600; cursor: pointer; padding: 0;
+}
+
+/* Loading */
+.loading { text-align: center; font-size: 18px; color: var(--muted); }

@@ -1,37 +1,42 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './Profile.css';
 import OnlineDot from '../components/OnlineDot';
 
+const MAX_SKILLS = 8;
+
 export default function Profile() {
   const { phone } = useParams();
   const navigate = useNavigate();
+
   const [worker, setWorker] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
+
+  const [showAbout, setShowAbout] = useState(false);
+  const [showAllSkills, setShowAllSkills] = useState(false);
+
   const hasUpdated = useRef(false);
 
-  // 1) profilga kirishlar hisoblagichi
+  // Kirishlar hisoblagichi
   useEffect(() => {
     if (hasUpdated.current) return;
     hasUpdated.current = true;
     supabase.rpc('increment_views', { user_phone: phone });
   }, [phone]);
 
-  // 2) foydalanuvchi GPS
+  // GPS
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
       });
     }
   }, []);
 
-  // 3) worker ma'lumoti + masofa
+  // Worker + masofa
   useEffect(() => {
     const fetchWorker = async () => {
       const { data, error } = await supabase
@@ -42,7 +47,7 @@ export default function Profile() {
 
       if (!error && data) {
         const filteredSkills = Array.isArray(data.skills)
-          ? data.skills.filter((skill) => skill && skill.toLowerCase() !== 'barchasini tanlash')
+          ? data.skills.filter(s => s && s.toLowerCase() !== 'barchasini tanlash')
           : [];
 
         const next = { ...data, skills: filteredSkills };
@@ -50,10 +55,8 @@ export default function Profile() {
 
         if (userLocation && data.latitude && data.longitude) {
           const dist = calculateDistance(
-            userLocation.latitude,
-            userLocation.longitude,
-            data.latitude,
-            data.longitude
+            userLocation.latitude, userLocation.longitude,
+            data.latitude, data.longitude
           ).toFixed(1);
           setDistance(dist);
         }
@@ -61,7 +64,6 @@ export default function Profile() {
         console.error('Xatolik:', error);
       }
     };
-
     fetchWorker();
   }, [phone, userLocation]);
 
@@ -69,13 +71,10 @@ export default function Profile() {
     const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    const a = Math.sin(dLat/2)**2 +
+      Math.cos((lat1*Math.PI)/180) * Math.cos((lat2*Math.PI)/180) *
+      Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   };
 
   const handlePhoneClick = async () => {
@@ -103,6 +102,11 @@ export default function Profile() {
   if (!worker) return <div className="loading">Ma'lumotlar yuklanmoqda...</div>;
 
   const age = getAge();
+  const skills = Array.isArray(worker.skills) ? worker.skills : [];
+  const visibleSkills = showAllSkills ? skills : skills.slice(0, MAX_SKILLS);
+  const restCount = Math.max(skills.length - MAX_SKILLS, 0);
+  const aboutText = worker.about_text || "";
+  const aboutNeedsMore = aboutText.length > 220; // taxminiy trigger
 
   return (
     <div className="profile-container">
@@ -119,25 +123,24 @@ export default function Profile() {
           <OnlineDot lastSeen={worker.last_seen} />
         </div>
 
-        {/* Badges: masofa, yosh */}
         <div className="badges">
-          {distance && <span className="badge">📌 Sizdan: {distance} km</span>}
           {age && <span className="badge">🎂 {age} yosh</span>}
           {worker.gender && <span className="badge">👤 {worker.gender}</span>}
+          {distance && <span className="badge">📌 Sizdan: {distance} km</span>}
         </div>
 
-        {/* Asosiy amallar */}
+        {/* Actions */}
         <div className="profile-actions">
-          <button className="action-button primary" onClick={handlePhoneClick}>
+          <button className="btn btn--primary btn-call" onClick={handlePhoneClick}>
             📞 Qo‘ng‘iroq qilish
           </button>
-          <button className="chat-button" onClick={() => navigate(`/chat/${worker.phone}`)}>
+          <button className="btn btn--accent" onClick={() => navigate(`/chat/${worker.phone}`)}>
             ✉️ Xabar yozish
           </button>
-          {worker.latitude && worker.longitude && (
-            <button className="action-button" onClick={openInMaps}>
-              🗺 Xarita
-            </button>
+          {(worker.latitude && worker.longitude) ? (
+            <button className="btn btn--neutral" onClick={openInMaps}>🗺 Xarita</button>
+          ) : (
+            <button className="btn btn--outline" disabled>🗺 Xarita</button>
           )}
         </div>
       </div>
@@ -153,14 +156,27 @@ export default function Profile() {
 
         <p><strong>🛠 Kasblari:</strong></p>
         <div className="skills">
-          {(worker.skills && worker.skills.length > 0)
-            ? worker.skills.map((s, i) => <span key={i} className="skill-chip">{s}</span>)
+          {visibleSkills.length > 0
+            ? visibleSkills.map((s, i) => <span key={i} className="skill-chip">{s}</span>)
             : <span className="badge">Ma’lumot yo‘q</span>}
+          {!showAllSkills && restCount > 0 && (
+            <button className="skill-chip more" onClick={() => setShowAllSkills(true)}>
+              +{restCount}
+            </button>
+          )}
         </div>
 
-        <p style={{ marginTop: 12 }}>
-          <strong>ℹ️ O‘zi haqida:</strong> {worker.about_text || "Ma'lumot yo'q."}
-        </p>
+        <p><strong>ℹ️ O‘zi haqida:</strong></p>
+        <div className="about-wrapper">
+          <div className={`about ${aboutNeedsMore && !showAbout ? 'clamped' : ''}`}>
+            {aboutText || "Ma'lumot yo'q."}
+          </div>
+          {aboutNeedsMore && (
+            <button className="moreless" onClick={() => setShowAbout(!showAbout)}>
+              {showAbout ? "Kamroq" : "Ko‘proq"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
