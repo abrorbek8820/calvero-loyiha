@@ -1,72 +1,104 @@
+:root {
+  --brand: #e11d48;       /* Calvero Red */
+  --brand-600: #be123c;   /* hover */
+  --ink: #0b0b0c;         /* matn (dark) */
+  --paper: #ffffff;       /* karta (light) */
+  --bg: #0b0b0c;          /* fon (dark) */
+  --card: #121214;        /* karta (dark) */
+  --muted: #9ca3af;
+  --ring: #22232a;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --shadow-elev: 0 10px 28px rgba(0,0,0,.35);
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger:  #ef4444;
+}
+
+body.light .profil-container {
+  --bg: #f7f8fb;
+  --card: var(--paper);
+  --ink: #0b0b0c;
+  --ring: #e5e7eb;
+  --shadow-elev: 0 10px 24px rgba(0,0,0,.08);
+}
+
+body.dark  .profil-container {
+  --bg: #0b0b0c;
+  --card: #121214;
+  --ink: #e7e7ea;
+  --ring: #22232a;
+  --shadow-elev: 0 10px 28px rgba(0,0,0,.35);
+}
+
 /* Asosiy konteyner */
-/*.profil-container {
-  max-width: 500px;
-  margin: 24px auto;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s, color 0.3s;
-  overflow-y: auto;
-}*/
-
 .profil-container {
-  max-height: 100vh; /* ekran balandligidan oshmaydi */
-  overflow-y: auto; /* vertikal scroll qo'shiladi */
-  padding-bottom: 20px; /* pastda qo'shimcha joy */
+  overflow-x: hidden;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 20px;
 }
 
-.profil-container.dark-mode {
-  background-color: #1e293b;
-  color: #f1f5f9;
-}
-
-.profil-container.light-mode {
-  background-color: #f9fafb;
-  color: #1e293b;
-}
-
-/* Profil kartasi ichidagi elementlar */
+/* Profil kartasi */
 .profil-card {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Avatar qismi */
-.avatar-wrapper {
+/* Avatar + ism blok */
+.profil-top {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar-wrapper {
   position: relative;
+  width: 98px;
+  height: 98px;
+  flex: 0 0 98px;
 }
 
-.avatar-wrapper img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+.avatar-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 3px solid #94a3b8;
-  background-color: #cbd5e1;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  border: 2px solid var(--ring);
+  display: block;
 }
 
-.avatar-wrapper span {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  font-size: 12px;
-  background-color: #475569;
-  color: #f1f5f9;
-  padding: 4px 8px;
-  border-radius: 6px;
+.avatar-clickable {
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 
-.avatar-wrapper span:hover {
-  background-color: #64748b;
+.avatar-clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
 }
 
-/* Info bloki */
+.hidden {
+  display: none;
+}
+
+.profile-ident {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+/* Info box */
 .info-box {
   border-radius: 12px;
   padding: 16px;
@@ -97,6 +129,7 @@
 
 /* Textarea */
 textarea {
+  box-sizing: border-box;
   width: 100%;
   padding: 12px;
   border-radius: 10px;
@@ -110,10 +143,6 @@ textarea {
 }
 
 /* Tugmalar */
-button {
-  transition: background-color 0.2s ease;
-}
-
 .save-button,
 .edit-button,
 .logout-button {
@@ -127,28 +156,15 @@ button {
   color: white;
 }
 
-.save-button {
-  background-color: #10b981;
-}
-.save-button:hover {
-  background-color: #059669;
-}
+.save-button { background-color: #10b981; }
+.save-button:hover { background-color: #059669; }
 
-.edit-button {
-  background-color: #3b82f6;
-}
-.edit-button:hover {
-  background-color: #2563eb;
-}
+.edit-button { background-color: #3b82f6; }
+.edit-button:hover { background-color: #2563eb; }
 
-.logout-button {
-  background-color: #ef4444;
-}
-.logout-button:hover {
-  background-color: #dc2626;
-}
+.logout-button { background-color: #ef4444; }
+.logout-button:hover { background-color: #dc2626; }
 
-/* Tugmalar ketma-ket chiqishi uchun */
 .button-group {
   display: flex;
   flex-direction: column;
@@ -157,25 +173,23 @@ button {
 
 /* Mobil optimizatsiya */
 @media (max-width: 480px) {
-  .profil-container {
-    padding: 16px;
-    border-radius: 12px;
-  }
+  .profil-container { padding: 16px; border-radius: 12px; }
+  .avatar-wrapper { width: 80px; height: 80px; flex-basis: 80px; }
+  .profile-name { font-size: 16px; }
+  .save-button, .edit-button, .logout-button { font-size: 14px; padding: 10px; }
+}
 
-  .avatar-wrapper img {
-    width: 100px;
-    height: 100px;
-  }
+/* Yuqori qatlam gorizontal */
+.profil-top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 
-  .avatar-wrapper span {
-    font-size: 11px;
-    padding: 2px 6px;
-  }
-
-  .save-button,
-  .edit-button,
-  .logout-button {
-    font-size: 14px;
-    padding: 10px;
-  }
+/* Avatar konteyner – markazga majburlashni olib tashlaymiz */
+.avatar-wrapper{
+  position:relative;
+  width:98px;
+  height:98px;
+  flex:0 0 98px;
 }

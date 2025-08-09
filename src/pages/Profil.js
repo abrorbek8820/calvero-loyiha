@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import "./Profil.css";
@@ -12,6 +12,7 @@ export default function Profil() {
   const [about, setAbout] = useState("");
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState("light");
+  const fileInputRef = useRef(null);
 
   // Rejimni body class orqali olish
   useEffect(() => {
@@ -121,40 +122,43 @@ export default function Profil() {
 
   return (
     <div className={`profil-container ${mode === "dark" ? "dark-mode" : "light-mode"}`}>
-      <div className="profil-card">
-        <div className="avatar-wrapper">
-          <label className="relative cursor-pointer">
-            <img src={avatarUrl || "/user.png"} alt="Avatar" className="avatar-img" />
-            <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
-            <span className="change-text">O‘zgartirish</span>
-          </label>
-        </div>
-
-        <div className="info-box">
-          <label>Ism:</label>
-          <p>{name}</p>
-        </div>
-        <div className="info-box">
-          <label>O‘zingiz haqingizda:</label>
-          <textarea
-            value={about}
-            onChange={(e) => setAbout(e.target.value)}
-            placeholder="O‘zingiz haqingizda qisqacha yozing..."
-          ></textarea>
-          <button onClick={handleAboutSave} className="save-button">
-            Saqlash
-          </button>
-        </div>
-
-        <div className="button-group">
-          <button onClick={() => navigate("/edit-profile")} className="edit-button">
-            Tahrirlash
-          </button>
-          <button onClick={handleLogout} className="logout-button">
-            Chiqish
-          </button>
-        </div>
-      </div>
+  <div className="profil-card profil-top">
+    <div className="avatar-wrapper">
+      <img
+        src={avatarUrl || "/user.png"}
+        alt="Avatar"
+        className="avatar-img avatar-clickable"
+        onClick={() => fileInputRef.current?.click()}
+      />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleAvatarChange}
+        className="hidden"
+      />
     </div>
-  );
-}
+
+    <div className="profile-ident">
+      <h2 className="profile-name">{name || "Ishchi"}</h2>
+      {/* istasang bu yerga job/status chip qo‘shamiz */}
+    </div>
+  </div>
+
+  <div className="info-box">
+    <label>O‘zingiz haqingizda:</label>
+    <textarea
+      value={about}
+      onChange={(e) => setAbout(e.target.value)}
+      placeholder="O‘zingiz haqingizda qisqacha yozing..."
+    />
+    <button onClick={handleAboutSave} className="save-button">Saqlash</button>
+  </div>
+
+  <div className="button-group">
+    <button onClick={() => navigate("/edit-profile")} className="edit-button">Tahrirlash</button>
+    <button onClick={handleLogout} className="logout-button">Chiqish</button>
+  </div>
+</div>
+
+  );}
