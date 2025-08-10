@@ -124,85 +124,84 @@ export default function Profile() {
   const aboutNeedsMore = aboutText.length > 220; // taxminiy trigger
 
   return (
-  <div className="profile-page">
-    <div className="profile-scroll">
-      <div className="profile-container">
+  <div className="profile-screen">
+    <div className="profile-container">
+      <button className="back-button" onClick={() => navigate(-1)}>Ortga</button>
 
-        <div className="profile-header">
-          <img
-            src={worker.avatar_url || '/user.png'}
-            alt={`${worker.name || 'Ishchi'} — avatar`}
-            className="profile-avatar"
-          />
-          <div className="name-row">
-            <h2 className="profile-name">{worker.name}</h2>
-            <OnlineDot lastSeen={worker.last_seen} />
-          </div>
-
-          {/* Badges */}
-          <div className="badges">
-            {age && <span className="badge">🎂 {age} yosh</span>}
-            {worker.gender && <span className="badge">👤 {worker.gender}</span>}
-            {distance && <span className="badge">📌 Sizdan: {distance} km</span>}
-          </div>
-
-          {/* Actions (keng ekranda ko'rinadi) */}
-          <div className="profile-actions">
-            <button className="btn btn--primary btn-call" onClick={handlePhoneClick}>
-              📞 Qo‘ng‘iroq qilish
-            </button>
-            <button
-              className="btn btn--accent"
-              onClick={() => navigate(`/chat/${worker.phone}`)}
-            >
-              ✉️ Xabar yozish
-            </button>
-            {(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
-              <button className="btn btn--neutral" onClick={openInMaps}>🗺 Xarita</button>
-            ) : (
-              <button className="btn btn--outline" disabled>🗺 Xarita</button>
-            )}
-          </div>
+      <div className="profile-header">
+        <img
+          src={worker.avatar_url || '/user.png'}
+          alt={`${worker.name || 'Ishchi'} — avatar`}
+          className="profile-avatar"
+        />
+        <div className="name-row">
+          <h2 className="profile-name">{worker.name}</h2>
+          <OnlineDot lastSeen={worker.last_seen} />
         </div>
 
-        <div className="profile-details">
-          <p>
-            <strong>📞 Telefon raqami:</strong>
-            <span className="phone-link" onClick={handlePhoneClick} role="link" tabIndex={0}>
-              +{worker.phone}
-            </span>
-          </p>
+        {/* Badges */}
+        <div className="badges">
+          {age && <span className="badge">🎂 {age} yosh</span>}
+          {worker.gender && <span className="badge">👤 {worker.gender}</span>}
+          {distance && <span className="badge">📌 Sizdan: {distance} km</span>}
+        </div>
 
-          <p><strong>📍 Tug‘ilgan shahar:</strong> {worker.birth_place || '—'}</p>
+        {/* Actions — desktop/tablet */}
+        <div className="profile-actions">
+          <button className="btn btn--primary btn-call" onClick={handlePhoneClick}>
+            📞 Qo‘ng‘iroq qilish
+          </button>
+          <button
+            className="btn btn--accent"
+            onClick={() => navigate(`/chat/${worker.phone}`)}
+          >
+            ✉️ Xabar yozish
+          </button>
+          {(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
+            <button className="btn btn--neutral" onClick={openInMaps}>🗺 Xarita</button>
+          ) : (
+            <button className="btn btn--outline" disabled>🗺 Xarita</button>
+          )}
+        </div>
+      </div>
 
-          <p><strong>🛠 Kasblari:</strong></p>
-          <div className="skills">
-            {visibleSkills.length > 0
-              ? visibleSkills.map((s, i) => <span key={i} className="skill-chip">{s}</span>)
-              : <span className="badge">Ma’lumot yo‘q</span>}
-            {!showAllSkills && restCount > 0 && (
-              <button className="skill-chip more" onClick={() => setShowAllSkills(true)}>
-                +{restCount}
-              </button>
-            )}
+      <div className="profile-details">
+        <p>
+          <strong>📞 Telefon raqami:</strong>
+          <span className="phone-link" onClick={handlePhoneClick} role="link" tabIndex={0}>
+            +{worker.phone}
+          </span>
+        </p>
+
+        <p><strong>📍 Tug‘ilgan shahar:</strong> {worker.birth_place || '—'}</p>
+
+        <p><strong>🛠 Kasblari:</strong></p>
+        <div className="skills">
+          {visibleSkills.length > 0
+            ? visibleSkills.map((s, i) => <span key={i} className="skill-chip">{s}</span>)
+            : <span className="badge">Ma’lumot yo‘q</span>}
+          {!showAllSkills && restCount > 0 && (
+            <button className="skill-chip more" onClick={() => setShowAllSkills(true)}>
+              +{restCount}
+            </button>
+          )}
+        </div>
+
+        <p><strong>ℹ️ O‘zi haqida:</strong></p>
+        <div className="about-wrapper">
+          <div className={`about ${aboutNeedsMore && !showAbout ? 'clamped' : ''}`}>
+            {aboutText || "Ma'lumot yo'q."}
           </div>
-
-          <p><strong>ℹ️ O‘zi haqida:</strong></p>
-          <div className="about-wrapper">
-            <div className={`about ${aboutNeedsMore && !showAbout ? 'clamped' : ''}`}>
-              {aboutText || "Ma'lumot yo'q."}
-            </div>
-            {aboutNeedsMore && (
-              <button className="moreless" onClick={() => setShowAbout(!showAbout)}>
-                {showAbout ? 'Kamroq' : 'Ko‘proq'}
-              </button>
-            )}
-          </div>
+          {aboutNeedsMore && (
+            <button className="moreless" onClick={() => setShowAbout(!showAbout)}>
+              {showAbout ? 'Kamroq' : 'Ko‘proq'}
+            </button>
+          )}
         </div>
       </div>
     </div>
 
-    {/* Pastga yopishgan CTA (mobil) */}
+    {/* Pastga yopishgan CTA — mobil */}
     <div className="sticky-cta">
       <button className="btn btn--primary" onClick={handlePhoneClick}>📞 Qo‘ng‘iroq</button>
       <button className="btn btn--accent" onClick={() => navigate(`/chat/${worker.phone}`)}>
