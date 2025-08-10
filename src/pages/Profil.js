@@ -123,7 +123,7 @@ export default function Profil() {
   return (
   <div className={`profil-container ${mode === "dark" ? "dark-mode" : "light-mode"}`}>
     {/* Yuqori va o‘rta qism */}
-    <div className="profile-content">
+    <div className="profil-content">
       {/* Avatar + ism */}
       <div className="profil-card profil-top">
         <div className="avatar-wrapper">
@@ -142,8 +142,8 @@ export default function Profil() {
           />
         </div>
 
-        <div className="profile-ident">
-          <h2 className="profile-name">{name || "Ishchi"}</h2>
+        <div className="profil-ident">
+          <h2 className="profil-name">{name || "Ishchi"}</h2>
         </div>
       </div>
 
