@@ -6,14 +6,14 @@
   --primary: #2665b1;  /* brend ko'k */
   --on-primary: #ffffff;
 
-  --accent: #25D366;   /* chat (WhatsApp) yashili */
-  /* Muhim: oq matn o'rniga to'q yozuv — kontrast yuqori bo'ladi */
-  --on-accent: #0b1f0e;
+  --accent: #25D366;   /* chat */
+  --on-accent: #0b1f0e; /* kontrasti yuqori matn */
 
-  --name: #e3ff12;     /* ism rangi (xush ko'rganingiz) */
+  --name: #e3ff12;     /* ism rangi */
 }
 
-/* Dark */
+/* Dark (default) */
+:root,
 [data-theme="dark"] {
   --bg: #0f1115;
   --card-bg: #171a1f;
@@ -45,17 +45,8 @@
   --btn-hover: #e7edf6;
 }
 
-/* ============ Container ============ */
-.profile-container {
-  max-width: 680px;
-  margin: 16px auto;
-  padding: 20px;
-  background-color: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-}
+/* ============ Page & Container ============ */
+body { background: var(--bg); }
 
 /* Back */
 .back-button {
@@ -65,6 +56,7 @@
   border-radius: 10px;
   padding: 8px 14px;
   cursor: pointer;
+  margin-bottom: 12px;
 }
 .back-button:hover { background: var(--btn-hover); }
 
@@ -89,32 +81,19 @@
   color: var(--muted); font-size: 12px; padding: 6px 10px; border-radius: 999px;
 }
 
-/* ============ Buttons (unified) ============ */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 44px; padding: 10px 14px; border-radius: 12px;
-  font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid transparent;
-  text-decoration: none;
-}
-.btn:active { transform: translateY(1px); }
-
-.btn--primary   { background: var(--primary); color: var(--on-primary); }
-.btn--accent    { background: var(--accent);  color: var(--on-accent);  }
-.btn--neutral   { background: var(--btn-bg);  color: var(--text); border-color: var(--border); }
-.btn--outline   { background: transparent;    color: var(--text); border-color: var(--border); }
-.btn--primary:hover { filter: brightness(1.05); }
-.btn--accent:hover  { filter: brightness(1.03); }
-.btn--neutral:hover,
-.btn--outline:hover { background: var(--btn-hover); }
 
 /* Actions layout: mobil 2 ustun (qo'ng'iroq katta), keng ekranda 3 ustun */
 .profile-actions {
   display: grid; gap: 10px; grid-template-columns: 1fr 1fr; margin: 14px 0 6px;
 }
-.btn-call { grid-column: 1 / -1; } /* mobil — butun qatorni egallaydi */
+.btn-call { grid-column: 1 / -1; } /* mobil — butun qator */
 @media (min-width: 560px) {
   .profile-actions { grid-template-columns: repeat(3, 1fr); }
   .btn-call { grid-column: auto; }
+}
+@media (max-width: 559px) {
+  /* mobil — yuqoridagi actions'ni ko'rsatmasak ham bo'ladi (pastda sticky bor) */
+  .profile-actions { display: none; }
 }
 
 /* Details */
@@ -122,14 +101,6 @@
 .profile-details p { margin: 10px 0; font-size: 15px; color: var(--muted); }
 .profile-details strong { color: var(--text); font-weight: 700; }
 
-/* Phone link ko'rinishi */
-.phone-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 10px; margin-left: 6px;
-  background: var(--btn-bg); border: 1px dashed var(--border); border-radius: 10px;
-  color: var(--text); cursor: pointer; text-decoration: none;
-}
-.phone-link:hover { background: var(--btn-hover); }
 
 /* Skills → chips */
 .skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
@@ -156,3 +127,79 @@
 
 /* Loading */
 .loading { text-align: center; font-size: 18px; color: var(--muted); }
+
+
+/* --- Profile sahifa: dark fonni CSSdan boshqaramiz --- */
+.profile-container {
+  background-color: #121212;   /* avval #ffffff edi */
+  color: #ffffff;
+  max-width: 680px;            /* biroz kengroq card */
+  margin: 16px auto;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.28);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* --- Sticky CTA (pastga yopishgan tugmalar paneli) --- */
+.sticky-cta {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(18,18,18,0.92);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  z-index: 1000;
+}
+
+/* Kontent pastdagi panel ostiga kirib ketmasin */
+.page-spacer { height: 72px; }
+
+/* CTA tugmalari */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 10px 14px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  border: 1px solid transparent; text-decoration: none;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn--primary { background: #2665b1; color: #fff; }
+.btn--accent  { background: #25D366; color: #0b1f0e; }  /* yuqori kontrast */
+.btn--neutral { background: #20242c; color: #e8e8e8; border-color: #2a2f39; }
+.btn--outline { background: transparent; color: #e8e8e8; border-color: #2a2f39; }
+.btn--primary:hover { filter: brightness(1.05); }
+.btn--accent:hover  { filter: brightness(1.03); }
+.btn--neutral:hover,
+.btn--outline:hover { background: #262b36; }
+
+/* Telefon havola ko‘rinishi (bor bo‘lmasa qo‘shing) */
+.phone-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; margin-left: 6px;
+  background: #20242c; border: 1px dashed #2a2f39; border-radius: 10px;
+  color: #e8e8e8; cursor: pointer; text-decoration: none;
+}
+.phone-link:hover { background: #262b36; }
+
+/* --- Profil uchun local skroll qobiq (sahifa skrolliga o'xshash) --- */
+.profile-page {
+  position: relative;
+  height: 100dvh;              /* mobilda barqaror viewport */
+  background: var(--bg);
+}
+
+.profile-scroll {
+  height: 100%;
+  overflow-y: auto;            /* shu yerda skroll bo'ladi */
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 0 88px;        /* pastdagi sticky CTA uchun bo'sh joy */
+}
+
+/* Desktopda sticky CTA ni yashiramiz, tepada Actions bor */
+@media (min-width: 560px) {
+  .sticky-cta { display: none; }
+}
