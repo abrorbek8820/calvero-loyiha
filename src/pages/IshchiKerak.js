@@ -129,12 +129,17 @@ return (
               key={worker.phone}
               onClick={() => navigate(`/profile/${worker.phone}`)}
             >
+              <div className="ustunli">
+              <h3 className="worker-name">{worker.name}<OnlineDot lastSeen={worker.last_seen} /> </h3>
+              <div className="workerlar">
               <img src={worker.avatar_url || "/user.png"} alt="avatar" className="avatar" />
+              
               <div className="worker-info">
-                <h3 className="worker-name">{worker.name}<OnlineDot lastSeen={worker.last_seen} /> </h3>
                 <p className="worker-skill">{worker.skills[0]}</p>
                 <p className="worker-distance">📍 Sizdan {worker.distance} km</p>
                 <p className="worker-location">{worker.birth_place}lik</p>
+                </div>
+                </div>
               </div>
             </div>
           ))}

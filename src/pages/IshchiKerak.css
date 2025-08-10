@@ -127,7 +127,7 @@ body.dark .worker-card {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: auto;
+  font-size: 25px;
   font-weight: bold;
   color: #222;
 }
@@ -246,14 +246,14 @@ body.dark .worker-card {
 
 
 .avatar {
-  max-width: 50px;
-  max-height: 50px;
-  min-width:50px;
-  min-height: 50px;
+  max-width: 100px;
+  max-height: 100px;
+  min-width:100px;
+  min-height: 100px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #4f79f7 !important;
-  box-shadow: 0 4px 12px rgb(46, 0, 229)));
+  box-shadow: 0 4px 12px rgba(46, 0, 229, 0);
 }
 
 .dark-mode .avatar {
@@ -281,4 +281,17 @@ body.dark .worker-card {
 @keyframes spin {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.workerlar{
+  display: flex;
+  overflow: hidden;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ustunli{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
 }
