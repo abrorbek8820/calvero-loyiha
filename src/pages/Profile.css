@@ -7,7 +7,7 @@
   --on-primary: #ffffff;
 
   --accent: #25D366;   /* chat */
-  --on-accent: #0b1f0e; /* kontrasti yuqori matn */
+  --on-accent: #1f1f1f; /* kontrasti yuqori matn */
 
   --name: #e3ff12;     /* ism rangi */
 }
@@ -21,7 +21,7 @@
   --muted: #545454;
   --border: #000000;
 
-  --chip-bg: #ebffeb;
+  --chip-bg: #f4f4f4;
   --chip-border: #2a2f39;
   --badge-bg: #1b1f27;
 
@@ -57,7 +57,7 @@ body { background: var(--bg); }
   box-shadow: 0 0 0 6px rgba(38,101,177,.25);
 }
 .profile-name {
-  margin-top: 12px; font-size: 26px; font-weight: 800; color: #112c4c;
+  margin-top: 12px; font-size: 26px; font-weight: 800; color: #6b6b6b;
 }
 
 body.dark .profile-name { color: #e6df16; }
@@ -69,7 +69,7 @@ body.dark .profile-name { color: #e6df16; }
 }
 .badge {
   background: #c8c8c8; border: 1px solid var(--border);
-  color: black; font-size: 12px; padding: 6px 10px; border-radius: 999px;
+  color: rgb(0, 0, 0); font-size: 12px; padding: 6px 10px; border-radius: 999px;
 }
 
 
@@ -92,7 +92,7 @@ body.dark .profile-name { color: #e6df16; }
 .profile-details p { margin: 10px 0; font-size: 15px; color: var(--muted); }
 body.dark .profile-details p { color: #dddddd}
 .profile-details strong { color: var(--text); font-weight: 700; }
-body.dark .profile-details strong { color: #d2d769; font-weight: 700; }
+body.dark .profile-details strong { color: #dfe0ce; font-weight: 700; }
 
 
 /* Skills → chips */
@@ -133,7 +133,7 @@ body.dark .skill-chip {
 /* --- Profile sahifa: dark fonni CSSdan boshqaramiz --- */
 .profile-container {
   background-color: rgb(250, 252, 255);   /* avval #ffffff edi */
-  color: #000000;
+  color: #f5f5f5;
   max-width: 680px;            /* biroz kengroq card */
   margin: 16px auto;
   padding: 20px;
@@ -151,13 +151,16 @@ body.dark .profile-container {
   position: fixed;
   left: 0; right: 0; bottom: 0;
   padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
-  background: rgba(18,18,18,0.92);
+  background: rgba(242, 242, 242, 0.92);
   backdrop-filter: blur(6px);
   border-top: 1px solid rgba(255,255,255,0.1);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
   z-index: 1000;
+}
+body.dark .sticky-cta {
+    background: #0f1a3c;
 }
 
 /* Kontent pastdagi panel ostiga kirib ketmasin */
@@ -174,7 +177,7 @@ body.dark .profile-container {
 
 .btn--primary { background: #2665b1; color: #fff; }
 .btn--accent  { background: #25D366; color: #0b1f0e; }  /* yuqori kontrast */
-.btn--neutral { background: #20242c; color: #e8e8e8; border-color: #2a2f39; }
+.btn--neutral { background: #f52323; color: #ffffff; border-color: #2a2f39; }
 .btn--outline { background: transparent; color: #e8e8e8; border-color: #2a2f39; }
 .btn--primary:hover { filter: brightness(1.05); }
 .btn--accent:hover  { filter: brightness(1.03); }
@@ -185,11 +188,13 @@ body.dark .profile-container {
 .phone-link {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 10px; margin-left: 6px;
-  background: #20242c; border: 1px dashed #2a2f39; border-radius: 10px;
-  color: #e8e8e8; cursor: pointer; text-decoration: none;
+  background: #dbdbdb92; border: 1px dashed #05006200; border-radius: 10px;
+  color: #002aff; cursor: pointer; text-decoration: none;
 }
 .phone-link:hover { background: #262b36; }
-
+body.dark .phone-link {
+    color:#ffffff
+}
 /* === Profilga mahalliy skroll qobig'i === */
 .profile-page {
   position: relative;
