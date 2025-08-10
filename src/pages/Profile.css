@@ -181,3 +181,8 @@
 @media (min-width: 560px) {
   .profile-screen .sticky-cta { display: none; }
 }
+
+.profile-avatar{
+  height: 25px;
+  width: 25px;
+}

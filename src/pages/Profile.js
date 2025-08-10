@@ -124,9 +124,8 @@ export default function Profile() {
   const aboutNeedsMore = aboutText.length > 220; // taxminiy trigger
 
   return (
-  <div className="profile-screen">
+  <div className="profile-page">
     <div className="profile-container">
-      <button className="back-button" onClick={() => navigate(-1)}>Ortga</button>
 
       <div className="profile-header">
         <img
@@ -146,7 +145,7 @@ export default function Profile() {
           {distance && <span className="badge">📌 Sizdan: {distance} km</span>}
         </div>
 
-        {/* Actions — desktop/tablet */}
+        {/* Actions (keng ekranda ko'rinadi) */}
         <div className="profile-actions">
           <button className="btn btn--primary btn-call" onClick={handlePhoneClick}>
             📞 Qo‘ng‘iroq qilish
@@ -201,7 +200,8 @@ export default function Profile() {
       </div>
     </div>
 
-    {/* Pastga yopishgan CTA — mobil */}
+    {/* Sahifa pastida yopishgan CTA (mobil) */}
+    <div className="page-spacer" aria-hidden="true" />
     <div className="sticky-cta">
       <button className="btn btn--primary" onClick={handlePhoneClick}>📞 Qo‘ng‘iroq</button>
       <button className="btn btn--accent" onClick={() => navigate(`/chat/${worker.phone}`)}>
