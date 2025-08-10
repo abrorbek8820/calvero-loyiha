@@ -52,7 +52,7 @@ body { background: var(--bg); }
 /* Header */
 .profile-header { text-align: center; margin-bottom: 12px; }
 .profile-avatar {
-  width: 120px; height: 120px; border-radius: 50%;
+  min-width: 300px; min-height: 300px; max-width: 300px; border-radius: 50%;
   object-fit: cover; border: 3px solid var(--primary);
   box-shadow: 0 0 0 6px rgba(38,101,177,.25);
 }
@@ -177,7 +177,7 @@ body.dark .sticky-cta {
 
 .btn--primary { background: #2665b1; color: #fff; }
 .btn--accent  { background: #25D366; color: #0b1f0e; }  /* yuqori kontrast */
-.btn--neutral { background: #d91f1f; color: #ffffff; border-color: #2a2f39; }
+.btn--neutral { background: #dae92e; color: #000000; border-color: #2a2f39; }
 .btn--outline { background: transparent; color: #e8e8e8; border-color: #2a2f39; }
 .btn--primary:hover { filter: brightness(1.05); }
 .btn--accent:hover  { filter: brightness(1.03); }
@@ -212,6 +212,7 @@ body.dark .phone-link {
    Neon "frame" + halo (scoped)
    ========================= */
 .profile-container.framed {
+  min-height: 100vh;
   position: relative;
   border-radius: 18px;
   /* Gradient border: ichki fon = card, tashqi qatlam = gradient */
@@ -247,19 +248,4 @@ body.dark .profile-container.framed {
     radial-gradient(120% 120% at 100% 100%, rgba(59,130,246,.28), transparent 60%);
   filter: blur(10px);
   z-index: -1;                  /* kartadan orqada */
-}
-
-/* Light rejim uchun biroz sokinroq ko'rinish */
-[data-theme="light"] .profile-container.framed {
-  background:
-    linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
-    linear-gradient(135deg, #60a5fa, #22d3ee) border-box;
-  box-shadow:
-    0 0 0 2px rgba(59,130,246,.12),
-    0 16px 44px rgba(30,64,175,.18);
-}
-[data-theme="light"] .profile-container.framed::before {
-  background:
-    radial-gradient(120% 120% at 0% 0%, rgba(96,165,250,.22), transparent 60%),
-    radial-gradient(120% 120% at 100% 100%, rgba(34,211,238,.22), transparent 60%);
 }
