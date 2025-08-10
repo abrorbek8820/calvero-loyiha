@@ -126,6 +126,7 @@ export default function Profile() {
   return (
   <div className="profile-page">
     <div className="profile-container">
+      <div className="profile-container framed">
 
       <div className="profile-header">
         <img
@@ -197,6 +198,7 @@ export default function Profile() {
             </button>
           )}
         </div>
+      </div>
       </div>
     </div>
 
