@@ -50,9 +50,10 @@ body { background: var(--bg); }
 
 
 /* Header */
-.profile-header { text-align: center; margin-bottom: 12px; }
+.profile-header { align-items: center; display:flex; flex-direction: column; }
 .profile-avatar {
-  min-width: 300px; min-height: 300px; max-width: 300px; border-radius: 50%;
+ align-items: center;
+  min-width: 250px; min-height: 250px; max-width: 250px; border-radius: 50%;
   object-fit: cover; border: 3px solid var(--primary);
   box-shadow: 0 0 0 6px rgba(38,101,177,.25);
 }
@@ -177,7 +178,7 @@ body.dark .sticky-cta {
 
 .btn--primary { background: #2665b1; color: #fff; }
 .btn--accent  { background: #25D366; color: #0b1f0e; }  /* yuqori kontrast */
-.btn--neutral { background: #dae92e; color: #000000; border-color: #2a2f39; }
+.btn--neutral { background: #9ca721; color: #000000; border-color: #2a2f39; }
 .btn--outline { background: transparent; color: #e8e8e8; border-color: #2a2f39; }
 .btn--primary:hover { filter: brightness(1.05); }
 .btn--accent:hover  { filter: brightness(1.03); }
@@ -212,7 +213,7 @@ body.dark .phone-link {
    Neon "frame" + halo (scoped)
    ========================= */
 .profile-container.framed {
-  min-height: 100vh;
+  min-height: 90vh;
   position: relative;
   border-radius: 18px;
   /* Gradient border: ichki fon = card, tashqi qatlam = gradient */
