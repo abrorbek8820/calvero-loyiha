@@ -136,7 +136,7 @@ return (
               
               <div className="worker-info">
                 <p className="worker-skill">{worker.skills[0]}</p>
-                <p className="worker-distance">📍 Sizdan {worker.distance} km</p>
+                <p className="worker-distance">Sizdan {worker.distance} km</p>
                 <p className="worker-location">{worker.birth_place}lik</p>
                 </div>
                 </div>

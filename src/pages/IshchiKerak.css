@@ -124,6 +124,7 @@ body.dark .worker-card {
 }
 
 .worker-name {
+  text-align: center;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -136,23 +137,25 @@ body.dark .worker-card {
 }
 
 .worker-skill {
-  font-size: 18px;
+  font-size: 25px;
   color: #0288d1; /* light mode */
+  gap: 25px;
 }
 .dark-mode .worker-skill {
   color: #4fc3f7; /* och ko‘k — dark mode */
 }
 
 .worker-distance {
-  font-size: 14px;
+  font-size: 20px;
   color: #f50000; /* orange – light mode */
+  gap: 25px;
 }
 .dark-mode .worker-distance {
   color: #ffb74d; /* soft orange – dark mode */
 }
 
 .worker-location {
-  font-size: 14px;
+  font-size: 20px;
   color: #388e3c;
 }
 .dark-mode .worker-location {
@@ -238,11 +241,6 @@ body.dark .worker-card {
   color: #4fc3f7;
 }
 
-.worker-card:hover .avatar {
-  transform: scale(1.08);
-  box-shadow: 0 0 10px rgba(79, 177, 247, 0.5);
-}
-
 
 
 .avatar {
@@ -286,7 +284,7 @@ body.dark .worker-card {
 .workerlar{
   display: flex;
   overflow: hidden;
-  gap: 12px;
+  gap: 25px;
   margin-bottom: 12px;
 }
 
