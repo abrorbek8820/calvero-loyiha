@@ -121,7 +121,7 @@ export default function Profil() {
     return <p className="text-white text-center mt-10">Yuklanmoqda...</p>;
 
   return (
-  <div className={"profil-container"}>
+  <div className={`profil-container ${mode === "dark" ? "dark-mode" : "light-mode"}`}>
     {/* Yuqori va o‘rta qism */}
     <div className="profil-content">
       {/* Avatar + ism */}

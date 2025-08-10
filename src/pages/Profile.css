@@ -1,7 +1,7 @@
 /* ============ Theme tokens ============ */
 :root {
   --radius: 14px;
-  --shadow: 0 12px 40px rgba(0,0,0,.28);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
 
   --primary: #2665b1;  /* brend ko'k */
   --on-primary: #ffffff;
@@ -15,13 +15,13 @@
 /* Dark (default) */
 :root,
 [data-theme="dark"] {
-  --bg: #0f1115;
+  --bg: #322828;
   --card-bg: #171a1f;
-  --text: #e9eef5;
-  --muted: #b8c0cc;
-  --border: #2a2f39;
+  --text: #212020;
+  --muted: #545454;
+  --border: #000000;
 
-  --chip-bg: #1b1f27;
+  --chip-bg: #ebffeb;
   --chip-border: #2a2f39;
   --badge-bg: #1b1f27;
 
@@ -33,7 +33,7 @@
 [data-theme="light"] {
   --bg: #f7f9fc;
   --card-bg: #ffffff;
-  --text: #0f172a;
+  --text: #131313;
   --muted: #475569;
   --border: #e2e8f0;
 
@@ -48,17 +48,6 @@
 /* ============ Page & Container ============ */
 body { background: var(--bg); }
 
-/* Back */
-.back-button {
-  background: var(--btn-bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 8px 14px;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-.back-button:hover { background: var(--btn-hover); }
 
 /* Header */
 .profile-header { text-align: center; margin-bottom: 12px; }
@@ -68,8 +57,10 @@ body { background: var(--bg); }
   box-shadow: 0 0 0 6px rgba(38,101,177,.25);
 }
 .profile-name {
-  margin-top: 12px; font-size: 26px; font-weight: 800; color: var(--name);
+  margin-top: 12px; font-size: 26px; font-weight: 800; color: #112c4c;
 }
+
+body.dark .profile-name { color: #e6df16; }
 .name-row { display: inline-flex; align-items: center; gap: 8px; }
 
 /* Badges */
@@ -77,8 +68,8 @@ body { background: var(--bg); }
   display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px;
 }
 .badge {
-  background: var(--badge-bg); border: 1px solid var(--border);
-  color: var(--muted); font-size: 12px; padding: 6px 10px; border-radius: 999px;
+  background: #c8c8c8; border: 1px solid var(--border);
+  color: black; font-size: 12px; padding: 6px 10px; border-radius: 999px;
 }
 
 
@@ -99,7 +90,9 @@ body { background: var(--bg); }
 /* Details */
 .profile-details { margin-top: 14px; }
 .profile-details p { margin: 10px 0; font-size: 15px; color: var(--muted); }
+body.dark .profile-details p { color: #dddddd}
 .profile-details strong { color: var(--text); font-weight: 700; }
+body.dark .profile-details strong { color: #d2d769; font-weight: 700; }
 
 
 /* Skills → chips */
@@ -111,11 +104,19 @@ body { background: var(--bg); }
 }
 .skill-chip.more { cursor: pointer; opacity: .9; }
 
+body.dark .skill-chip {
+    background: #444264; color: #ffffff;
+  border: 1px solid var(--chip-border); border-radius: 999px;
+  padding: 6px 10px; font-size: 12px; line-height: 1;
+}
+
 /* About → clamp + expand */
 .about-wrapper { position: relative; }
 .about {
   white-space: pre-line; color: var(--muted); font-size: 15px; line-height: 1.5;
 }
+  body.dark .about { color: #dddddd; }
+
 .about.clamped {
   display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;
   overflow: hidden; max-height: 7.6em;
@@ -131,14 +132,18 @@ body { background: var(--bg); }
 
 /* --- Profile sahifa: dark fonni CSSdan boshqaramiz --- */
 .profile-container {
-  background-color: #121212;   /* avval #ffffff edi */
-  color: #ffffff;
+  background-color: rgb(250, 252, 255);   /* avval #ffffff edi */
+  color: #000000;
   max-width: 680px;            /* biroz kengroq card */
   margin: 16px auto;
   padding: 20px;
   border-radius: 14px;
   box-shadow: 0 12px 40px rgba(0,0,0,.28);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body.dark .profile-container {
+    background-color: #0f1a3c;
 }
 
 /* --- Sticky CTA (pastga yopishgan tugmalar paneli) --- */
