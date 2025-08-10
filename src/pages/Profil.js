@@ -159,7 +159,7 @@ export default function Profil() {
     </div>
 
     {/* Pastki tugmalar */}
-    <div className="profile-actions">
+    <div className="profil-actions">
       <button onClick={handleAboutSave} className="save-button">Saqlash</button>
       <button onClick={() => navigate("/edit-profile")} className="edit-button">Tahrirlash</button>
       <button onClick={handleLogout} className="logout-button">Chiqish</button>
