@@ -124,38 +124,42 @@ body.dark .worker-card {
 }
 
 .worker-name {
-  text-align: center;
+  align-items: center;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 25px;
-  font-weight: bold;
+  gap: 6px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  font-weight:700;
   color: #222;
+  line-height: 1.15;
+  font-size: clamp(16px, 2.8vw, 20px);
 }
 .dark-mode .worker-name {
   color: #fff;
 }
 
 .worker-skill {
-  font-size: 25px;
+  font-size: 16px;
   color: #0288d1; /* light mode */
-  gap: 25px;
+  
 }
 .dark-mode .worker-skill {
   color: #4fc3f7; /* och ko‘k — dark mode */
 }
 
 .worker-distance {
-  font-size: 20px;
+  font-size: 12px;
   color: #f50000; /* orange – light mode */
-  gap: 25px;
+  
 }
 .dark-mode .worker-distance {
   color: #ffb74d; /* soft orange – dark mode */
 }
 
 .worker-location {
-  font-size: 20px;
+  font-size: 12px;
   color: #388e3c;
 }
 .dark-mode .worker-location {
@@ -244,10 +248,10 @@ body.dark .worker-card {
 
 
 .avatar {
-  max-width: 100px;
-  max-height: 100px;
-  min-width:100px;
-  min-height: 100px;
+  max-width: 70px;
+  max-height: 70px;
+  min-width:70px;
+  min-height: 70px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #4f79f7 !important;
@@ -279,17 +283,4 @@ body.dark .worker-card {
 @keyframes spin {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-.workerlar{
-  display: flex;
-  overflow: hidden;
-  gap: 25px;
-  margin-bottom: 12px;
-}
-
-.ustunli{
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
 }
