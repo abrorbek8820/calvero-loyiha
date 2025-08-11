@@ -129,7 +129,7 @@ return (
               key={worker.phone}
               onClick={() => navigate(`/profile/${worker.phone}`)}
             > 
-              <img src={worker.avatar_url || "/user.png"} alt="avatar" className="avatar" />
+              <img src={worker.avatar_url || "/user.png"} alt="avatar" className="avatari" />
               
               <div className="worker-info">
                 <h3 className="worker-name">{worker.name}<OnlineDot lastSeen={worker.last_seen} /> </h3>

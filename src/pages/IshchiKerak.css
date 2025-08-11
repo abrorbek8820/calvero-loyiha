@@ -86,10 +86,10 @@ body.light .ishchi-kerak-container {
 .worker-card {
   width: 100%;
   max-width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 106, 255, 0.669);
   padding: 0 5px;
@@ -141,6 +141,8 @@ body.dark .worker-card {
 }
 
 .worker-skill {
+  white-space: normal;
+  overflow-wrap:anywhere;
   font-size: 16px;
   color: #0288d1; /* light mode */
   
@@ -159,7 +161,7 @@ body.dark .worker-card {
 }
 
 .worker-location {
-  font-size: 12px;
+  font-size: 10px;
   color: #388e3c;
 }
 .dark-mode .worker-location {
@@ -247,7 +249,7 @@ body.dark .worker-card {
 
 
 
-.avatar {
+.avatari {
   max-width: 70px;
   max-height: 70px;
   min-width:70px;
@@ -258,7 +260,7 @@ body.dark .worker-card {
   box-shadow: 0 4px 12px rgba(46, 0, 229, 0);
 }
 
-.dark-mode .avatar {
+.dark-mode .avatari {
   border: 2px solid #0077d9 !important;
   box-shadow: 0 4px 12px rgba(64, 0, 255, 0.381);
 }
