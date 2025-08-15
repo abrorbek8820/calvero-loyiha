@@ -1,126 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function VerifyCodeForm() {
-  const navigate = useNavigate();
+export default function VerifyCodeForm({ phone, onVerified }) {
   const [code, setCode] = useState('');
-  const [registerData, setRegisterData] = useState(null);
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const toPlus998 = (p) => {
+    const d = String(p).replace(/\D/g, '');
+    if (d.startsWith('998')) return '+' + d;      // 998XXXXXXXXX -> +998XXXXXXXXX
+    if (d.length === 9)   return '+998' + d;      // 9 xonali bo'lsa
+    return '+' + d;
+  };
 
-  useEffect(() => {
-    const stored = localStorage.getItem('registerData');
-    if (stored) {
-      setRegisterData(JSON.parse(stored));
-    } else {
-      setStatus('❌ Maʼlumotlar topilmadi. Iltimos, qaytadan urinib ko‘ring.');
-    }
-  }, []);
-
-  const handleVerify = async () => { if (!registerData || !registerData.phone) { setStatus('❌ Telefon raqam topilmadi.'); return; }
-
-if (code.length !== 6) { setStatus('❌ 6 xonali kodni kiriting.'); return; }
-
-const { phone, email, password, customId, name, birthPlace, birthYear, gender, skills, sessionToken } = registerData;
-
-setLoading(true); setStatus('');
-
-try { const res = await axios.post('/api/verify-code', { phone, code });
-
-if (!res.data.success) {
-  setStatus('❌ Noto‘g‘ri kod: ' + res.data.message);
-  setLoading(false);
-  return;
-}
-
-// 2. Avval signIn qilishga harakat qilamiz
-const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-  email,
-  password
-});
-
-if (!loginError && loginData?.user) {
-  // 🔐 session tokenni yangilaymiz
-  await supabase.from('workers')
-    .update({ session_token: sessionToken })
-    .eq('phone', phone);
-
-  setStatus('✅ Tizimga muvaffaqiyatli kirdingiz!');
-  localStorage.setItem('userPhone', phone);
-  localStorage.setItem('session_token', sessionToken);
-  localStorage.removeItem('registerData');
-  setTimeout(() => navigate('/'), 1500);
-  return;
-}
-
-// 3. Agar login bo‘lmadi — yangi foydalanuvchi yaratamiz
-const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-  email,
-  password
-});
-
-if (signUpError) {
-  setStatus('❌ Ro‘yxatdan o‘tishda xatolik: ' + signUpError.message);
-  setLoading(false);
-  return;
-}
-
-// 4. Workers jadvaliga yozamiz
-const { error: insertError } = await supabase.from('workers').insert([
-  {
-    user_id: signUpData.user?.id,
-    custom_id: customId,
-    name,
-    birth_place: birthPlace + 'lik',
-    birth_year: birthYear,
-    gender,
-    skills,
-    phone,
-    email,
-    role: 'worker',
-    session_token: sessionToken
+  const handleVerify = async () => {
+  const clean = code.trim();
+  if (!/^\d{6}$/.test(clean)) {
+    setStatus('❌ 6 xonali kod kiriting');
+    return;
   }
-]);
+  if (!phone) {
+    setStatus('❌ Telefon raqam topilmadi');
+    return;
+  }
 
-if (insertError) {
-  setStatus("❌ Ma'lumotlarni yozishda xatolik: " + insertError.message);
-  return;
+  // Har doim 998XXXXXXXXX formatga keltiramiz
+  const digits = String(phone).replace(/\D/g, '');
+  if (!/^998\d{9}$/.test(digits)) {
+    setStatus('❌ Telefon formati noto‘g‘ri (998XXXXXXXXX)');
+    return;
+  }
+
+  setLoading(true);
+  setStatus('');
+  try {
+    // Backendga ham 998XXXXXXXXX yuboramiz
+    const res = await axios.post('/api/verify-code', { phone: digits, code: clean });
+    if (res.data?.success) {
+      try { localStorage.setItem('userPhone', digits); } catch {}
+      setStatus('✅ Tasdiqlandi');
+      if (typeof onVerified === 'function') onVerified(digits);
+      else navigate('/register'); // 2-qadam
+    } else {
+      setStatus('❌ ' + (res.data?.message || 'Kod noto‘g‘ri'));
+    }
+  } catch (e) {
+    setStatus('❌ ' + (e.response?.data?.message || e.message || 'Server xatosi'));
+  } finally {
+    setLoading(false);
+  }
+};
+
+  return (
+    <div style={{ maxWidth: 400, margin: '0 auto' }}>
+      <h2>🔐 SMS kodni kiriting</h2>
+      <input
+        type="text"
+        inputMode="numeric"
+        placeholder="123456"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        disabled={loading}
+        style={{ width: '100%', padding: 8, marginBottom: 10 }}
+      />
+      <button onClick={handleVerify} disabled={loading}>
+        {loading ? 'Tekshirilmoqda...' : 'Tasdiqlash'}
+      </button>
+      <p>{status}</p>
+    </div>
+  );
 }
-
-setStatus('✅ Ro‘yxatdan muvaffaqiyatli o‘tildi!');
-localStorage.setItem('userPhone', phone);
-localStorage.setItem('session_token', sessionToken);
-localStorage.removeItem('registerData');
-setTimeout(() => navigate('/'), 1500);
-
-} catch (err) { setStatus('❌ Server bilan xatolik: ' + err.message); } finally { setLoading(false); } };
-
-return (
-
-  <div style={{ maxWidth: 400, margin: '50px auto', textAlign: 'center' }}>
-    <h2>🔐 Tasdiqlash kodi</h2>
-    <p>Telefon raqamingizga yuborilgan 6 xonali kodni kiriting:</p><input
-  type="text"
-  placeholder="123456"
-  value={code}
-  maxLength={6}
-  onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-  style={{ width: '100%', padding: 10, marginBottom: 10, textAlign: 'center' }}
-/>
-
-<button onClick={handleVerify} disabled={loading}>
-  {loading ? '⏳ Tekshirilmoqda...' : '✅ Kodni tasdiqlash'}
-</button>
-
-{status && (
-  <p style={{ marginTop: 15, color: status.startsWith('✅') ? 'green' : 'red' }}>{status}</p>
-)}
-
-  </div>
-);
-}
-
-export default VerifyCodeForm;

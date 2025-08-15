@@ -27,7 +27,7 @@ function IshKerak() {
 useEffect(() => {
   const userPhone = localStorage.getItem('userPhone');
   if (!userPhone) {
-    navigate('/register'); // agar ro‘yxatdan o‘tmagan bo‘lsa registerga yo‘naltirish
+    navigate('/otp'); // agar ro‘yxatdan o‘tmagan bo‘lsa registerga yo‘naltirish
   }
 }, [navigate]);
 
@@ -45,7 +45,7 @@ useEffect(() => {
 
     if (!phone || !localToken) {
       console.warn('⚠️ Local token yoki phone mavjud emas!');
-      navigate('/register');
+      navigate('/otp');
       return;
     }
 
@@ -66,7 +66,7 @@ useEffect(() => {
       await supabase.auth.signOut();
       localStorage.removeItem('userPhone');
       localStorage.removeItem('session_token');
-      navigate('/register');
+      navigate('/otp');
     } else {
       console.log('✅ Sessiya mos keldi.');
       fetchUserData();
@@ -98,7 +98,7 @@ const fetchUserData = async () => {
   const userPhone = localStorage.getItem('userPhone');
 
   if (!userPhone) {
-    navigate('/register');
+    navigate('/otp');
     return; // Agar telefon mavjud bo‘lmasa funksiyani to‘xtatamiz
   }
 
@@ -110,7 +110,7 @@ const fetchUserData = async () => {
 
   if (error || !data || data.length === 0) {
     console.error("Foydalanuvchi topilmadi yoki xatolik:", error);
-    navigate('/register'); // Agar ma’lumot bo‘lmasa yoki xato bo‘lsa registerga yuboriladi
+    navigate('/otp'); // Agar ma’lumot bo‘lmasa yoki xato bo‘lsa registerga yuboriladi
     return;
   }
 

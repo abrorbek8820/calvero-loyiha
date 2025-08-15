@@ -35,7 +35,7 @@ function Home() {
   if (userPhone && sessionToken) {
     navigate('/ishkerak');
   } else {
-    navigate('/register');
+    navigate('/otp');
   }
 };
 

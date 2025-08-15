@@ -87,6 +87,7 @@ body.light .ishchi-kerak-container {
   width: 100%;
   max-width: 100%;
   margin-bottom: 8px;
+  margin-top: 6px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -119,14 +120,15 @@ body.dark .worker-card {
 
 .worker-info h3,
 .worker-info p {
+  display: flex;
+  align-items: center;
   margin: 0;
-  padding:0;
+  padding:1px;
 }
 
 .worker-name {
   align-items: center;
   display: flex;
-  align-items: center;
   gap: 6px;
   white-space:normal;
   overflow-wrap:anywhere;
@@ -143,7 +145,7 @@ body.dark .worker-card {
 .worker-skill {
   white-space: normal;
   overflow-wrap:anywhere;
-  font-size: 16px;
+  font-size: 14px;
   color: #0288d1; /* light mode */
   
 }
@@ -256,8 +258,8 @@ body.dark .worker-card {
   min-height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #4f79f7 !important;
-  box-shadow: 0 4px 12px rgba(46, 0, 229, 0);
+  border: 2px solid rgba(71,178,255,0.7);
+  box-shadow: 0 0 8px rgba(71,178,255,0.4);
 }
 
 .dark-mode .avatari {

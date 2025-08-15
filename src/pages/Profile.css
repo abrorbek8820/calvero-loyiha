@@ -53,7 +53,7 @@ body { background: var(--bg); }
 .profile-header { align-items: center; display:flex; flex-direction: column; }
 .profile-avatar {
  align-items: center;
-  min-width: 250px; min-height: 250px; max-width: 250px; max-height: 250px; border-radius: 50%;
+  width: clamp(160px, 45vw, 200px); height: clamp(160px, 45vw, 200px); border-radius: 50%;
   object-fit: cover; border: 3px solid var(--primary);
   box-shadow: 0 0 0 6px rgba(38,101,177,.25);
 }
