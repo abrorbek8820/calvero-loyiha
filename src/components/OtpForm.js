@@ -1,13 +1,34 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function OtpForm({ onSuccess }) {
+// API bazaviy URL – avval .env dan, bo‘lmasa hostname bo‘yicha
+const API_BASE =
+  (process.env.REACT_APP_API_BASE_URL && process.env.REACT_APP_API_BASE_URL.trim()) ||
+  // (ixtiyoriy) agar Vite bo'lsa
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
+  (window.location.hostname === 'localhost'
+    ? 'http://localhost:5000'
+    : 'https://api.calvero.work');
+
+const api = axios.create({
+  baseURL: API_BASE,
+  timeout: 10000,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+export default function OtpForm({ onSuccess }) {
   const [digits9, setDigits9] = useState('');   // faqat 9 ta raqam
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const fmt = (s) => {
-    const d = s.replace(/\D/g, '').slice(0, 9);
+  // input: faqat raqam va 9 belgigacha
+  const onChangePhone = (e) => {
+    const d = e.target.value.replace(/\D/g, '').slice(0, 9);
+    setDigits9(d);
+  };
+
+  // ko'rinish uchun "90 123 45 67" format
+  const fmt = (d) => {
     const parts = [];
     if (d.length > 0) parts.push(d.slice(0, 2));
     if (d.length > 2) parts.push(d.slice(2, 5));
@@ -21,49 +42,45 @@ function OtpForm({ onSuccess }) {
       setStatus('❌ 9 xonali raqam kiriting (masalan: 90 123 45 67)');
       return;
     }
-    const phone = '998' + digits9;  // Eskiz/DB formati
+
+    const phone = '998' + digits9; // Eskiz/DB formati
 
     setLoading(true);
     setStatus('');
     try {
-      const res = await axios.post('/api/send-sms', { phone });
+      const res = await api.post('/api/send-sms', { phone });
       if (res.data?.success) {
         try { localStorage.setItem('userPhone', phone); } catch {}
         setStatus('✅ Kod yuborildi');
-        onSuccess?.(phone); // VerifyCodeForm’ga 998XXXXXXXXX ko‘rinishda beramiz
+        onSuccess?.(phone);
       } else {
         setStatus('❌ ' + (res.data?.message || 'Xatolik'));
       }
-    } catch {
-      setStatus('❌ Server bilan ulanishda xatolik');
+    } catch (err) {
+      const msg =
+        (err?.response?.data?.message) ||
+        err?.message ||
+        'Server bilan ulanishda xatolik';
+      setStatus('❌ ' + msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '0 auto' }}>
-      <h2>📱 Telefon raqamni kiriting</h2>
-
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 10 }}>
-        <span style={{ fontWeight: 'bold' }}>+998</span>
-        <input
-          type="tel"
-          inputMode="numeric"
-          placeholder="90 123 45 67"
-          value={fmt(digits9)}
-          onChange={(e) => setDigits9(e.target.value.replace(/\D/g, '').slice(0, 9))}
-          style={{ flex: 1, padding: 8 }}
-          disabled={loading}
-        />
-      </div>
-
+    <div>
+      <label>Telefon raqam (9 xonali):</label>
+      <input
+        type="tel"
+        value={fmt(digits9)}
+        onChange={onChangePhone}
+        placeholder="90 123 45 67"
+        inputMode="numeric"
+      />
       <button onClick={handleSend} disabled={loading}>
-        {loading ? 'Yuborilmoqda...' : 'Kod yuborish'}
+        {loading ? 'Yuborilmoqda…' : 'Kod yuborish'}
       </button>
-      <p>{status}</p>
+      {!!status && <p>{status}</p>}
     </div>
   );
 }
-
-export default OtpForm;

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Calvero Work SMS server",
   "main": "server.js",
-  "proxy": "http://localhost:5000",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
