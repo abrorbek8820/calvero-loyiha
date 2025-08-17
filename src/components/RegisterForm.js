@@ -93,6 +93,7 @@ function RegisterForm() {
       } else {
         const insertPayload = {
           name,
+          balance: 100000,
           birth_place: birthPlace,
           birth_year: birthYear,
           gender,
