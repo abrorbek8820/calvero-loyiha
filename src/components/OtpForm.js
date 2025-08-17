@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import "./otp.css";
+import { useNavigate } from "react-router-dom";
+
 
 // API bazaviy URL – avval .env dan, bo‘lmasa hostname bo‘yicha
 const API_BASE =
@@ -17,6 +20,7 @@ const api = axios.create({
 });
 
 export default function OtpForm({ onSuccess }) {
+  const navigate = useNavigate();
   const [digits9, setDigits9] = useState('');   // faqat 9 ta raqam
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
@@ -67,20 +71,65 @@ export default function OtpForm({ onSuccess }) {
     }
   };
 
+  const [accepted, setAccepted] = useState(
+  localStorage.getItem("offerAccepted") === "true"
+);
+
+  useEffect(() => {
+    setAccepted(localStorage.getItem("offerAccepted") === "true");
+  }, []);
+
+  const onToggleAccept = (e) =>{
+    const v = e.target.checked;
+    setAccepted(v);
+    localStorage.setItem("offerAccepted", v ? "true" : "false");
+  };
+
+
   return (
-    <div>
-      <label>Telefon raqam (9 xonali):</label>
-      <input
-        type="tel"
-        value={fmt(digits9)}
-        onChange={onChangePhone}
-        placeholder="90 123 45 67"
-        inputMode="numeric"
-      />
-      <button onClick={handleSend} disabled={loading}>
-        {loading ? 'Yuborilmoqda…' : 'Kod yuborish'}
+    <div className="raqam-bloki">
+      <label>Telefon raqamingizni kiriting:</label>
+
+      <div className="raqam">
+        <label>+998</label>
+        <input
+          type="tel"
+          value={fmt(digits9)}
+          onChange={onChangePhone}
+          placeholder="90 123 45 67"
+          inputMode="numeric"
+        />
+      </div>
+
+      <button onClick={handleSend} disabled={loading || !accepted}>
+        {loading ? "Yuborilmoqda…" : "Kod yuborish"}
       </button>
+      <div className="shartlari">
+      <div style={{ margin: "12px 0" }}>
+        <input
+          type="checkbox"
+          checked={accepted}
+          onChange={onToggleAccept}
+          style={{ marginLeft: 8, verticalAlign: "middle" }}
+        />
+        
+         Men{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/offer")}
+          style={{ background:"none", border:"none", padding:0, color:"#3961cdff", textDecoration:"underline", cursor:"pointer" }}
+        >
+          ommaviy oferta shartlari
+        </button>{" "}
+        bilan tanishib chiqdim va qabul qilaman!
+        </div>
+        
+      </div>
+
+      
+
       {!!status && <p>{status}</p>}
     </div>
   );
+
 }

@@ -28,6 +28,7 @@ import Balance from './pages/Balance';
 import Chat from './components/Chat/Chat';
 import ChatList from './components/ChatList';
 import ChatIcon from './components/ChatIcon';
+import Oferta from "./components/Oferta";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ function App() {
             <Route path="/ishchi-kerak" element={<IshchiKerak />} />
             <Route path="/client-register" element={<ClientRegister />} />
             <Route path="/profile/:phone" element={<Profile />} />
-
+            <Route path="/offer" element={<Oferta />} />
             <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
 
             {/* Guard: phone yo‘q bo‘lsa verify sahifaga kirganda /otp ga qaytaradi */}

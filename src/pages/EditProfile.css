@@ -101,7 +101,6 @@
   justify-content:center !important;
   gap: 8px;
   margin-bottom: 4px;
-   repeat(2, 1fr)
   width: 100%;*/
   
   display: grid;
