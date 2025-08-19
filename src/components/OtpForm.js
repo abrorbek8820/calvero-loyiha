@@ -1,90 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./otp.css";
 import { useNavigate } from "react-router-dom";
-
 
 // API bazaviy URL – avval .env dan, bo‘lmasa hostname bo‘yicha
 const API_BASE =
   (process.env.REACT_APP_API_BASE_URL && process.env.REACT_APP_API_BASE_URL.trim()) ||
-  // (ixtiyoriy) agar Vite bo'lsa
-  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
-  (window.location.hostname === 'localhost'
-    ? 'http://localhost:5000'
-    : 'https://api.calvero.work');
+  (typeof import.meta !== "undefined" &&
+    import.meta.env &&
+    import.meta.env.VITE_API_BASE_URL) ||
+  (window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://api.calvero.work");
 
 const api = axios.create({
   baseURL: API_BASE,
   timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: { "Content-Type": "application/json" },
 });
 
 export default function OtpForm({ onSuccess }) {
   const navigate = useNavigate();
-  const [digits9, setDigits9] = useState('');   // faqat 9 ta raqam
-  const [status, setStatus] = useState('');
+  const [digits9, setDigits9] = useState(""); // faqat 9 ta raqam
+  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [accepted, setAccepted] = useState(
+    (typeof localStorage !== "undefined" &&
+      localStorage.getItem("offerAccepted") === "true") ||
+      false
+  );
 
   // input: faqat raqam va 9 belgigacha
   const onChangePhone = (e) => {
-    const d = e.target.value.replace(/\D/g, '').slice(0, 9);
+    const d = e.target.value.replace(/\D/g, "").slice(0, 9);
     setDigits9(d);
   };
 
-  // ko'rinish uchun "90 123 45 67" format
+  // ko‘rinish uchun "90 123 45 67"
   const fmt = (d) => {
     const parts = [];
     if (d.length > 0) parts.push(d.slice(0, 2));
     if (d.length > 2) parts.push(d.slice(2, 5));
     if (d.length > 5) parts.push(d.slice(5, 7));
     if (d.length > 7) parts.push(d.slice(7, 9));
-    return parts.join(' ');
+    return parts.join(" ");
   };
 
   const handleSend = async () => {
     if (digits9.length !== 9) {
-      setStatus('❌ 9 xonali raqam kiriting (masalan: 90 123 45 67)');
+      setStatus("❌ 9 xonali raqam kiriting (masalan: 90 123 45 67)");
       return;
     }
-
-    const phone = '998' + digits9; // Eskiz/DB formati
+    const phone = "998" + digits9; // Eskiz formati
 
     setLoading(true);
-    setStatus('');
+    setStatus("");
     try {
-      const res = await api.post('/api/send-sms', { phone });
-      if (res.data?.success) {
-        try { localStorage.setItem('userPhone', phone); } catch {}
-        setStatus('✅ Kod yuborildi');
+      const { data } = await api.post("/api/send-sms", { phone });
+      // backend: { ok:true } yoki { ok:false, msg:"..." }
+      if (data?.ok === true || data?.success === true) {
+        try {
+          localStorage.setItem("userPhone", phone);
+        } catch {}
+        setStatus("✅ Kod yuborildi");
         onSuccess?.(phone);
       } else {
-        setStatus('❌ ' + (res.data?.message || 'Xatolik'));
+        setStatus("❌ " + (data?.msg || data?.message || "Xatolik"));
       }
     } catch (err) {
       const msg =
-        (err?.response?.data?.message) ||
+        err?.response?.data?.msg ||
+        err?.response?.data?.message ||
         err?.message ||
-        'Server bilan ulanishda xatolik';
-      setStatus('❌ ' + msg);
+        "Server bilan ulanishda xatolik";
+      setStatus("❌ " + msg);
     } finally {
       setLoading(false);
     }
   };
 
-  const [accepted, setAccepted] = useState(
-  localStorage.getItem("offerAccepted") === "true"
-);
-
   useEffect(() => {
-    setAccepted(localStorage.getItem("offerAccepted") === "true");
+    try {
+      setAccepted(localStorage.getItem("offerAccepted") === "true");
+    } catch {}
   }, []);
 
-  const onToggleAccept = (e) =>{
+  const onToggleAccept = (e) => {
     const v = e.target.checked;
     setAccepted(v);
-    localStorage.setItem("offerAccepted", v ? "true" : "false");
+    try {
+      localStorage.setItem("offerAccepted", v ? "true" : "false");
+    } catch {}
   };
-
 
   return (
     <div className="raqam-bloki">
@@ -104,32 +111,37 @@ export default function OtpForm({ onSuccess }) {
       <button onClick={handleSend} disabled={loading || !accepted}>
         {loading ? "Yuborilmoqda…" : "Kod yuborish"}
       </button>
-      <div className="shartlari">
-      <div style={{ margin: "12px 0" }}>
-        <input
-          type="checkbox"
-          checked={accepted}
-          onChange={onToggleAccept}
-          style={{ marginLeft: 8, verticalAlign: "middle" }}
-        />
-        
-         Men{" "}
-        <button
-          type="button"
-          onClick={() => navigate("/offer")}
-          style={{ background:"none", border:"none", padding:0, color:"#3961cdff", textDecoration:"underline", cursor:"pointer" }}
-        >
-          ommaviy oferta shartlari
-        </button>{" "}
-        bilan tanishib chiqdim va qabul qilaman!
-        </div>
-        
+
+      <div className="shartlari" style={{ marginTop: 12 }}>
+        <label style={{ display: "block", cursor: "pointer" }}>
+          <input
+            type="checkbox"
+            checked={accepted}
+            onChange={onToggleAccept}
+            style={{ marginRight: 8, verticalAlign: "middle" }}
+          />
+          Men{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/offer")}
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              color: "#3961cdff",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+          >
+            ommaviy oferta shartlari
+          </button>{" "}
+          bilan tanishib chiqdim va qabul qilaman!
+        </label>
       </div>
 
-      
-
-      {!!status && <p>{status}</p>}
+      {!!status && (
+        <p style={{ marginTop: 12, whiteSpace: "pre-wrap" }}>{status}</p>
+      )}
     </div>
   );
-
 }

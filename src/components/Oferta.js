@@ -7,7 +7,7 @@ export default function OfferPage() {
       <h1>📝 Ommaviy Oferta Shartnomasi</h1>
 
       <section>
-        <h2>1. Umumiy holatlar</h2>
+        <h1>1. Umumiy holatlar</h1>
         <p>
           Ushbu Ommaviy Oferta (bundan buyon matnda "Oferta" deb yuritiladi)
           O‘zbekiston Respublikasining amaldagi qonunchiligiga muvofiq, "Calvero
@@ -29,7 +29,7 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h2>2. Shartnoma predmeti</h2>
+        <h1>2. Shartnoma predmeti</h1>
         <p>
           Platforma foydalanuvchilarga quyidagi xizmatlarni ko‘rsatadi: ishchi
           qidirayotgan mijozlar uchun ishchilar bazasini taqdim etish, ishchilar
@@ -43,7 +43,7 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h2>3. Tomonlarning huquqlari va majburiyatlari</h2>
+        <h1>3. Tomonlarning huquqlari va majburiyatlari</h1>
         <p><strong>Platforma quyidagi huquqlarga ega:</strong></p>
         <ul>
           <li>Shartnoma shartlarini bir tomonlama o‘zgartirish.</li>
@@ -95,7 +95,7 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h2>5. Javobgarlik va risklar</h2>
+        <h1>5. Javobgarlik va risklar</h1>
         <p>
           Platforma foydalanuvchilar o‘rtasidagi har qanday kelishuv, ish sifati,
           to‘lov muammolari yoki kechikishlar uchun javobgar emas. Foydalanuvchi
@@ -105,7 +105,7 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h2>6. Maxfiylik siyosati</h2>
+        <h1>6. Maxfiylik siyosati</h1>
         <p>
           Foydalanuvchidan olingan ma’lumotlar (ism, telefon raqam, lokatsiya)
           O‘zbekiston Respublikasining "Shaxsiy ma’lumotlarni himoya qilish"
@@ -115,7 +115,7 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h2>7. Shartlarning amal qilish muddati</h2>
+        <h1>7. Shartlarning amal qilish muddati</h1>
         <p>
           Ushbu Oferta Platformaning rasmiy saytida joylashtirilgan paytdan kuchga
           kiradi va yangilangan taqdirda foydalanuvchi yangi versiyasiga avtomatik
@@ -132,7 +132,7 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h2>9. Yakuniy holatlar</h2>
+        <h1>9. Yakuniy holatlar</h1>
         <p>
           Ushbu Ommaviy Oferta hujjati foydalanuvchining Platformadan foydalanishi
           orqali qonuniy kuchga kiradi. Hech qanday qo‘l imzosi talab etilmaydi.

@@ -1,5 +1,6 @@
 .offer-container{
   max-width: 500px;
+  width: 95vw;
   max-height: 100vh;
   overflow-y: auto;
   padding-bottom: 20px;
@@ -43,7 +44,7 @@ body {
 
 .oferta h1 { margin: 0 0 6px; }
 .oferta p { margin: 8px 0; }
-.oferta h2 { margin-top: 28px; color:#0f172a; }
+.oferta h5 { margin-top: 28px; color:#0f172a; }
 .oferta h3 { margin-top: 18px; }
 .oferta ul, .oferta ol { padding-left: 20px; }
 .oferta code {

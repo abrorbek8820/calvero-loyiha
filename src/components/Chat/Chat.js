@@ -128,7 +128,7 @@ export default function Chat() {
 
   // Polling
   useEffect(() => {
-    if (!sender_phone) navigate("/register");
+    if (!sender_phone) navigate("/otp");
   }, [sender_phone, navigate]);
 
   useEffect(() => {
