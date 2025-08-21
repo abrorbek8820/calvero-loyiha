@@ -100,6 +100,7 @@ function App() {
             <Route path="/profile/:phone" element={<Profile />} />
             <Route path="/offer" element={<Oferta />} />
             <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
+            <Route path="/payme-test" element={<PaymeDemo />} />
 
             {/* Guard: phone yo‘q bo‘lsa verify sahifaga kirganda /otp ga qaytaradi */}
             <Route
