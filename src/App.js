@@ -81,8 +81,7 @@ function App() {
   }, []);
 
   return (
-    <>
-    <PaymeDemo />
+    
     <AppContext.Provider value={{ mode, setMode }}>
       <RegisterProvider>
         <Router>
@@ -118,7 +117,7 @@ function App() {
         </Router>
       </RegisterProvider>
     </AppContext.Provider>
-    </>
+    
   );
 }
 
