@@ -29,6 +29,7 @@ import Chat from './components/Chat/Chat';
 import ChatList from './components/ChatList';
 import ChatIcon from './components/ChatIcon';
 import Oferta from "./components/Oferta";
+import PaymeDemo from "./components/PaymeDemo";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -79,6 +80,12 @@ function App() {
   }, []);
 
   return (
+    <>
+    <div>
+      <h1>Payme Test</h1>
+      {/* AUTH qiymatini base64 qilib qo'yganingni shu yerga joylaysan */}
+      <PaymeDemo auth="UGF5Y29tOlRlc3QjUGFyb2w=" />
+    </div>
     <AppContext.Provider value={{ mode, setMode }}>
       <RegisterProvider>
         <Router>
@@ -113,6 +120,7 @@ function App() {
         </Router>
       </RegisterProvider>
     </AppContext.Provider>
+    </>
   );
 }
 
