@@ -85,7 +85,7 @@ function App() {
     <div>
       <h1>Payme Test</h1>
       {/* AUTH qiymatini base64 qilib qo'yganingni shu yerga joylaysan */}
-      <PaymeDemo auth={auth} />
+      <PaymeDemo auth="UGF5Y29tOiZvMWNHdXN5UiNJdVJGVlR1ek9YU2VoaHZYZ0VoU1JzeGZmVw==" />
     </div>
     <AppContext.Provider value={{ mode, setMode }}>
       <RegisterProvider>
