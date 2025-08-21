@@ -1,16 +1,30 @@
 // src/api/payme.js
-const API_URL = import.meta.env.VITE_API_URL || "https://api.calvero.work";
 
-export async function callPayme(method, params, auth) {
-  const r = await fetch(`${API_URL}/payme/callback`, {  // ✅ lokal yoki prod
-    method: 'POST',
+// API manzil — backend server
+const API_URL = "https://api.calvero.work";
+
+// Paycom test auth (base64 qilib yozilgan)
+// Misol: echo -n "Paycom:TEST_PAROL" | base64
+const AUTH = "UGF5Y29tOlRlc3QjUGFyb2w=";
+
+export async function callPayme(method, params) {
+  const r = await fetch(`${API_URL}/payme/callback`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Basic ${auth}`
+      "Content-Type": "application/json",
+      Authorization: `Basic ${AUTH}`,
     },
-    body: JSON.stringify({ jsonrpc: '2.0', id: Date.now(), method, params })
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: Date.now(),
+      method,
+      params,
+    }),
   });
+
   const data = await r.json();
-  if (data.error) throw new Error(`${data.error.code}: ${data.error.message}`);
-  return data.result;
+  if (data.error) {
+    throw new Error(`${data.error.code}: ${data.error.message}`);
+  }
+  return data.result; // result qaytadi
 }

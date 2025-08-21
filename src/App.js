@@ -46,6 +46,7 @@ function OtpPage({ setPhone }) {
 function App() {
   const [mode, setMode] = useState('light');
   const [phone, setPhone] = useState('');
+  const auth = process.env.REACT_APP_PAYME_AUTH;
 
   useEffect(() => {
     const updateLastSeen = async () => {
@@ -84,7 +85,7 @@ function App() {
     <div>
       <h1>Payme Test</h1>
       {/* AUTH qiymatini base64 qilib qo'yganingni shu yerga joylaysan */}
-      <PaymeDemo auth="UGF5Y29tOlRlc3QjUGFyb2w=" />
+      <PaymeDemo auth={auth} />
     </div>
     <AppContext.Provider value={{ mode, setMode }}>
       <RegisterProvider>
