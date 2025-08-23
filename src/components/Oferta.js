@@ -123,7 +123,7 @@ export default function OfferPage() {
         </p>
       </section>
       <section>
-        <h2>8. Nizolarni hal qilish tartibi</h2>
+        <h1>8. Nizolarni hal qilish tartibi</h1>
         <p>
           Barcha nizolar avvalo muzokara yo‘li bilan hal qilinadi. Agar bu samara
           bermasa, O‘zbekiston Respublikasining amaldagi qonunchiligiga muvofiq
@@ -132,7 +132,17 @@ export default function OfferPage() {
       </section>
 
       <section>
-        <h1>9. Yakuniy holatlar</h1>
+        <h1>9. Bolalar xavfsizligi siyosati</h1>
+        <p>
+          DIQQAT! Bizning xizmatimiz 18 yoshdan katta foydalanuvchilar uchun mo'ljallangan.
+        </p>
+        <p>Ilovamizda bolalar yoki voyaga yetmaganlarga nisbatan ekspluatatsiya, zo'ravonlik, jinsiy kontent va boshqa noqonuniy faoliyat qat'iyan taqiqlanadi.</p>
+        <p>Voyaga yetmaganlar ushbu ilovadan foydalanishi man etiladi!</p>
+        <p>Platformadan foydalangan xar bir foydalanuvchi Bolalar xavfsizligi to'g'risidagi qonunlarga bo'ysunishlari, hamda Google Play Bolalar standartlariga rioya qilishlari shart!</p>
+      </section>
+
+      <section>
+        <h1>10. Yakuniy holatlar</h1>
         <p>
           Ushbu Ommaviy Oferta hujjati foydalanuvchining Platformadan foydalanishi
           orqali qonuniy kuchga kiradi. Hech qanday qo‘l imzosi talab etilmaydi.
