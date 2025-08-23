@@ -30,6 +30,7 @@ import ChatList from './components/ChatList';
 import ChatIcon from './components/ChatIcon';
 import Oferta from "./components/Oferta";
 import PaymeDemo from "./components/PaymeDemo";
+import Delete from "./pages/Delete";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ function App() {
             <Route path="/offer" element={<Oferta />} />
             <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
             <Route path="/payme-test" element={<PaymeDemo />} />
+            <Route path="/delete" element={<Delete />} />
 
             {/* Guard: phone yo‘q bo‘lsa verify sahifaga kirganda /otp ga qaytaradi */}
             <Route
