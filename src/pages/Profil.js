@@ -163,6 +163,7 @@ export default function Profil() {
       <button onClick={handleAboutSave} className="save-button">Saqlash</button>
       <button onClick={() => navigate("/edit-profile")} className="edit-button">Tahrirlash</button>
       <button onClick={handleLogout} className="logout-button">Chiqish</button>
+      <button onClick={() => navigate("/delete")} className="logout-button">Akkauntni o'chirish</button>
     </div>
   </div>
 );
