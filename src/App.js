@@ -10,6 +10,7 @@ import {
 
 import OnlineStatus from './components/OnlineStatus';
 import Home from './pages/Home';
+import HomeDom from './pages/HomeDom';
 import RegisterForm from './components/RegisterForm';
 import IshKerak from './pages/IshKerak';
 import Profil from './pages/Profil';
@@ -90,7 +91,8 @@ function App() {
           <ChatIcon />
           <Routes>
             <Route path="/soqqa" element={<Balance />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<HomeDom />} />
             <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
             <Route path="/ishkerak" element={<IshKerak />} />
             <Route path="/profil" element={<Profil />} />
