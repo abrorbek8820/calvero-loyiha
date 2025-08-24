@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './IshKerak.css';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 function IshKerak() {
   const [userName, setUserName] = useState('');
@@ -208,6 +209,9 @@ if (!error) {
 
 
 return ( <div className="ishkerak-container">
+  <Helmet>
+    <meta name="robots" content="noindex, nofollow" />
+  </Helmet>
   <div className="top-section">
     <img src={avatarUrl || "/user.png"}
     alt="Avatar"
@@ -217,7 +221,7 @@ return ( <div className="ishkerak-container">
       <div className="user-name">{userName}</div>
       <button
   className="balance-btn"
-  onClick={() => navigate("/balance")}
+  onClick={() => navigate("/soqqa")}
 >
   Balans: {balance !== null ? balance.toLocaleString() : '...'}
 </button>

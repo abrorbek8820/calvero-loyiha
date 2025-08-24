@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import "./Balance.css";
+import { Helmet } from "react-helmet";
 
 const Balance = () => {
   const [balance, setBalance] = useState(null);
@@ -68,6 +69,9 @@ const formatCustomId = (id) => {
 
   return (
     <div className="balance-page">
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <img src="/logo-calvero.png" alt="Calvero" className="calvero-logo" />
 
       <h2>💰 Balansingiz: {balance?.toLocaleString()} so‘m</h2>

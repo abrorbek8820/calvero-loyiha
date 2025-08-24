@@ -89,7 +89,7 @@ function App() {
           <OnlineStatus />
           <ChatIcon />
           <Routes>
-            <Route path="/balance" element={<Balance />} />
+            <Route path="/soqqa" element={<Balance />} />
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
             <Route path="/ishkerak" element={<IshKerak />} />
