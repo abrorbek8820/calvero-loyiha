@@ -33,7 +33,7 @@ function Home() {
   const sessionToken = localStorage.getItem('session_token');
 
   if (userPhone && sessionToken) {
-    navigate('/ishchi-kerak');
+    navigate('/ishkerak');
   } else {
     navigate('/otp');
   }
