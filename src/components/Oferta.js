@@ -60,7 +60,7 @@ Users may request access to, correction or deletion of their data by contacting 
 <p>
 If you have questions about this policy, you can reach us at:  
 <br />
-📧 Email: info@calvero.work
+📧 Email: info.calvero.work@gmail.com
 </p>
       </div>
       
