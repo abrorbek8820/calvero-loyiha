@@ -74,7 +74,7 @@ const formatCustomId = (id) => {
       </Helmet>
       <img src="/logo-calvero.png" alt="Calvero" className="calvero-logo" />
 
-      <h2>💰 Balansingiz: {balance?.toLocaleString()} so‘m</h2>
+      <h2>💰 Balansingiz: {(balance / 100)?.toLocaleString()} so‘m</h2>
 
       <div className="account-id">
         <span className="formatted-id">Hisob raqam: {formatCustomId(customId)}</span>

@@ -141,7 +141,7 @@ const fetchUserData = async () => {
 
 const handleOnlineClick = async () => { let location; try { location = await new Promise((resolve, reject) => { navigator.geolocation.getCurrentPosition( pos => resolve(pos.coords), reject ); }); } catch (err) { alert('GPS xatosi!'); return; }
 
-if (balance < 5000) {
+if (balance < 500000) {
   alert('Balans yetarli emas!');
   return;
 }
@@ -149,7 +149,7 @@ if (balance < 5000) {
 const { error } = await supabase
   .from('workers')
   .update({
-    balance: balance - 5000,
+    balance: balance - 500000,
     status: 'online',
     is_listed: true,
     online_time: new Date().toISOString(),
@@ -159,7 +159,7 @@ const { error } = await supabase
   .eq('phone', phone);
 
 if (!error) {
-  setBalance(balance - 5000);
+  setBalance(balance - 500000);
   setStatus('online');
   setIsListed(true);
   setTimeLeft(18000);
@@ -223,7 +223,7 @@ return ( <div className="ishkerak-container">
   className="balance-btn"
   onClick={() => navigate("/soqqa")}
 >
-  Balans: {balance !== null ? balance.toLocaleString() : '...'}
+  Balans: {balance !== null ? (balance / 100).toLocaleString() : '...'}
 </button>
         </div>
         </div>
