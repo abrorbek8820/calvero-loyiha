@@ -198,7 +198,7 @@ const toggleListed = async () => {
 
   const goingOnline = !isListed;
 
-  // 1) Avval is_listed ni o‘zgartiramiz (BAND ↔ ONLINE)
+  // 1. Darhol is_listed ni yangilaymiz
   const { error: e1 } = await supabase
     .from('workers')
     .update({
@@ -210,40 +210,40 @@ const toggleListed = async () => {
   if (!e1) {
     setIsListed(goingOnline);
   } else {
-    console.warn('is_listed yangilashda xato:', e1);
+    console.warn('is_listed yangilash xatosi:', e1);
     return;
   }
 
-  // 2) Faqat BAND → ONLINE bo‘layotganda va timeLeft > 60 bo‘lsa GPS yozamiz
+  // 2. Faqat band → online va timeLeft > 60 bo‘lsa, GPS fon rejimida yoziladi
   if (goingOnline && timeLeft > 60) {
-    try {
-      const pos = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          (p) => resolve(p),
-          (e) => reject(e),
-          { enableHighAccuracy: false, maximumAge: 20_000, timeout: 8000 }
-        );
-      });
+    // GPS’ni UI kutmasin — faqat fon rejimida bajaramiz
+    (async () => {
+      try {
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (p) => resolve(p),
+            (e) => reject(e),
+            { enableHighAccuracy: false, maximumAge: 20000, timeout: 8000 }
+          );
+        });
 
-      const { latitude, longitude } = pos.coords;
+        const { latitude, longitude } = pos.coords;
 
-      const { error: e2 } = await supabase
-        .from('workers')
-        .update({
-          latitude,
-          longitude,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('phone', phone);
+        const { error: e2 } = await supabase
+          .from('workers')
+          .update({
+            latitude,
+            longitude,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('phone', phone);
 
-      if (e2) {
-        console.warn('GPS yozishda xato:', e2);
-      } else {
-        console.log('📍 Joylashuv yangilandi:', latitude, longitude);
+        if (e2) console.warn('GPS yozishda xato:', e2);
+        else console.log('📍 GPS yangilandi:', latitude, longitude);
+      } catch (e) {
+        console.warn('📵 GPS olish xatosi:', e?.message || e);
       }
-    } catch (e) {
-      console.warn('📵 GPS olish xato:', e?.message || e);
-    }
+    })(); // fon rejimi: UI kutmaydi
   }
 };
 
