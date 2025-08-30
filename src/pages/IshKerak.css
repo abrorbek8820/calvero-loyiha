@@ -59,3 +59,18 @@ body.light .ishkerak-container {
 .timer { font-size: 28px; font-family: 'Courier New', monospace; color: var(--accent); margin-top: 20px; font-weight: bold; }
 
 .status-btn.disabled { opacity: 0.6; pointer-events: none; background: #cccccc !important; color: #666666 !important; box-shadow: none; cursor: not-allowed; }
+
+.lamp-button {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  color: #facc15; /* sariq rang (Tailwind: yellow-400) */
+  transition: transform 0.2s ease;
+}
+
+.lamp-button:hover {
+  transform: scale(1.2);
+  color: #fbbf24; /* hover sariq (yellow-300) */
+}

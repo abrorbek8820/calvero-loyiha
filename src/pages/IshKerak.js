@@ -265,6 +265,13 @@ return ( <div className="ishkerak-container">
   Balans: {balance !== null ? (balance / 100).toLocaleString() : '...'}
 </button>
         </div>
+        <button
+  className="lamp-button"
+  onClick={() => navigate("/yorqinoma")}
+  title="Foydalanish bo‘yicha yo‘riqnoma"
+>
+  💡
+</button>
         </div>
 
 <div className="stats-section">
