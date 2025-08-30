@@ -203,7 +203,6 @@ const toggleListed = async () => {
     .from('workers')
     .update({
       is_listed: goingOnline,
-      updated_at: new Date().toISOString(),
     })
     .eq('phone', phone);
 
