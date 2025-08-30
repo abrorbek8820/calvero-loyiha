@@ -60,17 +60,20 @@ body.light .ishkerak-container {
 
 .status-btn.disabled { opacity: 0.6; pointer-events: none; background: #cccccc !important; color: #666666 !important; box-shadow: none; cursor: not-allowed; }
 
-.lamp-button {
-  font-size: 24px;
+.lamp-top-left {
+  position: absolute;
+  top: 12px;
+  left: 12px;
   background: none;
   border: none;
+  font-size: 22px;
   cursor: pointer;
-  margin-left: 10px;
-  color: #facc15; /* sariq rang (Tailwind: yellow-400) */
+  color: #facc15; /* sariq */
   transition: transform 0.2s ease;
+  z-index: 10;
 }
 
-.lamp-button:hover {
+.lamp-top-left:hover {
   transform: scale(1.2);
-  color: #fbbf24; /* hover sariq (yellow-300) */
+  color: #fbbf24; /* och sariq */
 }

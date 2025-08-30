@@ -252,6 +252,13 @@ return ( <div className="ishkerak-container">
     <meta name="robots" content="noindex, nofollow" />
   </Helmet>
   <div className="top-section">
+    <button
+  className="lamp-button"
+  onClick={() => navigate("/yorqinoma")}
+  title="Foydalanish bo‘yicha yo‘riqnoma"
+>
+  💡
+</button>
     <img src={avatarUrl || "/user.png"}
     alt="Avatar"
     className="avatar"
@@ -265,13 +272,6 @@ return ( <div className="ishkerak-container">
   Balans: {balance !== null ? (balance / 100).toLocaleString() : '...'}
 </button>
         </div>
-        <button
-  className="lamp-button"
-  onClick={() => navigate("/yorqinoma")}
-  title="Foydalanish bo‘yicha yo‘riqnoma"
->
-  💡
-</button>
         </div>
 
 <div className="stats-section">
