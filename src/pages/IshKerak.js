@@ -196,44 +196,50 @@ useEffect(() => {
 const toggleListed = async () => {
   if (status !== 'online') return;
 
-  // Band -> Online bo'layapti (isListed: false -> true)
   const goingOnline = !isListed;
 
-  let updates = { is_listed: goingOnline };
-
-  if (goingOnline) {
-    // Online'ga qaytayotganda joylashuvni 1 marta yangilaymiz
-    try {
-      const pos = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          (p) => resolve(p),
-          (e) => reject(e),
-          { enableHighAccuracy: false, maximumAge: 20_000, timeout: 8_000 }
-        );
-      });
-      const { latitude, longitude } = pos.coords;
-      updates = {
-        ...updates,
-        latitude,
-        longitude,
-        updated_at: new Date().toISOString(),
-      };
-    } catch (e) {
-      console.warn('GPS xato:', e?.message || e);
-      // Xohlasangiz, bu yerda qaytib ketishingiz mumkin:
-      // alert('GPS ruxsatini yoqing. Joylashuv yangilanmadi.');
-      // return;
-      // Hozircha onlaynga o'tishni to'smaymiz, faqat joylashuv yozilmaydi.
-    }
-  }
-
-  const { error } = await supabase
+  // 1) Avval isListed-ni darhol yangilaymiz (UI tez bo'lsin)
+  const { error: e1 } = await supabase
     .from('workers')
-    .update(updates)
+    .update({ is_listed: goingOnline, updated_at: new Date().toISOString() })
     .eq('phone', phone);
 
-  if (!error) {
+  if (!e1) {
     setIsListed(goingOnline);
+  } else {
+    console.warn('is_listed yangilash xatosi:', e1);
+    return; // agar bu ham ishlamasa, davom qilmaymiz
+  }
+
+  // 2) Agar ONLINE'ga qaytayotgan bo'lsak — GPS ni fon rejimida yozamiz
+  if (goingOnline) {
+    // UI ni bloklamaslik uchun async IIFE
+    (async () => {
+      try {
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (p) => resolve(p),
+            (e) => reject(e),
+            { enableHighAccuracy: false, maximumAge: 20_000, timeout: 5_000 }
+          );
+        });
+        const { latitude, longitude } = pos.coords;
+
+        const { error: e2 } = await supabase
+          .from('workers')
+          .update({
+            latitude,
+            longitude,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('phone', phone);
+
+        if (e2) console.warn('GPS update xato:', e2);
+        else console.log('GPS yangilandi:', latitude, longitude);
+      } catch (e) {
+        console.warn('GPS olish muvaffaqiyatsiz (lekin ONLINE bo‘ldi):', e?.message || e);
+      }
+    })();
   }
 };
 
