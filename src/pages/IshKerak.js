@@ -42,10 +42,8 @@ useEffect(() => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
 
-    console.log('📦 Local storage:', { phone, localToken });
-
     if (!phone || !localToken) {
-      console.warn('⚠️ Local token yoki phone mavjud emas!');
+      console.warn('❌ Local token yoki phone mavjud emas!');
       navigate('/otp');
       return;
     }
@@ -56,14 +54,8 @@ useEffect(() => {
       .eq('phone', phone)
       .single();
 
-    console.log('🛠 Supabase natijasi:', { data, error });
-
     if (error || !data || data.session_token !== localToken) {
-      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.", {
-        supabaseToken: data?.session_token,
-        localToken,
-      });
-
+      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.");
       await supabase.auth.signOut();
       localStorage.removeItem('userPhone');
       localStorage.removeItem('session_token');
@@ -74,8 +66,16 @@ useEffect(() => {
     }
   };
 
+  // 1. Birinchi yuklanishda tekshir
   checkSessionToken();
-}, []);
+
+  // 2. Har safar ilova "focus" bo‘lsa — qayta tekshir
+  window.addEventListener('focus', checkSessionToken);
+
+  return () => {
+    window.removeEventListener('focus', checkSessionToken);
+  };
+}, [navigate]);
 
   
   useEffect(() => {

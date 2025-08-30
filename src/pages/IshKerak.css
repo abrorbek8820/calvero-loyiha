@@ -64,13 +64,14 @@ body.light .ishkerak-container {
   position: fixed;
   top: 12px;
   left: 12px;
-  font-size: 22px;
   background: none;
   border: none;
+  font-size: 22px;
   color: #facc15; /* sariq */
   cursor: pointer;
   z-index: 9999;
   transition: transform 0.2s ease;
+  line-height: 1;
 }
 
 .lamp-fixed:hover {
