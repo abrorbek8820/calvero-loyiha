@@ -193,17 +193,48 @@ useEffect(() => {
 
 
 
-const toggleListed = async () => { if (status !== 'online') return;
+const toggleListed = async () => {
+  if (status !== 'online') return;
 
-const { error } = await supabase
-  .from('workers')
-  .update({ is_listed: !isListed })
-  .eq('phone', phone);
+  // Band -> Online bo'layapti (isListed: false -> true)
+  const goingOnline = !isListed;
 
-if (!error) {
-  setIsListed(!isListed);
-}
+  let updates = { is_listed: goingOnline };
 
+  if (goingOnline) {
+    // Online'ga qaytayotganda joylashuvni 1 marta yangilaymiz
+    try {
+      const pos = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          (p) => resolve(p),
+          (e) => reject(e),
+          { enableHighAccuracy: false, maximumAge: 20_000, timeout: 8_000 }
+        );
+      });
+      const { latitude, longitude } = pos.coords;
+      updates = {
+        ...updates,
+        latitude,
+        longitude,
+        updated_at: new Date().toISOString(),
+      };
+    } catch (e) {
+      console.warn('GPS xato:', e?.message || e);
+      // Xohlasangiz, bu yerda qaytib ketishingiz mumkin:
+      // alert('GPS ruxsatini yoqing. Joylashuv yangilanmadi.');
+      // return;
+      // Hozircha onlaynga o'tishni to'smaymiz, faqat joylashuv yozilmaydi.
+    }
+  }
+
+  const { error } = await supabase
+    .from('workers')
+    .update(updates)
+    .eq('phone', phone);
+
+  if (!error) {
+    setIsListed(goingOnline);
+  }
 };
 
 
