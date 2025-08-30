@@ -234,7 +234,6 @@ const toggleListed = async () => {
           .update({
             latitude,
             longitude,
-            updated_at: new Date().toISOString(),
           })
           .eq('phone', phone);
 
