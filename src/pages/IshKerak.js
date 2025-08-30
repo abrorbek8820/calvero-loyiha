@@ -247,18 +247,18 @@ const toggleListed = async () => {
 
 
 
-return ( <div className="ishkerak-container">
-  <Helmet>
-    <meta name="robots" content="noindex, nofollow" />
-  </Helmet>
-  <div className="top-section">
-    <button
+return ( <><button
   className="lamp-button"
   onClick={() => navigate("/yorqinoma")}
   title="Foydalanish bo‘yicha yo‘riqnoma"
 >
   💡
 </button>
+<div className="ishkerak-container">
+  <Helmet>
+    <meta name="robots" content="noindex, nofollow" />
+  </Helmet>
+  <div className="top-section">
     <img src={avatarUrl || "/user.png"}
     alt="Avatar"
     className="avatar"
@@ -307,6 +307,7 @@ return ( <div className="ishkerak-container">
     )}
   </div>
 </div>
+</>
 
 ); }
 
