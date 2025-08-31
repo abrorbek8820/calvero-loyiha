@@ -42,10 +42,8 @@ useEffect(() => {
     const phone = localStorage.getItem('userPhone');
     const localToken = localStorage.getItem('session_token');
 
-    console.log('📦 Local storage:', { phone, localToken });
-
     if (!phone || !localToken) {
-      console.warn('⚠️ Local token yoki phone mavjud emas!');
+      localStorage.clear();
       navigate('/otp');
       return;
     }
@@ -56,26 +54,17 @@ useEffect(() => {
       .eq('phone', phone)
       .single();
 
-    console.log('🛠 Supabase natijasi:', { data, error });
-
     if (error || !data || data.session_token !== localToken) {
-      console.warn("❌ Sessiya mos emas. Logout qilinmoqda.", {
-        supabaseToken: data?.session_token,
-        localToken,
-      });
-
-      await supabase.auth.signOut();
-      localStorage.removeItem('userPhone');
-      localStorage.removeItem('session_token');
+      localStorage.clear();
       navigate('/otp');
     } else {
-      console.log('✅ Sessiya mos keldi.');
-      fetchUserData();
+      fetchUserData(); // asosiy ma'lumotlarni yuklash
     }
   };
 
+  // Faqat birinchi yuklanganda chaqiriladi
   checkSessionToken();
-}, []);
+}, [navigate]);
 
   
   useEffect(() => {
@@ -193,22 +182,68 @@ useEffect(() => {
 
 
 
-const toggleListed = async () => { if (status !== 'online') return;
+const toggleListed = async () => {
+  if (status !== 'online') return;
 
-const { error } = await supabase
-  .from('workers')
-  .update({ is_listed: !isListed })
-  .eq('phone', phone);
+  const goingOnline = !isListed;
 
-if (!error) {
-  setIsListed(!isListed);
-}
+  // 1. Darhol is_listed ni yangilaymiz
+  const { error: e1 } = await supabase
+    .from('workers')
+    .update({
+      is_listed: goingOnline,
+    })
+    .eq('phone', phone);
 
+  if (!e1) {
+    setIsListed(goingOnline);
+  } else {
+    console.warn('is_listed yangilash xatosi:', e1);
+    return;
+  }
+
+  // 2. Faqat band → online va timeLeft > 60 bo‘lsa, GPS fon rejimida yoziladi
+  if (goingOnline && timeLeft > 60) {
+    // GPS’ni UI kutmasin — faqat fon rejimida bajaramiz
+    (async () => {
+      try {
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (p) => resolve(p),
+            (e) => reject(e),
+            { enableHighAccuracy: false, maximumAge: 20000, timeout: 8000 }
+          );
+        });
+
+        const { latitude, longitude } = pos.coords;
+
+        const { error: e2 } = await supabase
+          .from('workers')
+          .update({
+            latitude,
+            longitude,
+          })
+          .eq('phone', phone);
+
+        if (e2) console.warn('GPS yozishda xato:', e2);
+        else console.log('📍 GPS yangilandi:', latitude, longitude);
+      } catch (e) {
+        console.warn('📵 GPS olish xatosi:', e?.message || e);
+      }
+    })(); // fon rejimi: UI kutmaydi
+  }
 };
 
 
 
-return ( <div className="ishkerak-container">
+return ( <><button
+  className="lamp-fixed"
+  onClick={() => navigate("/yorqinoma")}
+  title="Foydalanish bo‘yicha yo‘riqnoma"
+>
+  💡
+</button>
+<div className="ishkerak-container">
   <Helmet>
     <meta name="robots" content="noindex, nofollow" />
   </Helmet>
@@ -261,6 +296,7 @@ return ( <div className="ishkerak-container">
     )}
   </div>
 </div>
+</>
 
 ); }
 
