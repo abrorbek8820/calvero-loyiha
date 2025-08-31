@@ -200,6 +200,19 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, []);
 
+useEffect(() => {
+  const handleFocus = () => {
+    console.log("📱 App focusga qaytdi. Sahifa reload qilinmoqda...");
+    window.location.reload();
+  };
+
+  window.addEventListener('focus', handleFocus);
+
+  return () => {
+    window.removeEventListener('focus', handleFocus);
+  };
+}, []);
+
 
 
 const toggleListed = async () => {
