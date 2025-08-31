@@ -251,7 +251,7 @@ const toggleListed = async () => {
 return ( <>
 <button
   className="lamp-fixed"
-  onClick={() => navigate("/yorqinoma")}
+  onClick={() => navigate("/yoriqnoma")}
   title="Yo‘riqnoma"
 >
   💡
