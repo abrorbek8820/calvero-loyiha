@@ -43,35 +43,45 @@ useEffect(() => {
   const localToken = localStorage.getItem('session_token');
 
   if (alreadyChecked === 'yes') {
-    console.log('✅ Session oldin tekshirilgan');
-    fetchUserData(); // agar kerak bo‘lsa
+    fetchUserData();
     return;
   }
 
   const checkSessionToken = async () => {
-    if (!phone || !localToken) {
-      console.warn('❌ Phone yoki token yo‘q. OTP sahifaga.');
-      localStorage.clear();
-      navigate('/otp');
-      return;
-    }
+    try {
+      const { data, error } = await supabase
+        .from('workers')
+        .select('session_token')
+        .eq('phone', phone)
+        .maybeSingle();
 
-    const { data, error } = await supabase
-      .from('workers')
-      .select('session_token')
-      .eq('phone', phone)
-      .single();
+      if (localToken && data?.session_token && data.session_token !== localToken) {
+        // Faqat token mavjud bo‘lsa va mos bo‘lmasa logout qilamiz
+        console.warn('❌ Token mavjud, lekin mos emas. Logout.');
+        localStorage.clear();
+        navigate('/otp');
+        return;
+      }
 
-    if (error || !data || data.session_token !== localToken) {
-      console.warn('❌ Token mos emas. Logout qilinmoqda.');
-      localStorage.clear();
-      navigate('/otp');
-    } else {
-      console.log('✅ Session mos keldi');
+      // Aks holda davom etaveramiz
+      console.log('✅ Token mos yoki mavjud emas, ishlayveramiz.');
+      localStorage.setItem('session_checked', 'yes');
+      fetchUserData();
+    } catch (err) {
+      console.warn('❌ Supabase so‘rovda xato:', err);
+      // Xatoga qaramay, ishlashni davom ettiramiz
       localStorage.setItem('session_checked', 'yes');
       fetchUserData();
     }
   };
+
+  // Localda phone bo‘lishi kerak, token bo‘lsa yaxshi
+  if (!phone) {
+    console.warn('❌ Telefon yo‘q! Logout qilamiz.');
+    localStorage.clear();
+    navigate('/otp');
+    return;
+  }
 
   checkSessionToken();
 }, [navigate]);
