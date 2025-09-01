@@ -92,7 +92,7 @@ function EditProfile() {
       alert('❌ Yangilashda xatolik: ' + error.message);
     } else {
       alert('✅ Profil muvaffaqiyatli yangilandi!');
-      navigate('/home');
+      navigate('/home', { replace: true });
     }
 
     setLoading(false);

@@ -98,7 +98,7 @@ export default function ClientRegister() {
 
       localStorage.setItem("clientPhone", fullPhone);
       setStatus("Muvaffaqiyatli ro'yxatdan o'tildi ✅");
-      navigate("/home");
+      navigate("/home", { replace: true });
     } catch (e) {
       const msg = e?.message || "Noma'lum xatolik";
       console.error(e);

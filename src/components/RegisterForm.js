@@ -135,7 +135,7 @@ const userPhoneDigits = (location.state?.phone || '').replace(/\D/g, '');
       document.cookie = `userPhone=${userPhoneDigits}; path=/; secure; SameSite=None; max-age=${60*60*24*365}`;
 
       setStatus('✅ Ma’lumotlar saqlandi');
-      navigate('/home');
+      navigate('/home', {replace: true });
     } catch (err) {
       setStatus('❌ Server/Auth xatosi: ' + (err.message || ''));
     } finally {

@@ -33,6 +33,7 @@ import Oferta from "./components/Oferta";
 import PaymeDemo from "./components/PaymeDemo";
 import Delete from "./pages/Delete";
 import Yoriqnoma from "./components/Yoriqnoma";
+import ProtectedLayout from "./layouts/ProtectedLayout";
 
 function OtpPage({ setPhone }) {
   const navigate = useNavigate();
@@ -89,37 +90,31 @@ function App() {
       <RegisterProvider>
         <Router>
           <OnlineStatus />
-          <ChatIcon />
           <Routes>
-            <Route path="/soqqa" element={<Balance />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/" element={<HomeDom />} />
-            <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
-            <Route path="/ishkerak" element={<IshKerak />} />
-            <Route path="/profil" element={<Profil />} />
-            <Route path="/edit-profile" element={<EditProfile />} />
-            <Route path="/ishchi-kerak" element={<IshchiKerak />} />
-            <Route path="/client-register" element={<ClientRegister />} />
-            <Route path="/profile/:phone" element={<Profile />} />
-            <Route path="/offer" element={<Oferta />} />
-            <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
-            <Route path="/payme-test" element={<PaymeDemo />} />
-            <Route path="/delete" element={<Delete />} />
-            <Route path="/yoriqnoma" element={<Yoriqnoma />} />
+  {/* Public sahifalar — konvertsiz */}
+  <Route path="/home" element={<Home />} />
+  <Route path="/" element={<HomeDom />} />
+  <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
+  <Route path="/client-register" element={<ClientRegister />} />
+  <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
+  <Route path="/verify-code" element={phone ? <VerifyCodeForm phone={phone} /> : <Navigate to="/otp" replace />} />
+  <Route path="/offer" element={<Oferta />} />
+  <Route path="/payme-test" element={<PaymeDemo />} />
+  <Route path="/delete" element={<Delete />} />
 
-            {/* Guard: phone yo‘q bo‘lsa verify sahifaga kirganda /otp ga qaytaradi */}
-            <Route
-              path="/verify-code"
-              element={
-                phone ? <VerifyCodeForm phone={phone} /> : <Navigate to="/otp" replace />
-              }
-            />
-
-            {/* ❌ Eski route olib tashlandi: <Route path="/verify-new-phone" element={<VerifyNewPhone />} /> */}
-
-            <Route path="/chat/:phone" element={<Chat />} />
-            <Route path="/chats" element={<ChatList />} />
-          </Routes>
+  {/* Protected sahifalar — konvert bilan */}
+  <Route element={<ProtectedLayout />}>
+  <Route path="/soqqa" element={<Balance />} />
+    <Route path="/ishkerak" element={<IshKerak />} />
+    <Route path="/profil" element={<Profil />} />
+    <Route path="/edit-profile" element={<EditProfile />} />
+    <Route path="/ishchi-kerak" element={<IshchiKerak />} />
+    <Route path="/profile/:phone" element={<Profile />} />
+    <Route path="/chat/:phone" element={<Chat />} />
+    <Route path="/chats" element={<ChatList />} />
+    <Route path="/yoriqnoma" element={<Yoriqnoma />} />
+  </Route>
+</Routes>
         </Router>
       </RegisterProvider>
     </AppContext.Provider>
