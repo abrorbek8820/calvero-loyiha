@@ -107,15 +107,40 @@ export default function Profil() {
   };
 
   const handleLogout = async () => {
-    const confirm = window.confirm(
-      "Tizimdan chiqsangiz balansdagi mablag‘ yo‘qoladi. Chiqishni istaysizmi?"
-    );
-    if (!confirm) return;
+  const confirm = window.confirm(
+    "Tizimdan chiqsangiz balansdagi mablag‘ yo‘qoladi. Chiqishni istaysizmi?"
+  );
+  if (!confirm) return;
 
-    localStorage.removeItem("userPhone");
+  const phone = localStorage.getItem("userPhone");
+
+  // 1️⃣ Workers jadvalidagi session_token'ni tozalash
+  if (phone) {
+    try {
+      await supabase
+        .from("workers")
+        .update({ session_token: null })
+        .eq("phone", phone);
+    } catch (e) {
+      console.warn("❌ Workers jadvalidan tokenni tozalashda xato:", e.message);
+    }
+  }
+
+  // 2️⃣ Supabase Auth sessiyadan chiqish
+  try {
     await supabase.auth.signOut();
-    navigate("/");
-  };
+  } catch (e) {
+    console.warn("❌ Supabase auth signOut xato:", e.message);
+  }
+
+  // 3️⃣ LocalStorage tozalash
+  localStorage.removeItem("userPhone");
+  localStorage.removeItem("session_token");
+  localStorage.removeItem("session_checked");
+
+  // 4️⃣ Foydalanuvchini chiqarib yuborish
+  navigate("/");
+};
 
   if (loading)
     return <p className="text-white text-center mt-10">Yuklanmoqda...</p>;

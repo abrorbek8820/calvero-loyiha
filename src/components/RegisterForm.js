@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { generateUniqueId } from '../utils';
 import { maleSkills, femaleSkills } from '../data/skills';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +10,8 @@ function RegisterForm() {
   const navigate = useNavigate();
 
   // OTP bosqichida LS'ga 998XXXXXXXXX sifatida saqlangan bo'lishi kerak
-  const userPhoneDigits = (localStorage.getItem('userPhone') || '').replace(/\D/g, ''); // 998XXXXXXXXX
+  const location = useLocation();
+const userPhoneDigits = (location.state?.phone || '').replace(/\D/g, '');
 
   const [name, setName] = useState('');
   const [birthPlace, setBirthPlace] = useState('');
@@ -42,6 +43,12 @@ function RegisterForm() {
   // Email/Parol — sizning talabingiz bo‘yicha
   const email = userPhoneDigits ? `${userPhoneDigits}@calvero.work` : '';
   const password = userPhoneDigits;
+
+  useEffect(() => {
+  if (!/^998\d{9}$/.test(userPhoneDigits)) {
+    navigate('/otp');
+  }
+}, []);
 
   const handleRegister = async () => {
     if (!/^998\d{9}$/.test(userPhoneDigits)) {
@@ -135,6 +142,7 @@ function RegisterForm() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="register-container">

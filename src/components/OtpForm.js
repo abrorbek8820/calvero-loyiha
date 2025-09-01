@@ -59,9 +59,6 @@ export default function OtpForm({ onSuccess }) {
       const { data } = await api.post("/api/send-sms", { phone });
       // backend: { ok:true } yoki { ok:false, msg:"..." }
       if (data?.ok === true || data?.success === true) {
-        try {
-          localStorage.setItem("userPhone", phone);
-        } catch {}
         setStatus("✅ Kod yuborildi");
         onSuccess?.(phone);
       } else {

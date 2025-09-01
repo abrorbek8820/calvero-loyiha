@@ -33,46 +33,26 @@ useEffect(() => {
   
   useEffect(() => {
   const bootstrapSession = async () => {
-    let phoneLS = localStorage.getItem('userPhone');
+    const phoneLS = localStorage.getItem('userPhone');
     const token = localStorage.getItem('session_token');
 
-    // A) phone yo‘q bo‘lsa — token orqali tiklashga urinamiz
-    if (!phoneLS && token) {
-      const { data } = await supabase
-        .from('workers')
-        .select('phone, session_token')
-        .eq('session_token', token)
-        .maybeSingle();
-
-      if (data?.phone) {
-        localStorage.setItem('userPhone', data.phone);
-        phoneLS = data.phone;
-      }
+    // ❗ Qat'iy qoida: ikkalasi ham bo'lishi shart
+    if (!phoneLS || !token) {
+      return forceLogout();
     }
 
-    // B) hamon phone yo‘q bo‘lsa — endi OTP
-    if (!phoneLS) {
-      navigate('/otp');
-      return;
+    // Serverdagi token bilan mosligini tekshiramiz
+    const { data, error } = await supabase
+      .from('workers')
+      .select('session_token')
+      .eq('phone', phoneLS)
+      .maybeSingle();
+
+    if (error || !data || (data.session_token && data.session_token !== token)) {
+      return forceLogout();
     }
 
-    // C) token bor bo‘lsa va serverda ham bor bo‘lsa — mosligini tekshiramiz
-    if (token) {
-      const { data } = await supabase
-        .from('workers')
-        .select('session_token')
-        .eq('phone', phoneLS)
-        .maybeSingle();
-
-      if (data?.session_token && data.session_token !== token) {
-        localStorage.removeItem('userPhone');
-        localStorage.removeItem('session_token');
-        navigate('/otp');
-        return;
-      }
-    }
-
-    // D) hammasi joyida — ma’lumotlarni yuklaymiz
+    // OK — ma'lumotlarni yuklaymiz
     fetchUserData();
   };
 
@@ -140,38 +120,45 @@ const fetchUserData = async () => {
   setLoadingUser(false);
 };
 
-const handleOnlineClick = async () => { let location; try { location = await new Promise((resolve, reject) => { navigator.geolocation.getCurrentPosition( pos => resolve(pos.coords), reject ); }); } catch (err) { alert('GPS xatosi!'); return; }
+const handleOnlineClick = async () => {
+  const currentPhone = localStorage.getItem('userPhone'); // 🔄 yangidan o'qish
+  let location;
+  try {
+    location = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        pos => resolve(pos.coords),
+        reject
+      );
+    });
+  } catch (err) {
+    alert('GPS xatosi!');
+    return;
+  }
 
-if (balance < 500000) {
-  alert('Balans yetarli emas!');
-  return;
-}
+  if (balance < 500000) {
+    alert('Balans yetarli emas!');
+    return;
+  }
 
-const { error } = await supabase
-  .from('workers')
-  .update({
-    balance: balance - 500000,
-    status: 'online',
-    is_listed: true,
-    online_time: new Date().toISOString(),
-    latitude: location.latitude,
-    longitude: location.longitude,
-  })
-  .eq('phone', phone);
+  const { error } = await supabase
+    .from('workers')
+    .update({
+      balance: balance - 500000,
+      status: 'online',
+      is_listed: true,
+      online_time: new Date().toISOString(),
+      latitude: location.latitude,
+      longitude: location.longitude,
+    })
+    .eq('phone', currentPhone); // 🟢 fresh phone
 
-if (!error) {
-  setBalance(balance - 500000);
-  setStatus('online');
-  setIsListed(true);
-  setTimeLeft(18000);
-
-  setTimeout(() => {
-    fetchUserData();
-  }, 300);
-
-  
-}
-
+  if (!error) {
+    setBalance(balance - 500000);
+    setStatus('online');
+    setIsListed(true);
+    setTimeLeft(18000);
+    setTimeout(fetchUserData, 300);
+  }
 };
 
 useEffect(() => {
@@ -197,55 +184,52 @@ useEffect(() => {
 const toggleListed = async () => {
   if (status !== 'online') return;
 
+  const currentPhone = localStorage.getItem('userPhone'); // 🔄 yangidan o'qish
   const goingOnline = !isListed;
 
-  // 1. Darhol is_listed ni yangilaymiz
   const { error: e1 } = await supabase
     .from('workers')
-    .update({
-      is_listed: goingOnline,
-    })
-    .eq('phone', phone);
+    .update({ is_listed: goingOnline })
+    .eq('phone', currentPhone);
 
-  if (!e1) {
-    setIsListed(goingOnline);
-  } else {
+  if (e1) {
     console.warn('is_listed yangilash xatosi:', e1);
     return;
   }
+  setIsListed(goingOnline);
 
-  // 2. Faqat band → online va timeLeft > 60 bo‘lsa, GPS fon rejimida yoziladi
   if (goingOnline && timeLeft > 60) {
-    // GPS’ni UI kutmasin — faqat fon rejimida bajaramiz
     (async () => {
       try {
         const pos = await new Promise((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(
-            (p) => resolve(p),
-            (e) => reject(e),
+            p => resolve(p),
+            e => reject(e),
             { enableHighAccuracy: false, maximumAge: 20000, timeout: 8000 }
           );
         });
-
-        const { latitude, longitude } = pos.coords;
+        const { latitude, longitude } = pos;
 
         const { error: e2 } = await supabase
           .from('workers')
-          .update({
-            latitude,
-            longitude,
-          })
-          .eq('phone', phone);
+          .update({ latitude, longitude })
+          .eq('phone', currentPhone);
 
         if (e2) console.warn('GPS yozishda xato:', e2);
         else console.log('📍 GPS yangilandi:', latitude, longitude);
       } catch (e) {
         console.warn('📵 GPS olish xatosi:', e?.message || e);
       }
-    })(); // fon rejimi: UI kutmaydi
+    })();
   }
 };
 
+const forceLogout = () => {
+  localStorage.removeItem('userPhone');
+  localStorage.removeItem('session_token');
+  localStorage.removeItem('session_checked');
+  navigate('/otp');
+};
 
 
 return ( <>
