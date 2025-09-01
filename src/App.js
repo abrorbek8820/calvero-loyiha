@@ -34,8 +34,10 @@ import PaymeDemo from "./components/PaymeDemo";
 import Delete from "./pages/Delete";
 import Yoriqnoma from "./components/Yoriqnoma";
 import ProtectedLayout from "./layouts/ProtectedLayout";
+import OtpPage from "./pages/OtpPage";
+import VerifyPage from "./pages/VerifyPage";
 
-function OtpPage({ setPhone }) {
+/*function OtpPage({ setPhone }) {
   const navigate = useNavigate();
   return (
     <OtpForm
@@ -45,7 +47,7 @@ function OtpPage({ setPhone }) {
       }}
     />
   );
-}
+}*/
 
 function App() {
   const [mode, setMode] = useState('light');
@@ -96,11 +98,13 @@ function App() {
   <Route path="/" element={<HomeDom />} />
   <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
   <Route path="/client-register" element={<ClientRegister />} />
-  <Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
-  <Route path="/verify-code" element={phone ? <VerifyCodeForm phone={phone} /> : <Navigate to="/otp" replace />} />
+  {/*<Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
+  <Route path="/verify-code" element={phone ? <VerifyCodeForm phone={phone} /> : <Navigate to="/otp" replace />} />*/}
   <Route path="/offer" element={<Oferta />} />
   <Route path="/payme-test" element={<PaymeDemo />} />
   <Route path="/delete" element={<Delete />} />
+  <Route path="/verify" element={<VerifyPage />} />
+  <Route path="/otp" element={<OtpPage />} />
 
   {/* Protected sahifalar — konvert bilan */}
   <Route element={<ProtectedLayout />}>

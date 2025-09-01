@@ -47,9 +47,8 @@ export default function VerifyCodeForm({ phone, onVerified }) {
       const { data } = await api.post('/api/verify-code', { phone: digits, code: clean });
       // backend: { ok:true } yoki xatoda { ok:false, reason/msg }
       if (data?.ok === true || data?.success === true) {
-        try { localStorage.setItem('userPhone', digits); } catch {}
         setStatus('✅ Tasdiqlandi');
-        onVerified ? onVerified(digits) : navigate('/register');
+        onVerified ? onVerified(digits) : navigate('/register', { state: { phone: digits } });
       } else {
         setStatus('❌ ' + (data?.msg || data?.reason || data?.message || 'Kod noto‘g‘ri'));
       }
