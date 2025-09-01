@@ -15,6 +15,12 @@ export default function VerifyPage() {
 
   if (!/^998\d{9}$/.test(phone)) return null;
 
-  // VerifyCodeForm ichida navigate('/register', { state: { phone } }) qilamiz
-  return <VerifyCodeForm phone={phone} />;
+  return (
+    <VerifyCodeForm
+      phone={phone}
+      onVerified={(p) =>
+        navigate("/register", { state: { phone: p }, replace: true })
+      }
+    />
+  );
 }

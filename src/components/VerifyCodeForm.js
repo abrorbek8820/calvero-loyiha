@@ -28,14 +28,8 @@ export default function VerifyCodeForm({ phone, onVerified }) {
       return;
     }
 
-    // phone prop bo‘lmasa, localStorage'dan olamiz
-    let rawPhone = String(phone || '');
-    if (!rawPhone) {
-      try { rawPhone = localStorage.getItem('userPhone') || ''; } catch {}
-    }
-
-    // 998XXXXXXXXX format
-    const digits = rawPhone.replace(/\D/g, '');
+    // ✅ faqat prop orqali kelgan raqamga ruxsat (oqimni yopiq ushlab turamiz)
+    const digits = String(phone || '').replace(/\D/g, '');
     if (!/^998\d{9}$/.test(digits)) {
       setStatus('❌ Telefon formati noto‘g‘ri (998XXXXXXXXX)');
       return;
@@ -48,7 +42,12 @@ export default function VerifyCodeForm({ phone, onVerified }) {
       // backend: { ok:true } yoki xatoda { ok:false, reason/msg }
       if (data?.ok === true || data?.success === true) {
         setStatus('✅ Tasdiqlandi');
-        onVerified ? onVerified(digits) : navigate('/register', { state: { phone: digits } });
+        if (onVerified) {
+          onVerified(digits); // VerifyPage ichida replace bilan navigate qiladi
+        } else {
+          // ✅ fallback: brauzer tarixida verify qolmasin
+          navigate('/register', { state: { phone: digits }, replace: true });
+        }
       } else {
         setStatus('❌ ' + (data?.msg || data?.reason || data?.message || 'Kod noto‘g‘ri'));
       }
@@ -75,6 +74,7 @@ export default function VerifyCodeForm({ phone, onVerified }) {
         placeholder="123456"
         value={code}
         onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+        onKeyDown={(e) => { if (e.key === 'Enter' && !loading) handleVerify(); }}
         disabled={loading}
         style={{ width: '100%', padding: 8, marginBottom: 10 }}
         autoComplete="one-time-code"
