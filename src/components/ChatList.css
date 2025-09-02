@@ -1,4 +1,4 @@
-/* Asosiy konteyner */
+/* Asosiy konteyner 
 .chat-list-container {
   transition: box-shadow 0.3s ease-in-out;
   
@@ -14,6 +14,37 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+}*/
+
+.chat-list-container {
+  transition: box-shadow 0.3s ease-in-out;
+
+  width: 95vw;
+  max-width: 500px;
+
+  /* balandlikni cheklash */
+  height: 95vh; /* toʻliq ekran balandligi */
+  max-height: 95vh;
+
+  margin: 0 auto;
+  padding: 24px 16px 40px 20px;
+  background-color: var(--card-bg);
+  border-radius: 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Chat list uchun alohida scroll joyi */
+.chat-items-wrapper{
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding-right: 6px;
+  overscroll-behavior: contain;
 }
 
 body.light .chat-list-container {

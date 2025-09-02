@@ -254,3 +254,143 @@ body.dark .chat-footer input {
   border-radius: 8px;
   cursor: pointer;
 }
+
+/* Chat.css ga kichik qo‘shimcha (xohishga ko‘ra) 
+.phone-link {
+  background: transparent; border: 0; padding: 0;
+  font: inherit; cursor: pointer;
+}
+
+.message-bubble { position: relative; }
+.msg-actions {
+  display: none;
+  position: absolute;
+  bottom: -26px;
+  right: 8px;
+  gap: 6px;
+}*/
+
+/* Bubble konteyneri ichida joylash */
+.message-bubble { position: relative; }
+
+/* Kebab tugma joylashuvi: o'ng burchak (o'ng bubble) / chap burchak (chap bubble) */
+.msg-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+}
+.message-bubble.left .msg-actions {
+  right: auto;
+  left: 6px;
+}
+
+/* Kebab tugma o'zi */
+.kebab-btn {
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  line-height: 1;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.kebab-btn:active { opacity: .7; }
+
+/* Menyu (popover) */
+.msg-menu {
+  position: absolute;
+  top: 34px;   /* tugma tagida */
+  right: 0;
+  min-width: 150px;
+  background: var(--menu-bg, #fff);
+  color: var(--menu-fg, #0f1a3c);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: 4px;
+  z-index: 20;
+}
+.message-bubble.left .msg-menu {
+  right: auto;
+  left: 0;
+}
+
+/* Menyu elementlari */
+.msg-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.msg-menu button:hover { background: rgba(0,0,0,.06); }
+
+/* Mobil uchun kattaroq touch maydon */
+@media (hover: none) and (pointer: coarse) {
+  .kebab-btn { padding: 10px; font-size: 20px; }
+  .msg-menu button { padding: 14px 14px; font-size: 16px; }
+}
+
+/* (avvalgi qolganlari) */
+.edited-tag { margin-left: 6px; font-size: 12px; opacity: .75; }
+.deleted-placeholder { opacity: .7; font-style: italic; }
+
+.phone-link {
+  background: transparent; border: 0; padding: 0;
+  font: inherit; cursor: pointer;
+}
+.phone-link:hover { text-decoration: underline; }
+
+/* Lightbox / modal */
+.img-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: grid; place-items: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.img-modal-body {
+  position: relative;
+  max-width: 95vw; max-height: 90vh;
+}
+
+.img-modal-img {
+  display: block;
+  max-width: 95vw;
+  max-height: 85vh;
+  width: auto; height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  object-fit: contain;
+}
+
+/* Yopish tugmasi */
+.img-modal-close {
+  position: absolute; top: -10px; right: -10px;
+  background: #000; color: #fff;
+  border: none; border-radius: 999px;
+  width: 36px; height: 36px; cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35);
+}
+
+/* Yuklab olish havolasi */
+.img-modal-download {
+  position: absolute; left: 8px; bottom: -36px;
+  color: #fff; text-decoration: none;
+  font-size: 14px; padding: 4px 8px;
+  background: rgba(0,0,0,.45); border-radius: 8px;
+}
+
+/* Mobil pinch-zoomga mos */
+.img-modal-img {
+  touch-action: pan-x pan-y; /* sahifa scroll yaxshi ishlaydi */
+}
+
+/* Kichik rasm preview uchun hover (ixtiyoriy) */
+.chat-image { cursor: zoom-in; }

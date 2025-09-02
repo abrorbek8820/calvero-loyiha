@@ -106,31 +106,58 @@ export default function ChatList() {
     <h2>📥 Chatlar</h2>
 
     {isLoading && !initialLoadDone ? (
-  <div className="spinner-container">
-    <div className="spinner"></div>
-    <p style={{ marginTop: 10 }}>Yuklanmoqda...</p>
-  </div>
-) : chats.length > 0 ? (
-  // ...
-      chats.map(chat => (
-        <div key={chat.id} className={`chat-item ${unreadChats.includes(chat.id) ? 'unread' : ''}`}>
-          <div onClick={() => navigate(`/chat/${chat.phone}`)} style={{ flex: 1, cursor: 'pointer' }}>
-            ✉️ {chat.phone} <OnlineDot lastSeen={chat.last_seen} />
-            {unreadChats.includes(chat.id)}
-          </div>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteChat(chat.phone);
-            }}
-            className="delete-btn"
-          >
-            <Trash2 size={20} />
-          </button>
-        </div>
-      ))
+      <div className="spinner-container">
+        <div className="spinner"></div>
+        <p style={{ marginTop: 10 }}>Yuklanmoqda...</p>
+      </div>
     ) : (
-      <p>Chatlar mavjud emas.</p>
+      <div className="chat-items-wrapper">
+        {chats.length > 0 ? (
+          chats.map((chat) => (
+            <div
+              key={chat.id}
+              className={`chat-item ${unreadChats.includes(chat.id) ? 'unread' : ''}`}
+            >
+              <div
+                onClick={() => navigate(`/chat/${chat.phone}`)}
+                style={{ flex: 1, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}
+              >
+                <span>✉️ +{chat.phone}</span>
+                <OnlineDot lastSeen={chat.last_seen} />
+
+                {/* O‘qilmagan belgisi (matn chiqarmaydi, faqat nuqta/badge) */}
+                {unreadChats.includes(chat.id) && (
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: 'red'
+                    }}
+                    aria-label="O‘qilmagan"
+                    title="O‘qilmagan"
+                  />
+                )}
+              </div>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteChat(chat.phone);
+                }}
+                className="delete-btn"
+                aria-label="Chovni o‘chirish"
+                title="Chovni o‘chirish"
+              >
+                <Trash2 size={20} />
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>Chatlar mavjud emas.</p>
+        )}
+      </div>
     )}
   </div>
 );

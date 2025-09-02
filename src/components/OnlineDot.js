@@ -11,7 +11,7 @@ const getTimeAgoText = (lastSeen) => {
   if (diffSec <= 120) return null; // online — vaqt yozmaymiz
   if (diffSec <= 3600) return `${Math.floor(diffSec / 60)} daqiqa oldin`;
   if (diffSec <= 86400) return `${Math.floor(diffSec / 3600)} soat oldin`;
-  return 'Ko‘p vaqt oldin';
+  return 'Ancha oldin';
 };
 
 export default function OnlineDot({ lastSeen, showTime = false }) {
