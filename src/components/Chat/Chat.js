@@ -31,12 +31,26 @@ export default function Chat() {
 
   // kebab menyu
   const [openMenuId, setOpenMenuId] = useState(null);
-  const toggleMenu = (id) => setOpenMenuId((cur) => (cur === id ? null : id));
-  const closeMenu = () => setOpenMenuId(null);
+
+  
+const [menuUp, setMenuUp] = useState(false); 
 
   const [previewUrl, setPreviewUrl] = useState(null);
 const openPreview = (url) => setPreviewUrl(url);
 const closePreview = () => setPreviewUrl(null);
+
+const toggleMenu = (id, btnEl) => {
+  setOpenMenuId(cur => (cur === id ? null : id));
+  if (btnEl) {
+    const rect = btnEl.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    // menyu balandligi ~110–140px deb hisoblaymiz (2 tugma/1 tugma)
+    setMenuUp(spaceBelow < 140);
+    // xabar ekranga sig‘sin:
+    btnEl.closest('.message-bubble')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+};
+const closeMenu = () => { setOpenMenuId(null); setMenuUp(false); };
 
 // ESC bosilganda yopish
 useEffect(() => {
@@ -341,6 +355,8 @@ useEffect(() => {
     }
   };
 
+  
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -412,19 +428,19 @@ useEffect(() => {
                 {isOwn && (
                   <div className="msg-actions right">
                     <button
-                      className="kebab-btn"
-                      aria-label="Amallar"
-                      aria-expanded={openMenuId === msg.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleMenu(msg.id);
-                      }}
-                    >
-                      ⋮
-                    </button>
+  className="kebab-btn"
+  aria-label="Amallar"
+  aria-expanded={openMenuId === msg.id}
+  onClick={(e) => {
+    e.stopPropagation();
+    toggleMenu(msg.id, e.currentTarget); // 👈 elementni berayapmiz
+  }}
+>
+  ⋮
+</button>
 
                     {openMenuId === msg.id && (
-                      <div className="msg-menu" role="menu">
+                      <div className={`msg-menu ${menuUp ? 'up' : 'down'}`} role="menu">  
                         <button
                           role="menuitem"
                           onClick={() => {
@@ -476,19 +492,19 @@ useEffect(() => {
                 {isOwn && (
                   <div className="msg-actions right">
                     <button
-                      className="kebab-btn"
-                      aria-label="Amallar"
-                      aria-expanded={openMenuId === msg.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleMenu(msg.id);
-                      }}
-                    >
-                      ⋮
-                    </button>
+  className="kebab-btn"
+  aria-label="Amallar"
+  aria-expanded={openMenuId === msg.id}
+  onClick={(e) => {
+    e.stopPropagation();
+    toggleMenu(msg.id, e.currentTarget); // 👈 elementni berayapmiz
+  }}
+>
+  ⋮
+</button>
 
                     {openMenuId === msg.id && (
-                      <div className="msg-menu" role="menu">
+                      <div className={`msg-menu ${menuUp ? 'up' : 'down'}`} role="menu">  
                         <button
                           role="menuitem"
                           onClick={() => {
@@ -523,19 +539,19 @@ useEffect(() => {
               {isOwn && (
                 <div className="msg-actions right">
                   <button
-                    className="kebab-btn"
-                    aria-label="Amallar"
-                    aria-expanded={openMenuId === msg.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleMenu(msg.id);
-                    }}
-                  >
-                    ⋮
-                  </button>
+  className="kebab-btn"
+  aria-label="Amallar"
+  aria-expanded={openMenuId === msg.id}
+  onClick={(e) => {
+    e.stopPropagation();
+    toggleMenu(msg.id, e.currentTarget); // 👈 elementni berayapmiz
+  }}
+>
+  ⋮
+</button>
 
                   {openMenuId === msg.id && (
-                    <div className="msg-menu" role="menu">
+                    <div className={`msg-menu ${menuUp ? 'up' : 'down'}`} role="menu"> 
                       <button
                         role="menuitem"
                         onClick={() => {

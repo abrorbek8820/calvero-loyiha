@@ -300,8 +300,7 @@ body.dark .chat-footer input {
 /* Menyu (popover) */
 .msg-menu {
   position: absolute;
-  top: 34px;   /* tugma tagida */
-  right: 0;
+  z-index: 10000;                /* footer ustida tursin */
   min-width: 150px;
   background: var(--menu-bg, #fff);
   color: var(--menu-fg, #0f1a3c);
@@ -309,8 +308,16 @@ body.dark .chat-footer input {
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0,0,0,.12);
   padding: 4px;
-  z-index: 20;
 }
+
+/* Odatiy: pastga ochiladi (kebab tugmasi ostiga) */
+.msg-menu.down { top: 34px; right: 0; }
+.message-bubble.left .msg-menu.down { left: 0; right: auto; }
+
+/* Pastda joy yetmasa: yuqoriga ochiladi (kebab tugmasi ustiga) */
+.msg-menu.up { bottom: 34px; right: 0; }
+.message-bubble.left .msg-menu.up { left: 0; right: auto; }
+
 .message-bubble.left .msg-menu {
   right: auto;
   left: 0;
