@@ -617,14 +617,15 @@ useEffect(() => {
         </button>
       </div>
 
-      <div className="chat-header">
+      <div className="chat-pasti">
         <button
           type="button"
           className="phone-link"
           
         >
-          CALVERO WORK
+          
         </button>
+        
       </div>
     
 

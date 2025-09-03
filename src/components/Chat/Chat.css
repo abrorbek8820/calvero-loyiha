@@ -349,7 +349,7 @@ body.dark .chat-footer input {
 
 .phone-link {
   background: transparent; border: 0; padding: 0;
-  font: inherit; cursor: pointer;
+  font: inherit; cursor: pointer; color: white;
 }
 .phone-link:hover { text-decoration: underline; }
 
@@ -401,3 +401,12 @@ body.dark .chat-footer input {
 
 /* Kichik rasm preview uchun hover (ixtiyoriy) */
 .chat-image { cursor: zoom-in; }
+
+.chat-pasti {
+  padding: 6px;
+  background-color: #0f1a3c;;
+  color: #000000;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
