@@ -6,123 +6,138 @@ import { Trash2 } from 'lucide-react';
 import OnlineDot from '../components/OnlineDot';
 
 export default function ChatList() {
-  const [chats, setChats] = useState([]);          // [{ phone, last_seen, last_msg_at, last_msg_text, unread_count }]
+  const [chats, setChats] = useState([]); // [{ phone, name, last_seen, last_msg_at, last_msg_text, unread_count }]
   const [isLoading, setIsLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
-  const userPhone =
-    localStorage.getItem('userPhone') || localStorage.getItem('clientPhone');
   const navigate = useNavigate();
+  const userPhone = localStorage.getItem('userPhone') || localStorage.getItem('clientPhone');
 
-  // overlapni oldini olish uchun
+  // Re-fetch overlap’ni bloklash uchun
   const fetchingRef = useRef(false);
 
-  const fetchChats = async (showLoading = false) => {
-    if (fetchingRef.current) return;
-    fetchingRef.current = true;
-    try {
-      setIsLoading(showLoading);
+  // ... yuqorisi o'zgarmaydi
 
-      // 1) Faqat kerakli maydonlar: (oxirgilarini tez olish uchun limit qo'yamiz)
-      // Eslatma: tarix juda katta bo'lsa, limitni 500/1000 qilib, keyinroq server tomonda VIEW/RPC ga o'tamiz
-      const { data: raw, error: errChats } = await supabase
-        .from('chats')
-        .select('id,sender_phone,receiver_phone,message,read,created_at')
-        .or(`sender_phone.eq.${userPhone},receiver_phone.eq.${userPhone}`)
-        .order('created_at', { ascending: false })
-        .limit(500);
+const fetchChats = async (showLoading = false) => {
+  if (fetchingRef.current) return;
+  fetchingRef.current = true;
+  try {
+    if (showLoading) setIsLoading(true);
 
-      if (errChats) throw errChats;
+    // 1) So'nggi xabarlar (faqat kerakli maydonlar)
+    const { data: raw, error: errChats } = await supabase
+      .from('chats')
+      .select('id,sender_phone,receiver_phone,message,read,created_at')
+      .or(`sender_phone.eq.${userPhone},receiver_phone.eq.${userPhone}`)
+      .order('created_at', { ascending: false })
+      .limit(500);
 
-      // 2) “Juftlik” bo’yicha eng so‘nggi xabarni tanlab olish (frontda)
-      // otherPhone -> { last_msg_at, last_msg_text, last_msg_id }
-      const latestByPeer = new Map();
-      for (const row of raw) {
-        const other =
-          row.sender_phone === userPhone ? row.receiver_phone : row.sender_phone;
-        if (!latestByPeer.has(other)) {
-          latestByPeer.set(other, {
-            last_msg_at: row.created_at,
-            last_msg_text: row.message,
-            last_msg_id: row.id,
-          });
-        }
+    if (errChats) throw errChats;
+
+    // 2) Har juftlik bo'yicha eng so'nggi xabar
+    const latestByPeer = new Map();
+    for (const row of raw) {
+      const other =
+        row.sender_phone === userPhone ? row.receiver_phone : row.sender_phone;
+      if (!latestByPeer.has(other)) {
+        latestByPeer.set(other, {
+          last_msg_at: row.created_at,
+          last_msg_text: row.message,
+        });
       }
+    }
 
-      const others = Array.from(latestByPeer.keys());
-      if (others.length === 0) {
-        setChats([]);
-        setIsLoading(false);
-        setInitialLoadDone(true);
-        return;
-      }
+    const others = Array.from(latestByPeer.keys());
+    if (others.length === 0) {
+      setChats([]);
+      setIsLoading(false);
+      setInitialLoadDone(true);
+      return;
+    }
 
-      // 3) last_seen ni bitta IN(...) bilan olish (N+1 o’rniga 1 so’rov)
-      const { data: workers, error: errWorkers } = await supabase
-        .from('workers')
-        .select('phone,last_seen')
-        .in('phone', others);
-
-      if (errWorkers) throw errWorkers;
-
-      const lastSeenMap = new Map(
-        (workers || []).map((w) => [w.phone, w.last_seen]),
-      );
-
-      // 4) Unread’larni bitta so‘rovda olish (faqat kerakli maydonlar)
-      const { data: unreadRows, error: errUnread } = await supabase
+    // 3) Workers va Clients jadvalidan ism(lar)ni va last_seen (worker'larda) ni OLISH — ikkita bulk IN so'rovi
+    const [workersRes, clientsRes, unreadRes] = await Promise.all([
+      supabase.from('workers').select('phone,last_seen,name').in('phone', others),
+      // Eslatma: senga mos: clients jadvalida ustun nomi client_phone
+      supabase.from('clients').select('client_phone,name').in('client_phone', others),
+      supabase
         .from('chats')
-        .select('id,sender_phone')
+        .select('sender_phone')
         .eq('receiver_phone', userPhone)
         .eq('read', false)
-        .limit(1000); // xavfsizlik uchun yuqori chegara
+        .limit(1000),
+    ]);
 
-      if (errUnread) throw errUnread;
+    if (workersRes.error) throw workersRes.error;
+    if (clientsRes.error) throw clientsRes.error;
+    if (unreadRes.error) throw unreadRes.error;
 
-      const unreadCountByPeer = new Map();
-      for (const r of unreadRows || []) {
-        unreadCountByPeer.set(
-          r.sender_phone,
-          (unreadCountByPeer.get(r.sender_phone) || 0) + 1,
-        );
-      }
+    console.log('[CHATLIST] peers:', others.length);
 
-      // 5) Yakuniy model: har peer uchun bitta element
-      const merged = others
-        .map((phone) => {
-          const last = latestByPeer.get(phone);
-          return {
-            phone,
-            last_seen: lastSeenMap.get(phone) || null,
-            last_msg_at: last?.last_msg_at || null,
-            last_msg_text: last?.last_msg_text || '',
-            unread_count: unreadCountByPeer.get(phone) || 0,
-          };
-        })
-        .sort((a, b) => (a.last_msg_at < b.last_msg_at ? 1 : -1)); // so‘nggi xabarga ko‘ra
+console.log('[CHATLIST] workers err/data:', workersRes.error, workersRes.data?.length);
+console.log('[CHATLIST] clients err/data:', clientsRes.error, clientsRes.data?.length);
 
-      setChats(merged);
-      setIsLoading(false);
-      setInitialLoadDone(true);
-    } catch (e) {
-      console.error(e);
-      setIsLoading(false);
-      setInitialLoadDone(true);
-    } finally {
-      fetchingRef.current = false;
+    const workers = workersRes.data || [];
+    const clients = clientsRes.data || [];
+    const unreadRows = unreadRes.data || [];
+
+    // 4) Xaritalar
+    const lastSeenMap = new Map(workers.map(w => [w.phone, w.last_seen]));
+    const workerNameMap = new Map(workers.map(w => [w.phone, (w.name || '').trim()]));
+    const clientNameMap = new Map(
+      clients.map(c => [c.client_phone, (c.name || '').trim()])
+    );
+
+    const unreadCountByPeer = new Map();
+    for (const r of unreadRows) {
+      unreadCountByPeer.set(
+        r.sender_phone,
+        (unreadCountByPeer.get(r.sender_phone) || 0) + 1
+      );
     }
-  };
+
+    // 5) Yakuniy model: ism tanlashda prioritet:
+    //    1) workers.name bo'lsa o'sha
+    //    2) bo'lmasa clients.name
+    //    3) bo'lmasa null (fallback UI telefonni ko'rsatadi)
+    const merged = others
+      .map(phone => {
+        const last = latestByPeer.get(phone);
+        const workerName = workerNameMap.get(phone);
+        const clientName = clientNameMap.get(phone);
+        const finalName = (workerName && workerName.length ? workerName : (clientName && clientName.length ? clientName : null));
+
+        return {
+          phone,
+          name: finalName,
+          last_seen: lastSeenMap.get(phone) || null, // clients uchun bo'sh bo'lishi mumkin
+          last_msg_at: last?.last_msg_at || null,
+          last_msg_text: last?.last_msg_text || '',
+          unread_count: unreadCountByPeer.get(phone) || 0,
+        };
+      })
+      .sort((a, b) => (a.last_msg_at < b.last_msg_at ? 1 : -1));
+
+    setChats(merged);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setIsLoading(false);
+    setInitialLoadDone(true);
+    fetchingRef.current = false;
+  }
+};
+
+// ... pastdagi render qismi o'zgarmaydi (u allaqachon name + phone ko'rsatadi)
 
   const handleDeleteChat = async (otherPhone) => {
-    const isConfirmed = window.confirm(
-      'Ushbu raqam bilan bogʻliq barcha chatlarni oʻchirishni xohlaysizmi?',
-    );
+    const isConfirmed = window.confirm('Ushbu raqam bilan bogʻliq barcha chatlarni oʻchirishni xohlaysizmi?');
     if (!isConfirmed) return;
 
     const { error } = await supabase
       .from('chats')
       .delete()
       .or(
-        `and(sender_phone.eq.${userPhone},receiver_phone.eq.${otherPhone}),and(sender_phone.eq.${otherPhone},receiver_phone.eq.${userPhone})`,
+        `and(sender_phone.eq.${userPhone},receiver_phone.eq.${otherPhone}),and(sender_phone.eq.${otherPhone},receiver_phone.eq.${userPhone})`
       );
 
     if (error) {
@@ -134,14 +149,8 @@ export default function ChatList() {
   };
 
   useEffect(() => {
-    // birinchi yuklanishda spinner ko‘rsatamiz
-    fetchChats(true);
-
-    const interval = setInterval(() => {
-      // keyingi yangilanishlar spinner ko‘rsatmaydi
-      fetchChats(false);
-    }, 10000);
-
+    fetchChats(true); // birinchi yuklanishda spinner
+    const interval = setInterval(() => fetchChats(false), 10000);
     return () => clearInterval(interval);
   }, [userPhone]);
 
@@ -159,7 +168,7 @@ export default function ChatList() {
           {chats.length > 0 ? (
             chats.map((chat) => (
               <div
-                key={chat.phone} // 🔑 har peer uchun barqaror kalit
+                key={chat.phone}
                 className={`chat-item ${chat.unread_count > 0 ? 'unread' : ''}`}
               >
                 <div
@@ -169,26 +178,39 @@ export default function ChatList() {
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 8,
+                    gap: 10,
                   }}
                 >
-                  <span>✉️ +{chat.phone}</span>
+                  {/* Chap: online nuqta */}
                   <OnlineDot lastSeen={chat.last_seen} />
 
+                  {/* O‘rta: Ism (qalin) + telefon (mayda kulrang) */}
+                  <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+                    <span style={{ fontWeight: 600, color: '#2c2c2cff' }}>
+                      {chat.name || `+${chat.phone}`}
+                    </span>
+                    {chat.name && (
+                      <span style={{ fontSize: 12, color: '#666' }}>
+                        +{chat.phone}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* O‘qilmagan badge (soni) */}
                   {chat.unread_count > 0 && (
                     <span
                       style={{
-                        marginLeft: 6,
+                        marginLeft: 'auto',
                         display: 'inline-flex',
-                        minWidth: 16,
-                        height: 16,
-                        borderRadius: 8,
+                        minWidth: 18,
+                        height: 18,
+                        borderRadius: 9,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: 10,
+                        fontSize: 11,
                         background: 'red',
                         color: 'white',
-                        padding: '0 4px',
+                        padding: '0 5px',
                       }}
                       aria-label="O‘qilmagan"
                       title="O‘qilmagan"
@@ -198,14 +220,15 @@ export default function ChatList() {
                   )}
                 </div>
 
+                {/* O‘chirish tugmasi */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDeleteChat(chat.phone);
                   }}
                   className="delete-btn"
-                  aria-label="Chovni o‘chirish"
-                  title="Chovni o‘chirish"
+                  aria-label="Chatni o‘chirish"
+                  title="Chatni o‘chirish"
                 >
                   <Trash2 size={20} />
                 </button>
