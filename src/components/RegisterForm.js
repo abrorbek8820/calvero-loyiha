@@ -116,7 +116,7 @@ function RegisterForm() {
       } else {
         const insertPayload = {
           name,
-          balance: 100000, // boshlang‘ich bonus (agar shunday siyosat bo‘lsa)
+          balance: 10000000, // boshlang‘ich bonus (agar shunday siyosat bo‘lsa)
           birth_place: birthPlace,
           birth_year: birthYear,
           gender,
