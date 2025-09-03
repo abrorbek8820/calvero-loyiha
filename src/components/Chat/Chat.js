@@ -559,7 +559,7 @@ useEffect(() => {
                           startEdit(msg);
                         }}
                       >
-                        ✏️ Tahrirlash
+                        ✏️Tahrirlash
                       </button>
                       <button
                         role="menuitem"
@@ -614,6 +614,16 @@ useEffect(() => {
 
         <button className="chat-send-btn" onClick={sendMessage}>
           ➤
+        </button>
+      </div>
+
+      <div className="chat-header">
+        <button
+          type="button"
+          className="phone-link"
+          
+        >
+          CALVERO WORK
         </button>
       </div>
     
