@@ -13,6 +13,7 @@ export default function Profil() {
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState("light");
   const fileInputRef = useRef(null);
+  const [theme, setTheme] = useState("light");
 
   // Rejimni body class orqali olish
   useEffect(() => {
@@ -146,16 +147,16 @@ export default function Profil() {
     return <p className="text-white text-center mt-10">Yuklanmoqda...</p>;
 
   return (
-  <div className={"profil-container"}>
-    {/* Yuqori va o‘rta qism */}
+  <div className="profil-container">
     <div className="profil-content">
-      {/* Avatar + ism */}
-      <div className="profil-card profil-top">
-        <div className="avatar-wrapper">
+      
+      {/* Avatar va ism */}
+      <div className="profil-card">
+        <div className="avatar-section">
           <img
             src={avatarUrl || "/user.png"}
             alt="Avatar"
-            className="avatar-img avatar-clickable"
+            className="avatar-img"
             onClick={() => fileInputRef.current?.click()}
           />
           <input
@@ -165,30 +166,28 @@ export default function Profil() {
             onChange={handleAvatarChange}
             className="hidden"
           />
-        </div>
-
-        <div className="profil-ident">
           <h2 className="profil-name">{name || "Ishchi"}</h2>
         </div>
       </div>
 
-      {/* O'zingiz haqingizda */}
-      <div className="info-box">
-        <label>O‘zingiz haqingizda:</label>
+      {/* O‘zingiz haqingizda */}
+      <div className="info-section">
+        <label className="info-label">O‘zingiz haqingizda</label>
         <textarea
           value={about}
           onChange={(e) => setAbout(e.target.value)}
           placeholder="O‘zingiz haqingizda qisqacha yozing..."
+          className="about-input"
         />
       </div>
     </div>
 
     {/* Pastki tugmalar */}
     <div className="profil-actions">
-      <button onClick={handleAboutSave} className="save-button">Saqlash</button>
-      <button onClick={() => navigate("/edit-profile")} className="edit-button">Tahrirlash</button>
-      <button onClick={handleLogout} className="logout-button">Chiqish</button>
-      <button onClick={() => navigate("/delete")} className="logout-button">Akkauntni o'chirish</button>
+      <button onClick={handleAboutSave} className="action-button save">💾 Saqlash</button>
+      <button onClick={() => navigate("/edit-profile")} className="action-button edit">✏️ Tahrirlash</button>
+      <button onClick={handleLogout} className="action-button logout">🚪 Chiqish</button>
+      <button onClick={() => navigate("/delete")} className="action-button delete">🗑️ Akkauntni o‘chirish</button>
     </div>
   </div>
 );

@@ -1,222 +1,80 @@
-:root {
-  --brand: #e11d48;       /* Calvero Red */
-  --brand-600: #be123c;   /* hover */
-  --ink: #0b0b0c;         /* matn (dark) */
-  --paper: #ffffff;       /* karta (light) */
-  --bg: #0b0b0c;          /* fon (dark) */
-  --card: #121214;        /* karta (dark) */
-  --muted: #9ca3af;
-  --ring: #22232a;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --shadow-elev: 0 10px 28px rgba(0,0,0,.35);
-
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger:  #ef4444;
-}
-
-body.light .profil-container {
-  --bg: #f7f8fb;
-  --card: var(--paper);
-  --ink: #0b0b0c;
-  --ring: #e5e7eb;
-  --shadow-elev: 0 10px 24px rgba(0,0,0,.08);
-}
-
-body.dark  .profil-container {
-  --bg: #0b0b0c;
-  --card: #121214;
-  --ink: #e7e7ea;
-  --ring: #22232a;
-  --shadow-elev: 0 10px 28px rgba(0,0,0,.35);
-}
-
-/* Asosiy konteyner */
+/* Ekranga to‘liq mos va scrollsiz container */
 .profil-container {
-  overflow-x: hidden;
-  max-height: 100vh;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  padding-bottom: 20px;
-  background: var(--bg);
-  color: var(--ink);
-}
-
-.profile-content{
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
+  height: 100vh;
+  max-width: 500px;
   padding: 16px;
+  box-sizing: border-box;
 }
 
-.profile-actions{
-  display: grid;
-  gap: 20px;
-}
-
-/* Profil kartasi */
-.profil-card {
-  /*display: flex;
-  flex-direction: column;
-  gap: 20px;*/
-  display: grid;
-  gap: 12px;
-  padding: 16px;
-  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  background: transparent;
-}
-
-/* Avatar + ism blok */
-.profil-top {
+/* Yuqoridagi kontent (avatar, ism, about) */
+.profil-content {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
 }
 
+/* Avatar */
 .avatar-wrapper {
-  position: relative;
-  width: 98px;
-  height: 98px;
-  flex: 0 0 98px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .avatar-img {
-  width: 100%;
-  height: 100%;
+  width: 25%;
+  height: 25%;
   object-fit: cover;
-  border-radius: 50%;                       /* dumaloq */
-  border: 4px solid #4e6990;           /* qalin ramka, Calvero qizil */
-  box-shadow: 0 0 12px #4e6990; /* engil qizil soya */
-  background: #cbd5e1;
-  display: block;
-}
-
-.avatar-clickable {
-  cursor: pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-
-.avatar-clickable:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  border: 2px solid #ccc;
+  border-radius: 50%;
 }
 
 .hidden {
   display: none;
 }
 
-.profile-ident {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
+/* Ism */
+.profil-name {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
 }
 
-.profile-name {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: .2px;
-}
-
-/* Info box */
-.info-box {
-  border-radius: 12px;
-  padding: 16px;
-  transition: background-color 0.3s;
-}
-
-.dark-mode .info-box {
-  background-color: #334155;
-}
-
-.light-mode .info-box {
-  background-color: #e2e8f0;
-}
-
-.info-box label {
-  font-size: 13px;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 6px;
-  color: inherit;
-}
-
-.info-box p {
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 4px;
-}
-
-/* Textarea */
-textarea {
+/* About maydoni (balandligi cheklangan) */
+.about-input {
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  resize: none;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   box-sizing: border-box;
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #94a3b8;
-  resize: vertical;
-  min-height: 80px;
-  font-family: inherit;
-  font-size: 14px;
-  background-color: transparent;
-  color: inherit;
 }
 
-/* Tugmalar */
-.save-button,
-.edit-button,
-.logout-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  color: white;
-}
-
-.save-button { background-color: #10b981; }
-.save-button:hover { background-color: #059669; }
-
-.edit-button { background-color: #3b82f6; }
-.edit-button:hover { background-color: #2563eb; }
-
-.logout-button { background-color: #ef4444; }
-.logout-button:hover { background-color: #dc2626; }
-
-.button-group {
+/* Tugmalar har doim pastda */
+.profil-actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Mobil optimizatsiya */
-@media (max-width: 480px) {
-  .profil-container { padding: 16px; border-radius: 12px; }
-  .avatar-wrapper { width: 80px; height: 80px; flex-basis: 80px; }
-  .profile-name { font-size: 16px; }
-  .save-button, .edit-button, .logout-button { font-size: 14px; padding: 10px; }
-  .profile-content{gap: 12px; padding:12px; }
-  .profile-actions{ gap: 10px; padding: 12px; }
+.action-button {
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
 }
 
-/* Yuqori qatlam gorizontal */
-.profil-top{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-/* Avatar konteyner – markazga majburlashni olib tashlaymiz */
-.avatar-wrapper{
-  position:relative;
-  width:98px;
-  height:98px;
-  flex:0 0 98px;
-}
+.save   { background-color: #4caf50; }
+.edit   { background-color: #2196f3; }
+.logout { background-color: #ff9800; }
+.delete { background-color: #f44336; }
