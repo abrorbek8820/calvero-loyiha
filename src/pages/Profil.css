@@ -24,12 +24,13 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  background-color: black;
 }
 
 /* Rasm konteyneri */
 .avatar-wrapper {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid #ccc;

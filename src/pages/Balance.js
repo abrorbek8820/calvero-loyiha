@@ -68,41 +68,44 @@ const formatCustomId = (id) => {
   if (loading) return <div>⏳ Yuklanmoqda...</div>;
 
   return (
-    <div className="balance-page">
-      <Helmet>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
-      <img src="/logo-calvero.png" alt="Calvero" className="calvero-logo" />
+  <div className="balance-page">
+    <Helmet>
+      <meta name="robots" content="noindex, nofollow" />
+    </Helmet>
 
-      <h2>💰 Balansingiz: {(balance / 100)?.toLocaleString()} so‘m</h2>
+    <img src="/logo-calvero.png" alt="Calvero" className="calvero-logo" />
 
-      <div className="account-id">
-        <span className="formatted-id">Hisob raqam: {formatCustomId(customId)}</span>
-        <button onClick={copyToClipboard}>📋 Nusxalash</button>
-      </div>
+    <h2 className="balance-text">
+      💰 Balansingiz: <span className="amount">{(balance / 100)?.toLocaleString()} so‘m</span>
+    </h2>
 
-      {lastTopUp && (
-        <div className="last-topup">
-          🕓 Oxirgi to‘ldirish: {lastTopUp.amount.toLocaleString()} so‘m –{" "}
-          {new Date(lastTopUp.created_at).toLocaleDateString()}
-        </div>
-      )}
-
-      <div className="instruction-card">
-        <h4>📘 Balans to‘ldirish yo‘riqnoma:</h4>
-        <p>
-          To‘ldirish uchun <b>PayMe</b> yoki <b>Paynet</b> ilovasidan foydalaning. <br />
-          Izohga <b>{customId}</b> hisob raqamingizni yozishni unutmang. <br />
-          To‘lov 1–5 daqiqa ichida balansga tushadi.
-        </p>
-      </div>
-
-      <div className="partners">
-        <img src="/payme.png" alt="PayMe" className="partner-logo" />
-        <img src="/paynet.png" alt="Paynet" className="partner-logo" />
-      </div>
+    <div className="account-id-box">
+      <span className="account-id">Hisob raqam: <strong>{formatCustomId(customId)}</strong></span>
+      <button className="copy-button" onClick={copyToClipboard}>📋 Nusxalash</button>
     </div>
-  );
-};
+
+    {lastTopUp && (
+      <div className="last-topup">
+        🕓 Oxirgi to‘ldirish: {lastTopUp.amount.toLocaleString()} so‘m –{" "}
+        {new Date(lastTopUp.created_at).toLocaleDateString()}
+      </div>
+    )}
+
+    <div className="instruction-box">
+      <h4>📘 Balans to‘ldirish yo‘riqnoma:</h4>
+      <p>
+        To‘ldirish uchun <b>PayMe</b> ilovasidan foydalaning. <br />
+        <b>{customId}</b> hisob raqamingizni yozishni unutmang. <br />
+        To‘lov 1–5 daqiqa ichida balansga tushadi.
+      </p>
+    </div>
+
+    <div className="partner-logo-box">
+      <a href="intent://payme.uz/home#Intent;scheme=https;package=uz.dida.payme;end">
+  <img src="/payme.png" className="partner-logo" alt="Payme" />
+</a>
+    </div>
+  </div>
+);}
 
 export default Balance;
