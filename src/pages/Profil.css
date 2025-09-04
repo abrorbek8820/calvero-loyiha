@@ -14,35 +14,53 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-/* Avatar */
+/* Avatar + ismni markazga joylash */
+.avatar-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Rasm konteyneri */
 .avatar-wrapper {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  margin-bottom: 8px;
+  border: 3px solid #ccc;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
+/* Rasm o‘zi */
 .avatar-img {
-  width: 25%;
-  height: 25%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 2px solid #ccc;
+  object-position: center;
+  display: block;
   border-radius: 50%;
+}
+
+/* Rasm tagidagi ism */
+.profil-name {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #007bff;
+  text-align: center;
 }
 
 .hidden {
   display: none;
 }
 
-/* Ism */
-.profil-name {
-  font-size: 1.2rem;
-  margin-bottom: 16px;
-}
+
 
 /* About maydoni (balandligi cheklangan) */
 .about-input {

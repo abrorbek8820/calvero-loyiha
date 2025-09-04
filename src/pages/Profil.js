@@ -151,24 +151,23 @@ export default function Profil() {
     <div className="profil-content">
       
       {/* Avatar va ism */}
-      <div className="profil-card">
-        <div className="avatar-section">
-          <img
-            src={avatarUrl || "/user.png"}
-            alt="Avatar"
-            className="avatar-img"
-            onClick={() => fileInputRef.current?.click()}
-          />
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className="hidden"
-          />
-          <h2 className="profil-name">{name || "Ishchi"}</h2>
-        </div>
-      </div>
+      <div className="avatar-block">
+  <div className="avatar-wrapper" onClick={() => fileInputRef.current?.click()}>
+    <img
+      src={avatarUrl || "/user.png"}
+      alt="Avatar"
+      className="avatar-img"
+    />
+    <input
+      ref={fileInputRef}
+      type="file"
+      accept="image/*"
+      onChange={handleAvatarChange}
+      className="hidden"
+    />
+  </div>
+  <h2 className="profil-name">{name || "Ishchi"}</h2>
+</div>
 
       {/* O‘zingiz haqingizda */}
       <div className="info-section">
