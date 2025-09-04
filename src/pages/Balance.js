@@ -101,9 +101,7 @@ const formatCustomId = (id) => {
     </div>
 
     <div className="partner-logo-box">
-      <a href="intent://payme.uz/home#Intent;scheme=https;package=uz.dida.payme;end">
   <img src="/payme.png" className="partner-logo" alt="Payme" />
-</a>
     </div>
   </div>
 );}
