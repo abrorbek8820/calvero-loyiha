@@ -41,13 +41,29 @@ const closePreview = () => setPreviewUrl(null);
 
 const toggleMenu = (id, btnEl) => {
   setOpenMenuId(cur => (cur === id ? null : id));
+
   if (btnEl) {
     const rect = btnEl.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom;
-    // menyu balandligi ~110–140px deb hisoblaymiz (2 tugma/1 tugma)
-    setMenuUp(spaceBelow < 140);
-    // xabar ekranga sig‘sin:
-    btnEl.closest('.message-bubble')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+
+    // Footer balandligi + biz qo'ygan offsetni hisobga olamiz
+    const footer = document.querySelector('.chat-footer');
+    const footerH = footer ? footer.getBoundingClientRect().height : 0;
+
+    // Agar offsetdan foydalansangiz (oldin tavsiya qilganimdek)
+    const rootStyles = getComputedStyle(document.documentElement);
+    const bottomOffset = parseInt(rootStyles.getPropertyValue('--bottom-offset')) || 0;
+
+    // Kebab tugmadan pastda qolgan real joy:
+    const spaceBelow = window.innerHeight - rect.bottom - footerH - bottomOffset;
+
+    // Menyu taxminiy balandligi: 110–140 px (2 tugmali bo'lsa ~110, 3 tugmali ~140)
+    const menuHeight = 140;
+
+    setMenuUp(spaceBelow < menuHeight);
+
+    // Menyu ekranga sig‘ishi uchun xabarni markazga keltiramiz
+    btnEl.closest('.message-bubble')
+      ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
 };
 const closeMenu = () => { setOpenMenuId(null); setMenuUp(false); };
