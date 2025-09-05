@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 
+
 function IshKerak() {
   const [userName, setUserName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
@@ -75,7 +76,26 @@ useEffect(() => {
 
 useEffect(() => { if (timeLeft > 0) { const interval = setInterval(() => { setTimeLeft(prev => (prev > 0 ? prev - 1 : 0)); }, 1000); return () => clearInterval(interval); } }, [timeLeft]);
 
+// ✅ GPS: faqat coords qaytaradi (aniq va toza)
+async function getCoords() {
+  return await new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      p => resolve(p.coords),
+      e => reject(e),
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 12000 }
+    );
+  });
+}
 
+// ✅ Supabase: koordinatani yozish + last_seen yangilash
+async function writeCoords(phone, { latitude, longitude }) {
+  const { error } = await supabase
+    .from('workers')
+    .update({ latitude, longitude, last_seen: new Date().toISOString() })
+    .eq('phone', phone);
+
+  if (error) throw error;
+}
 
 const fetchUserData = async () => {
   const userPhone = localStorage.getItem('userPhone');
@@ -184,43 +204,30 @@ useEffect(() => {
 const toggleListed = async () => {
   if (status !== 'online') return;
 
-  const currentPhone = localStorage.getItem('userPhone'); // 🔄 yangidan o'qish
+  const currentPhone = localStorage.getItem('userPhone');
   const goingOnline = !isListed;
 
+  // 1) is_listed ni yangilash
   const { error: e1 } = await supabase
     .from('workers')
     .update({ is_listed: goingOnline })
     .eq('phone', currentPhone);
 
   if (e1) {
-    console.warn('is_listed yangilash xatosi:', e1);
+    alert('is_listed yangilash xatosi: ' + e1.message);
     return;
   }
   setIsListed(goingOnline);
 
+  // 2) ONLINE ga o‘tayotganda, faqat timeLeft > 60 bo‘lsa GPS yozish
   if (goingOnline && timeLeft > 60) {
-    (async () => {
-      try {
-        const pos = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(
-            p => resolve(p),
-            e => reject(e),
-            { enableHighAccuracy: false, maximumAge: 20000, timeout: 8000 }
-          );
-        });
-        const { latitude, longitude } = pos;
-
-        const { error: e2 } = await supabase
-          .from('workers')
-          .update({ latitude, longitude })
-          .eq('phone', currentPhone);
-
-        if (e2) console.warn('GPS yozishda xato:', e2);
-        else console.log('📍 GPS yangilandi:', latitude, longitude);
-      } catch (e) {
-        console.warn('📵 GPS olish xatosi:', e?.message || e);
-      }
-    })();
+    try {
+      const coords = await getCoords();
+      await writeCoords(currentPhone, coords);
+      await fetchUserData(); // UI ni yangilash
+    } catch (e) {
+      alert('GPS yoki bazaga yozishda xato: ' + (e?.message || e));
+    }
   }
 };
 
