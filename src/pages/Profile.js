@@ -21,10 +21,18 @@ export default function Profile() {
 
   // 1) Profilga kirishlar hisoblagichi (bir marta)
   useEffect(() => {
-    if (hasUpdated.current) return;
-    hasUpdated.current = true;
-    supabase.rpc('increment_views', { user_phone: phone });
-  }, [phone]);
+  if (hasUpdated.current) return;
+  hasUpdated.current = true;
+
+  const incrementViews = async () => {
+    const { error } = await supabase.rpc('increment_views', { user_phone: phone });
+    if (error) {
+      console.error("Views RPC xatoligi:", error.message);
+    }
+  };
+
+  incrementViews();
+}, [phone]);
 
   // 2) Foydalanuvchi GPS (masofa uchun)
   useEffect(() => {
