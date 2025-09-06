@@ -124,7 +124,7 @@ function RegisterForm() {
           phone: userPhoneDigits,
           email,
           session_token: sessionToken,
-          custom_id: generateUniqueId(),
+          custom_id: await generateUniqueId(1, 'workers'),
         };
         const { error: insErr } = await supabase
           .from('workers')
