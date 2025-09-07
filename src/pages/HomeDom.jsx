@@ -71,6 +71,24 @@ function Home() {
         </button>
       </div>
 
+      <button
+  onClick={() => {
+    window.location.href = 'https://chat.calvero.work';
+  }}
+  style={{
+    padding: '10px 20px',
+    fontSize: '16px',
+    borderRadius: '8px',
+    backgroundColor: '#000',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
+    marginTop: '20px'
+  }}
+>
+  Transport kerak 🚛
+</button>
+
       <div className="footer">©Calvero-Work 2025</div>
     </div>
   );
