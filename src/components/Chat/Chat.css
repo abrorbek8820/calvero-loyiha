@@ -1,0 +1,360 @@
+.chat-container {
+  width: 100vw; max-width: 500px;
+  height: auto; min-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #d4d4d4;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+body.light .chat-container {
+  color: #0f1a3c;
+    box-shadow: 0 0px 30px
+    #626262;
+  }
+  body.dark .chat-container {
+    background-color: #0f1a3c;
+    box-shadow: 0px 0px 30px
+    #f1f1f1;
+  }
+
+.chat-header {
+  padding: 12px;
+  background-color: #0088cc;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  position: relative;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.message-bubble.right {
+  margin-left: auto;
+  background-color: #0088cc;
+  color: #fff;
+  align-self: flex-end;
+}
+
+.message-bubble.left {
+  margin-right: auto;
+  background-color: #f6f8fe;
+  color: #000;
+}
+
+
+
+.message-time {
+  font-size: 10px;
+  text-align: right;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.chat-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #d4d4d4;
+  border-top: 1px solid #02669b;
+
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto; /* 👈 elementlar sig‘masa scrollga o‘tsin */
+}
+
+body.dark .chat-footer {
+  background-color: #005f8e;
+}
+
+
+.chat-send-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background-color: #0088cc;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.chat-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background-color: #d5d5d5;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.chat-image {
+  max-width: 240px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+.check-icon {
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 4px;
+  color: #888; /* default: yuborilgan, lekin o‘qilmagan */
+}
+
+.check-icon.read {
+  color: #4caf50; /* o‘qilgan bo‘lsa yashil */
+}
+
+
+
+.message-bubble.right.media-bubble {
+  background-color: transparent;
+  margin-left: auto;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.message-bubble.left.media-bubble {
+  background-color: transparent;
+  margin-right: auto;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.message-bubble.media-bubble img.chat-image {
+  max-width: 220px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+}
+
+.check-icon {
+  font-family: Arial, sans-serif !important;
+}
+
+.chat-location-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background-color: #d5d5d5; /*#0288d1;*/
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+.chat-location-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+.chat-location-btn img {
+  width: 25px;
+  height: 25px;
+}
+
+.chat-input {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 40px;
+  max-height: 150px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  flex-grow: 1;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 18px;
+  background-color:transparent;
+  color: white;
+}
+
+.load-more-btn {
+  padding: 8px 16px;
+  margin: 10px auto;
+  font-size: 14px;
+  background-color: #0088cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+/* Bubble konteyneri ichida joylash */
+.message-bubble { position: relative; }
+
+/* Kebab tugma joylashuvi: o'ng burchak (o'ng bubble) / chap burchak (chap bubble) */
+.msg-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+}
+.message-bubble.left .msg-actions {
+  right: auto;
+  left: 6px;
+}
+
+/* Kebab tugma o'zi */
+.kebab-btn {
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  line-height: 1;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.kebab-btn:active { opacity: .7; }
+
+/* Menyu (popover) */
+.msg-menu {
+  position: absolute;
+  z-index: 10000;                /* footer ustida tursin */
+  min-width: 160px;
+  background: var(--menu-bg, #fff);
+  color: var(--menu-fg, #0f1a3c);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: 4px;
+}
+
+/* Odatiy: pastga ochiladi (kebab tugmasi ostiga) */
+.msg-menu.down { top: 34px; right: 0; }
+.message-bubble.left .msg-menu.down { left: 0; right: auto; }
+
+/* Pastda joy yetmasa: yuqoriga ochiladi (kebab tugmasi ustiga) */
+.msg-menu.up { bottom: 34px; right: 0; }
+.message-bubble.left .msg-menu.up { left: 0; right: auto; }
+
+.message-bubble.left .msg-menu {
+  right: auto;
+  left: 0;
+}
+
+/* Menyu elementlari */
+.msg-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.msg-menu button:hover { background: rgba(0,0,0,.06); }
+
+/* Mobil uchun kattaroq touch maydon */
+@media (hover: none) and (pointer: coarse) {
+  .kebab-btn { padding: 10px; font-size: 20px; }
+  .msg-menu button { padding: 14px 14px; font-size: 16px; }
+}
+
+/* (avvalgi qolganlari) */
+.edited-tag { margin-left: 6px; font-size: 12px; opacity: .75; }
+.deleted-placeholder { opacity: .7; font-style: italic; }
+
+.phone-link {
+  background: transparent; border: 0; padding: 0;
+  font: inherit; cursor: pointer; color: rgb(255, 255, 255);
+}
+.phone-link:hover { text-decoration: underline; }
+
+/* Lightbox / modal */
+.img-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: grid; place-items: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.img-modal-body {
+  position: relative;
+  max-width: 95vw; max-height: 90vh;
+}
+
+.img-modal-img {
+  display: block;
+  max-width: 95vw;
+  max-height: 85vh;
+  width: auto; height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  object-fit: contain;
+}
+
+/* Yopish tugmasi */
+.img-modal-close {
+  position: absolute; top: -10px; right: -10px;
+  background: #000; color: #ffffff;
+  border: none; border-radius: 999px;
+  width: 36px; height: 36px; cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35);
+}
+
+/* Yuklab olish havolasi */
+.img-modal-download {
+  position: absolute; left: 8px; bottom: -36px;
+  color: #ffffff; text-decoration: none;
+  font-size: 14px; padding: 4px 8px;
+  background: rgba(0,0,0,.45); border-radius: 8px;
+}
+
+/* Mobil pinch-zoomga mos */
+.img-modal-img {
+  touch-action: pan-x pan-y; /* sahifa scroll yaxshi ishlaydi */
+}
+
+/* Kichik rasm preview uchun hover (ixtiyoriy) */
+.chat-image { cursor: zoom-in; }
+
+.chat-pasti {
+  padding: 6px;
+  background-color: #0f1a3c;;
+  color: #000000;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}

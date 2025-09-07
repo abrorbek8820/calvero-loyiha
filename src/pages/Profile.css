@@ -1,0 +1,252 @@
+/* ============ Theme tokens ============ */
+:root {
+  --radius: 14px;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+
+  --primary: #2665b1;  /* brend ko'k */
+  --on-primary: #ffffff;
+
+  --accent: #25D366;   /* chat */
+  --on-accent: #1f1f1f; /* kontrasti yuqori matn */
+
+  --name: #fbff00;     /* ism rangi */
+}
+
+/* Dark (default) */
+:root,
+[data-theme="dark"] {
+  --bg: #322828;
+  --card-bg: #171a1f;
+  --text: #212020;
+  --muted: #545454;
+  --border: #000000;
+
+  --chip-bg: #f4f4f4;
+  --chip-border: #2a2f39;
+  --badge-bg: #1b1f27;
+
+  --btn-bg: #20242c;
+  --btn-hover: #262b36;
+}
+
+/* Light */
+[data-theme="light"] {
+  --bg: #f7f9fc;
+  --card-bg: #ffffff;
+  --text: #131313;
+  --muted: #475569;
+  --border: #e2e8f0;
+
+  --chip-bg: #f2f6fb;
+  --chip-border: #e2e8f0;
+  --badge-bg: #eef2f7;
+
+  --btn-bg: #eff3f9;
+  --btn-hover: #e7edf6;
+}
+
+/* ============ Page & Container ============ */
+body { background: var(--bg); }
+
+
+/* Header */
+.profile-header { align-items: center; display:flex; flex-direction: column; }
+.profile-avatar {
+ align-items: center;
+  width: clamp(160px, 45vw, 200px); height: clamp(160px, 45vw, 200px); border-radius: 50%;
+  object-fit: cover; border: 3px solid var(--primary);
+  box-shadow: 0 0 0 6px rgba(38,101,177,.25);
+}
+.profile-name {
+  margin-top: 12px; font-size: 26px; font-weight: 800; color: #6b6b6b;
+}
+
+body.dark .profile-name { color: #e6df16; }
+.name-row { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Badges */
+.badges {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px;
+}
+.badge {
+  background: #c8c8c8; border: 1px solid var(--border);
+  color: rgb(0, 0, 0); font-size: 12px; padding: 6px 10px; border-radius: 999px;
+}
+
+
+/* Actions layout: mobil 2 ustun (qo'ng'iroq katta), keng ekranda 3 ustun */
+.profile-actions {
+  display: grid; gap: 10px; grid-template-columns: 1fr 1fr; margin: 14px 0 6px;
+}
+.btn-call { grid-column: 1 / -1; } /* mobil — butun qator */
+@media (min-width: 560px) {
+  .profile-actions { grid-template-columns: repeat(3, 1fr); }
+  .btn-call { grid-column: auto; }
+}
+@media (max-width: 559px) {
+  /* mobil — yuqoridagi actions'ni ko'rsatmasak ham bo'ladi (pastda sticky bor) */
+  .profile-actions { display: none; }
+}
+
+/* Details */
+.profile-details { margin-top: 14px; }
+.profile-details p { margin: 10px 0; font-size: 15px; color: var(--muted); }
+body.dark .profile-details p { color: #dddddd}
+.profile-details strong { color: var(--text); font-weight: 700; }
+body.dark .profile-details strong { color: #dfe0ce; font-weight: 700; }
+
+
+/* Skills → chips */
+.skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.skill-chip {
+  background: var(--chip-bg); color: var(--text);
+  border: 1px solid var(--chip-border); border-radius: 999px;
+  padding: 6px 10px; font-size: 12px; line-height: 1;
+}
+.skill-chip.more { cursor: pointer; opacity: .9; }
+
+body.dark .skill-chip {
+    background: #444264; color: #ffffff;
+  border: 1px solid var(--chip-border); border-radius: 999px;
+  padding: 6px 10px; font-size: 12px; line-height: 1;
+}
+
+/* About → clamp + expand */
+.about-wrapper { position: relative; }
+.about {
+  white-space: pre-line; color: var(--muted); font-size: 15px; line-height: 1.5;
+}
+  body.dark .about { color: #dddddd; }
+
+.about.clamped {
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;
+  overflow: hidden; max-height: 7.6em;
+}
+.moreless {
+  margin-top: 6px; border: none; background: transparent; color: var(--primary);
+  font-weight: 600; cursor: pointer; padding: 0;
+}
+
+/* Loading */
+.loading { text-align: center; font-size: 18px; color: var(--muted); }
+
+
+/* --- Profile sahifa: dark fonni CSSdan boshqaramiz --- */
+.profile-container {
+  background-color: rgb(250, 252, 255);   /* avval #ffffff edi */
+  color: #f5f5f5;
+  max-width: 680px;            /* biroz kengroq card */
+  margin: 16px auto;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.28);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body.dark .profile-container {
+    background-color: #0f1a3c;
+}
+
+/* --- Sticky CTA (pastga yopishgan tugmalar paneli) --- */
+.sticky-cta {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(242, 242, 242, 0.92);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  z-index: 1000;
+}
+body.dark .sticky-cta {
+    background: #0f1a3c;
+}
+
+/* Kontent pastdagi panel ostiga kirib ketmasin */
+.page-spacer { height: 72px; }
+
+/* CTA tugmalari */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 10px 14px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  border: 1px solid transparent; text-decoration: none;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn--primary { background: #2665b1; color: #fff; }
+.btn--accent  { background: #25D366; color: #0b1f0e; }  /* yuqori kontrast */
+.btn--neutral { background: #9ca721; color: #000000; border-color: #2a2f39; }
+.btn--outline { background: transparent; color: #e8e8e8; border-color: #2a2f39; }
+.btn--primary:hover { filter: brightness(1.05); }
+.btn--accent:hover  { filter: brightness(1.03); }
+.btn--neutral:hover,
+.btn--outline:hover { background: #262b36; }
+
+/* Telefon havola ko‘rinishi (bor bo‘lmasa qo‘shing) */
+.phone-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; margin-left: 6px;
+  background: #dbdbdb92; border: 1px dashed #05006200; border-radius: 10px;
+  color: #002aff; cursor: pointer; text-decoration: none;
+}
+.phone-link:hover { background: #262b36; }
+body.dark .phone-link {
+    color:#ffffff
+}
+/* === Profilga mahalliy skroll qobig'i === */
+.profile-page {
+  position: relative;
+  height: 100dvh;              /* mobil brauzerlar uchun barqaror balandlik */
+  overflow-y: auto;            /* skroll aynan shu yerda */
+  -webkit-overflow-scrolling: touch; /* iOS silliq skroll */
+  background: var(--bg);       /* tema fonini shu ekranga tatbiq etamiz */
+}
+
+/* Pastda sticky panel borligi uchun kontent ostida joy qoldiramiz */
+.page-spacer { height: 72px; } /* sticky-cta balandligiga teng */
+
+
+/* =========================
+   Neon "frame" + halo (scoped)
+   ========================= */
+.profile-container.framed {
+  min-height: 90vh;
+  position: relative;
+  border-radius: 18px;
+  /* Gradient border: ichki fon = card, tashqi qatlam = gradient */
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#fcfcfc, #e4e3e3) padding-box,
+    linear-gradient(135deg, rgb(0, 162, 255), rgb(0, 191, 255)) border-box; /* ko'k → siyan */
+  /* Yengil tashqi nurlar */
+  box-shadow:
+    0 0 0 2px rgba(59, 227, 246, 0.918),
+    0 18px 48px rgba(0, 255, 204, 0.829);
+}
+
+body.dark .profile-container.framed {
+    background:
+    linear-gradient(#0f1a3c, #0f1a3c) padding-box,
+    linear-gradient(135deg, rgb(0, 106, 255), rgba(0, 106, 255, 0.861)) border-box; /* ko'k → siyan */
+  /* Yengil tashqi nurlar */
+  box-shadow:
+    0 0 0 2px rgb(59, 131, 246),
+    0 18px 48px rgb(2, 133, 199);
+}
+
+/* Yumshoq "halo" — ramkaning tashqarisiga taralgan nur */
+.profile-container.framed::before {
+  content: "";
+  position: absolute;
+  inset: -12px;                 /* kartadan tashqariga chiqsin */
+  border-radius: inherit;
+  pointer-events: none;         /* bosishlarga halaqit bermasin */
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(56,189,248,.28), transparent 60%),
+    radial-gradient(120% 120% at 100% 100%, rgba(59,130,246,.28), transparent 60%);
+  filter: blur(10px);
+  z-index: -1;                  /* kartadan orqada */
+}

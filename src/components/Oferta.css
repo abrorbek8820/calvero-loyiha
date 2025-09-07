@@ -1,0 +1,158 @@
+.offer-container{
+  max-width: 500px;
+  width: 95vw;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* ===== Calvero Work — Oferta Styles ===== */
+
+/* 1) Umumiy sozlamalar */
+:root {
+  --of-fg: #1b1b1b;
+  --of-muted: #6b7280;
+  --of-border: #e5e5e5;
+  --of-bg: #fafafa;
+  --of-link: #0f172a;
+}
+
+html {
+  /* Silliq ichki skroll */
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--of-fg);
+  background: #fff;
+}
+
+/* iOS va mobil uchun tabiiy skroll hissi */
+.oferta-page,
+.oferta,
+.oferta-content {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 2) Bitta ustun (default) — Agar eski markup qolgani bo'lsa, shu yetadi */
+.oferta {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px 64px;
+  color: var(--of-fg);
+}
+
+.oferta h1 { margin: 0 0 6px; }
+.oferta p { margin: 8px 0; }
+.oferta h5 { margin-top: 28px; color:#0f172a; }
+.oferta h3 { margin-top: 18px; }
+.oferta ul, .oferta ol { padding-left: 20px; }
+.oferta code {
+  background: #f2f2f2;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Mundarija qutisi (default) */
+.oferta nav[aria-label="Mundarija"] {
+  border: 1px solid var(--of-border);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--of-bg);
+  margin: 12px 0 20px;
+}
+.oferta nav[aria-label="Mundarija"] ol { margin-top: 8px; }
+.oferta nav[aria-label="Mundarija"] a {
+  color: var(--of-link);
+  text-decoration: none;
+}
+.oferta nav[aria-label="Mundarija"] a:hover {
+  text-decoration: underline;
+}
+
+/* Anchorlar uchun ofset (agar tepada fixed header bo'lsa sarlavha yopilmasin) */
+.oferta section[id] {
+  scroll-margin-top: 84px; /* kerak bo'lsa bu sonni header balandligiga moslab o'zgartirasan */
+}
+
+/* Tepaga qaytish linki */
+.oferta footer a {
+  text-decoration: none;
+  color: var(--of-link);
+}
+
+/* 3) Ikki ustunli layout (ixtiyoriy, 2-kichik update bo'yicha) */
+.oferta-page {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.oferta-wrap {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px 64px;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile default */
+  gap: 24px;
+}
+
+/* Chap panel — toc */
+.oferta-toc {
+  border: 1px solid var(--of-border);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--of-bg);
+}
+
+.oferta-toc strong { display: block; margin-bottom: 6px; }
+.oferta-toc ol { margin-top: 8px; padding-left: 20px; }
+.oferta-toc a { color: var(--of-link); text-decoration: none; }
+.oferta-toc a:hover { text-decoration: underline; }
+
+/* O'ng panel — content */
+.oferta-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+  .oferta-wrap {
+    grid-template-columns: 280px 1fr;
+  }
+
+  /* Sticky TOC: ko'rinishni chiroyli ushlab turadi */
+  .oferta-toc {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+  }
+
+  /* Print paytida to'g'ri chiqishi uchun sectionlar bo'linishini nazorat qilamiz */
+  .oferta-content h2 { break-inside: avoid; }
+}
+
+/* 4) Havolalar va mayda elementlar */
+a { color: var(--of-link); }
+a:hover { opacity: 0.9; }
+
+/* 5) Chop etish (print) optimizatsiyasi */
+@media print {
+  nav[aria-label="Mundarija"], .oferta-toc { display: none !important; }
+  a { color: black !important; text-decoration: none !important; }
+  .oferta-wrap { display: block; padding: 0; margin: 0; }
+  .oferta-content { max-width: 100%; margin: 0; }
+}
+
+/* 6) Qo'shimcha: uzun sahifalarda kichik skroll indikator (ixtiyoriy) */
+.oferta-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #c7c7c7 transparent;
+}
+.oferta-scrollbar::-webkit-scrollbar { width: 8px; }
+.oferta-scrollbar::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 8px;
+}
+.oferta-scrollbar::-webkit-scrollbar-track { background: transparent; }

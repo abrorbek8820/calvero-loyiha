@@ -1,0 +1,65 @@
+.client-register-container {
+  max-width: 420px;
+  margin: 80px auto;
+  background: #111;
+  padding: 24px;
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.client-register-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #31d67b;
+}
+
+.client-register-container input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background: #222;
+  color: #fff;
+}
+.client-register-container input[type="text"]:focus { border-color: #00ffcc; }
+
+.raqam-uz .phone-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background: #222;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+.raqam-uz .phone-input:focus { border-color: #00ffcc; }
+
+.oferta-accept {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #ccc;
+}
+.oferta-label { display: flex; gap: 10px; align-items: flex-start; }
+.oferta-accept input[type="checkbox"] { margin-top: 3px; accent-color: #31d67b; }
+.oferta-link { color: #00ffcc; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; }
+
+.client-register-container button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #31d67b;
+  color: #111;
+  font-weight: 700;
+  cursor: pointer;
+}
+.client-register-container button:disabled { background: #555; color: #bbb; cursor: not-allowed; }
+
+.status { margin-top: 8px; }

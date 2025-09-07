@@ -1,0 +1,106 @@
+/*.register-container {
+  max-width: 450px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: 'Arial', sans-serif;
+}*/
+.register-container{
+  max-width: 500px;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+.register-container input:not([type="checkbox"]):not([type="radio"]),
+.register-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #f1ea29;
+}
+
+.register-container input,
+.register-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #616161;
+  font-size: 15px;
+}
+
+.register-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.register-container button:hover {
+  background-color: #45a049;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.checkbox-container label:hover {
+  background-color: #ddd;
+}
+
+p.status-message {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/*.kasblarimiz{
+  display: inline-flex;
+  flex-direction: column;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 5px;
+  margin-bottom: 15px;
+  justify-content:center;
+  align-items:first baseline;
+}*/
+.kasblarimiz {
+  display: block;
+  margin-top: 10px;
+}
+
+.kasblarimiz .skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kasblarimiz .skill-item {
+  display: flex;
+  align-items: center;   /* vertikal tekislash */
+  gap: 8px;              /* checkbox va matn oralig‘i */
+  line-height: 1.3;
+}
+
+/* Checkbox’ga kenglik berilmasin, avto bo‘lsin */
+.kasblarimiz .skill-item input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}

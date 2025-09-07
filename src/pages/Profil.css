@@ -1,0 +1,98 @@
+/* Ekranga to‘liq mos va scrollsiz container */
+.profil-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  max-width: 500px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Yuqoridagi kontent (avatar, ism, about) */
+.profil-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Avatar + ismni markazga joylash */
+.avatar-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Rasm konteyneri */
+.avatar-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #ccc;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+/* Rasm o‘zi */
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 50%;
+}
+
+/* Rasm tagidagi ism */
+.profil-name {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #007bff;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+/* About maydoni (balandligi cheklangan) */
+.about-input {
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  resize: none;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Tugmalar har doim pastda */
+.profil-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.save   { background-color: #4caf50; }
+.edit   { background-color: #2196f3; }
+.logout { background-color: #ff9800; }
+.delete { background-color: #f44336; }

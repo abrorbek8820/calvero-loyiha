@@ -1,0 +1,116 @@
+/*.edit-profile-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #111827;
+  color: #fff;
+  border-radius: 8px;
+}*/
+
+.edit-profile-container {
+  max-height: 100vh; /* ekran balandligidan oshmaydi */
+  overflow-y: auto; /* vertikal scroll qo'shiladi */
+  padding-bottom: 20px; /* pastda qo'shimcha joy */
+  max-width: 90vh;
+}
+
+.edit-profile-container input,
+.edit-profile-container select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+/*.skills-checkbox-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.skills-checkbox-container label {
+  background-color: #374151;
+  padding: 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}*/
+
+.edit-profile-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-profile-container button:hover {
+  background-color: #1d4ed8;
+}
+
+.phone-input {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.phone-input .prefix {
+  font-weight: bold;
+  margin-right: 6px;
+  color: #333;
+}
+
+.phone-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+/* EditProfile.css ga qo'shish mumkin */
+.skills-header {
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.select-all-btn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+.select-all-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.skillan-checkbox {
+  /*display:flex;
+  align-items:center; 
+  justify-content:center !important;
+  gap: 8px;
+  margin-bottom: 4px;
+  width: 100%;*/
+  
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-bottom: 15px;
+  justify-content:center;
+  align-items:center;
+}
+
+.skillan-checkbox input[type="checkbox"] {
+  margin: 0; /* Keraksiz tashqi bo‘shliqni olib tashlash */
+}

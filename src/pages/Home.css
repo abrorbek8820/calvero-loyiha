@@ -1,0 +1,193 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+.container {
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  background-color: transparent !important;
+  min-height: 100vh;
+  padding-top: 80px;
+  padding-bottom: 100px;
+  transition: all 0.3s ease-in-out;
+}
+
+body.dark {
+  background-color: #101935 !important;
+  color: #ffffff;
+}
+
+body.light {
+  background-color: #f0f2f5 !important;
+  color: #121212;
+}
+
+/* Menyu tugmasi */
+.menu-wrapper {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 9999;
+}
+
+.menu-button {
+  background-color: transparent;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #4a90e2;
+}
+
+.theme-menu {
+  display: none;
+  position: absolute;
+  top: 55px;
+  left: 15px;
+  background-color: rgba(74, 144, 226, 0.9);
+  padding: 10px;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+  font-size: 15px;
+  width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.theme-menu.active {
+  display: block;
+}
+
+.theme-menu div {
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.theme-menu div:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* CALVERO WORK yozuvi */
+.title-wrapper {
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 44px;
+  font-family: 'Michroma', sans-serif;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background:linear-gradient(90deg, #006fdd, #00c0d5, #006ad4);
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  0% { background-position: 0%; }
+  100% { background-position: 300%; }
+}
+
+@media (max-width: 3500px) {
+  .title {
+    font-size: 32px;
+    letter-spacing: 1px;
+  }
+}
+
+.trademark {
+  font-size: 0.5em;
+  vertical-align: super;
+  margin-left: 4px;
+  animation: tm-glow 10s ease-in-out infinite;
+}
+
+body.light .title {
+  color: #0b3d91 !important;
+}
+
+/* Tugmalarni joylashtirish */
+.buttons-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, #4a90e2, #357ab7) !important;
+  color: #ffffff !important;
+  border: none;
+  padding: 15px 30px;
+  width: 300px;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 10px 10px 20px rgba(83, 115, 204, 0.548);
+  transition: background-color 0.3s, transform 0.2s;
+
+  white-space: nowrap;   /* ✅ Matnni 1 qatorda saqla */
+  text-align: center;    /* ✅ Markazda */
+}
+
+@media (max-width: 500px) {
+  .button {
+    width: 90%;
+    font-size: 16px;
+    white-space: nowrap;  /* 🤝 Mobilda ham bitta qatorda saqlaymiz */
+  }
+}
+
+.button.clicked {
+  background: linear-gradient(to bottom, #7dd4ee, #142b44) !important;
+  transform: scale(0.98);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Pastdagi yozuv */
+.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: gray;
+  font-size: 14px;
+}
+
+/* Mobil uchun to‘liq moslashuv */
+@media (max-width: 500px) {
+  .title-wrapper {
+    margin-top: 40px;
+  }
+
+  .title {
+    font-size: 28px;
+    letter-spacing: 4px;
+  }
+
+  .button {
+    width: 90%;
+    font-size: 16px;
+  }
+}

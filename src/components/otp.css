@@ -1,0 +1,19 @@
+.raqam-bloki{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.shartlari{
+    height: 40px;
+    width: 300px;
+    border-radius: 10px;
+    display: flex;
+    background: transparent;
+    color: #323232;
+}
+
+body.dark .shartlari{
+    color: #dcdcdc;
+}
