@@ -216,7 +216,7 @@ const fetchWorkers = async (showLoading = true) => {
           </div>
         ) : workers.length === 0 ? (
           <p className="text-center p-4 text-xl">
-            💔 Hozirda barcha ishchilar band! Iltimos, keyinroq urinib ko‘ring!
+            ❌ Hozirda barcha ishchilar band! Iltimos, keyinroq urinib ko‘ring!
           </p>
         ) : (
           <>
