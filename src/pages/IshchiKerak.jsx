@@ -126,42 +126,41 @@ export default function IshchiKerak() {
     setSkillFilter("");
   }, [genderFilter]);
 
-  // ---- Ishchilarni olish (debouncega o'xshash himoya bilan)
-  const fetchWorkers = async (showLoading = true) => {
-    if (!userLocation) return;
+  // ---- Ishchilarni olish (debounce bilan, v2 RPC)
+const fetchWorkers = async (showLoading = true) => {
+  if (!userLocation) return;
 
-    const now = Date.now();
-    // 800 ms ichida ketma-ket fetchlardan saqla
-    if (now - lastFetchRef.current < 800) return;
-    lastFetchRef.current = now;
+  const now = Date.now();
+  // 800 ms ichida ketma-ket fetchlardan saqlash
+  if (now - lastFetchRef.current < 800) return;
+  lastFetchRef.current = now;
 
-    if (showLoading) setLoading(true);
+  if (showLoading) setLoading(true);
 
-    const { data, error } = await supabase.rpc("fetch_workers_conditional_js", {
-      client_lat: userLocation.latitude,
-      client_lon: userLocation.longitude,
-      radius_km: 10,
-      min_worker_count: 5,
-      filter_gender: genderFilter || null,
-      filter_skill: skillFilter || null,
-    });
+  // ⚠️ Eslatma: v2 funksiyada min_worker_count yo‘q — ichida 30 taga to‘ldirish mantiqi bor
+  const { data, error } = await supabase.rpc("fetch_workers_conditional_v2", {
+    client_lat:  userLocation.latitude,
+    client_lon:  userLocation.longitude,
+    radius_km:   10,
+    filter_gender: genderFilter || null,
+    filter_skill:  skillFilter  || null,
+  });
 
-    if (error) {
-      console.error(error);
-      // alert bilan bloklamaymiz
-      setLoading(false);
-      return;
-    }
+  if (error) {
+    console.error("[fetchWorkers] RPC error:", error);
+    setLoading(false);
+    return;
+  }
 
-    // Frontendda minimal tekshiruv (RPC allaqachon filtrlayapti)
-    const sorted = (data || []).map((w) => ({
-      ...w,
-      distance: Number(w.distance / 1000).toFixed(1), // metr -> km
-    }));
+  const sorted = (data || []).map(w => ({
+    ...w,
+    // distance (metr) -> km, 1 o‘rinli kasr
+    distance: Number(w.distance / 1000).toFixed(1),
+  }));
 
-    setWorkers(sorted);
-    if (showLoading) setLoading(false);
-  };
+  setWorkers(sorted);
+  if (showLoading) setLoading(false);
+};
 
   // ---- Birinchi yuklash va polling
   useEffect(() => {
@@ -183,7 +182,7 @@ export default function IshchiKerak() {
   return (
     <div className={`ishchi-kerak-container ${theme === "dark" ? "dark-mode" : ""}`}>
       <div className="fixed-header">
-        <div className="logo">🏗️ Calvero</div>
+        <div className="logo">🛠️ Calvero</div>
 
         <div className="filter-section">
           <select id="gender" value={genderFilter} onChange={(e) => setGenderFilter(e.target.value)}>
