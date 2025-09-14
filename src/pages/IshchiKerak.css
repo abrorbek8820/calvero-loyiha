@@ -61,6 +61,7 @@ body.light .ishchi-kerak-container {
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
+  
 }
 
 .filter-section select {
@@ -71,6 +72,8 @@ body.light .ishchi-kerak-container {
   transition: border-color 0.2s;
   color: #111;
   padding: 8px 12px;
+  max-width: 140px;
+  font-size: 14px;
 }
 
 .scrollable-workers {
