@@ -68,12 +68,11 @@ body.light .ishchi-kerak-container {
   border-radius: 8px;
   border: 1px solid #ccc;
   background-color: #f0f0f0;
-  font-size: 15px;
+  font-size: 14px;
   transition: border-color 0.2s;
   color: #111;
   padding: 8px 12px;
-  max-width: 140px;
-  font-size: 14px;
+  max-width: 170px;
 }
 
 .scrollable-workers {
