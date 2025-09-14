@@ -35,7 +35,7 @@ function Home() {
   if (userPhone && sessionToken) {
     navigate('/ishchi-kerak');
   } else {
-    navigate('/otp');
+    navigate('/ishchi-kerak');
   }
 };
 
