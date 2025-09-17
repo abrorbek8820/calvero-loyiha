@@ -1,0 +1,8 @@
+.hisob-container{
+    max-width: 500px;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  background: rgb(48, 48, 48);
+  color: #e0e0e0;
+}

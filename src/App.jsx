@@ -37,18 +37,16 @@ import ProtectedLayout from "./layouts/ProtectedLayout.jsx";
 import OtpPage from "./pages/OtpPage.jsx";
 import VerifyPage from "./pages/VerifyPage.jsx";
 import { HelmetProvider } from 'react-helmet-async';
+import Login from "./admin/Login.jsx";
+import Hisob from "./admin/Hisob.jsx";
+import Decoy from "./admin/Decoy.jsx";
 
-/*function OtpPage({ setPhone }) {
-  const navigate = useNavigate();
-  return (
-    <OtpForm
-      onSuccess={(phone) => {
-        setPhone(phone);
-        navigate('/verify-code');
-      }}
-    />
-  );
-}*/
+
+function Protected({ children }) {
+  // Simple protection: localStorage flag
+  const ok = typeof window !== "undefined" && localStorage.getItem("support_auth") === "1";
+  return ok ? children : <Navigate to="/login" replace />;
+}
 
 function App() {
   const [mode, setMode] = useState('light');
@@ -105,6 +103,13 @@ function App() {
   <Route path="/delete" element={<Delete />} />
   <Route path="/verify" element={<VerifyPage />} />
   <Route path="/otp" element={<OtpPage />} />
+  <Route path="/login" element={<Login />} />
+      <Route path="/hisob" element={<Protected><Hisob /></Protected>} />
+      {/* Decoy / random paths — you can add several fixed decoys */}
+      <Route path="/hdjj--%23+jdbucf" element={<Decoy />} />
+      <Route path="/skcdobcskkf" element={<Decoy />} />
+      {/* fallback */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
 
   {/* Protected sahifalar — konvert bilan */}
   <Route element={<ProtectedLayout />}>
