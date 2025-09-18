@@ -29,14 +29,20 @@ function Home() {
   };
 
   const handleIshKerak = () => {
-  const userPhone = localStorage.getItem('userPhone');
-  const sessionToken = localStorage.getItem('session_token');
+  const targetUrl = "https://calvero.work/ishkerak"; // tashqi ochilishi kerak bo'lgan sahifa
 
-  if (userPhone && sessionToken) {
-    navigate('/ishkerak');
-  } else {
-    navigate('/otp');
-  }
+  // Chrome orqali ochishga urinish (intent://)
+  const intentUrl =
+    "intent://" +
+    targetUrl.replace(/^https?:\/\//, "") +
+    "#Intent;scheme=https;package=com.android.chrome;" +
+    "S.browser_fallback_url=" +
+    encodeURIComponent(targetUrl) +
+    ";end";
+
+  // Android Chrome bo'lsa — Chrome ochadi
+  // Yo'q bo'lsa — fallback URL boshqa brauzerda ochiladi
+  window.location.href = intentUrl;
 };
 
   return (
