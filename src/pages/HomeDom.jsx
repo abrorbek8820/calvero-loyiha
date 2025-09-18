@@ -29,20 +29,14 @@ function Home() {
   };
 
   const handleIshKerak = () => {
-  const targetUrl = "https://calvero.work/ishkerak"; // tashqi ochilishi kerak bo'lgan sahifa
+  const targetUrl = "https://calvero.work/ishkerak";
 
-  // Chrome orqali ochishga urinish (intent://)
-  const intentUrl =
-    "intent://" +
-    targetUrl.replace(/^https?:\/\//, "") +
-    "#Intent;scheme=https;package=com.android.chrome;" +
-    "S.browser_fallback_url=" +
-    encodeURIComponent(targetUrl) +
-    ";end";
-
-  // Android Chrome bo'lsa — Chrome ochadi
-  // Yo'q bo'lsa — fallback URL boshqa brauzerda ochiladi
-  window.location.href = intentUrl;
+  // Chrome bor bo‘lsa ochadi, bo‘lmasa default browser
+  try {
+    window.open(targetUrl, "_system");  // Cordova/Ionic uslubida
+  } catch (e) {
+    window.open(targetUrl, "_blank");   // oddiy fallback
+  }
 };
 
   return (
