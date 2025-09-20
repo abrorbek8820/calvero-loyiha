@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import "./ClientRegister.css";
+import { getHomePath } from "../utils/getHomePath";
 
 export default function ClientRegister() {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ export default function ClientRegister() {
 
       localStorage.setItem("clientPhone", fullPhone);
       setStatus("Muvaffaqiyatli ro'yxatdan o'tildi ✅");
-      navigate("/home", { replace: true });
+      navigate(getHomePath(), { replace: true });
     } catch (e) {
       const msg = e?.message || "Noma'lum xatolik";
       console.error(e);

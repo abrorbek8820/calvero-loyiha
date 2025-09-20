@@ -66,7 +66,7 @@ function Home() {
         </button>
 
          <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={(() => navigate('/ishkerak'))}>
-        Ish kerak
+        ISH KERAK
       </button>
 
       {/*} <div className="download-section">

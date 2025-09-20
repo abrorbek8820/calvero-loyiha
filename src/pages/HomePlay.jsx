@@ -66,7 +66,7 @@ function Home() {
         </button>
 
          <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleWorkerClick}>
-        Ish kerak
+        ISH KERAK
       </button>
 
        {showConfirm && (
