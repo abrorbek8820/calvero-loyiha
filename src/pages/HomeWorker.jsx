@@ -65,17 +65,11 @@ function Home() {
           ISHCHI KERAK
         </button>
 
-         {/*<button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleWorkerClick}>
+         <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={(() => navigate('/ishkerak'))}>
         Ish kerak
       </button>
 
-       {showConfirm && (
-        <div className="modal">
-          <p>Calvero Work’da ishlash sayt yoki Worker ilovasi orqali</p>
-          <button onClick={handleContinue}>Davom etish</button>
-          <button onClick={() => setShowConfirm(false)}>Bekor qilish</button>
-        </div>
-      )}*/}
+       
 
 
       </div>

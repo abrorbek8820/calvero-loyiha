@@ -9,8 +9,9 @@ import {
 } from 'react-router-dom';
 
 import OnlineStatus from './components/OnlineStatus.jsx';
-import Home from './pages/Home.jsx';
-import HomeDom from './pages/HomeDom.jsx';
+import Home from './pages/HomePlay.jsx';
+import HomeDom from './pages/HomeSayt.jsx';
+import HomeWorker from './pages/HomeWorker.jsx';
 import RegisterForm from './components/RegisterForm.jsx';
 import IshKerak from './pages/IshKerak.jsx';
 import Profil from './pages/Profil.jsx';
@@ -94,6 +95,7 @@ function App() {
   {/* Public sahifalar — konvertsiz */}
   <Route path="/home" element={<Home />} />
   <Route path="/" element={<HomeDom />} />
+  <Route path="/home-worker" element={<HomeWorker />} />
   <Route path="/register" element={<RegisterForm setPhone={setPhone} />} />
   <Route path="/client-register" element={<ClientRegister />} />
   {/*<Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
@@ -109,7 +111,7 @@ function App() {
       <Route path="/hdjj--%23+jdbucf" element={<Decoy />} />
       <Route path="/skcdobcskkf" element={<Decoy />} />
       {/* fallback */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Decoy />} />
 
   {/* Protected sahifalar — konvert bilan */}
   <Route element={<ProtectedLayout />}>
