@@ -6,6 +6,7 @@ function Home() {
   const navigate = useNavigate();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleButtonClick = (action) => {
     setClicked(true);
@@ -28,16 +29,14 @@ function Home() {
     setShowThemeMenu(false);
   };
 
-  const handleIshKerak = () => {
-  const targetUrl = "https://calvero.work/ishkerak";
+  const handleWorkerClick = () => {
+    setShowConfirm(true); // modal yoki xabar chiqadi
+  };
 
-  // Chrome bor bo‘lsa ochadi, bo‘lmasa default browser
-  try {
-    window.open(targetUrl, "_system");  // Cordova/Ionic uslubida
-  } catch (e) {
-    window.open(targetUrl, "_blank");   // oddiy fallback
-  }
-};
+  const handleContinue = () => {
+    window.open("https://calvero.work/", "_blank"); 
+    setShowConfirm(false);
+  };
 
   return (
     <div className="container">
@@ -66,11 +65,22 @@ function Home() {
           ISHCHI KERAK
         </button>
 
-        <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleIshKerak}>
-          ISH KERAK
-        </button>
-      </div>
+         <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={(() => navigate('/ishkerak'))}>
+        Ish kerak
+      </button>
 
+       <div className="download-section">
+  <p>
+    Istasangiz sayt orqali foydalaning. <br />
+    <strong>Qulaylik uchun Calvero Worker ilovasini yuklab oling!</strong>
+  </p>
+  <a href="/CalveroWorker.apk" className="download-btn">
+    ⬇️ Worker ilovasini yuklab olish
+  </a>
+</div>
+
+
+      </div>
 
       <div className="footer">©Calvero-Work 2025</div>
     </div>

@@ -6,6 +6,7 @@ function Home() {
   const navigate = useNavigate();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleButtonClick = (action) => {
     setClicked(true);
@@ -28,16 +29,14 @@ function Home() {
     setShowThemeMenu(false);
   };
 
-  const handleIshKerak = () => {
-  const userPhone = localStorage.getItem('userPhone');
-  const sessionToken = localStorage.getItem('session_token');
+  const handleWorkerClick = () => {
+    setShowConfirm(true); // modal yoki xabar chiqadi
+  };
 
-  if (userPhone && sessionToken) {
-    navigate('/ishchi-kerak');
-  } else {
-    navigate('/ishchi-kerak');
-  }
-};
+  const handleContinue = () => {
+    window.open("https://calvero.work/", "_blank"); 
+    setShowConfirm(false);
+  };
 
   return (
     <div className="container">
@@ -66,9 +65,19 @@ function Home() {
           ISHCHI KERAK
         </button>
 
-        <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleIshKerak}>
-          ISH KERAK
-        </button>
+         <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleWorkerClick}>
+        Ish kerak
+      </button>
+
+       {showConfirm && (
+        <div className="modal">
+          <p>Calvero Work’da ishlash sayt yoki Worker ilovasi orqali</p>
+          <button onClick={handleContinue}>Davom etish</button>
+          <button onClick={() => setShowConfirm(false)}>Bekor qilish</button>
+        </div>
+      )}
+
+
       </div>
 
       <div className="footer">©Calvero-Work 2025</div>
