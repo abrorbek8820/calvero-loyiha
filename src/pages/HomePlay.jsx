@@ -71,7 +71,7 @@ function Home() {
 
        {showConfirm && (
         <div className="modal">
-          <p>Calvero Work’da ishlash sayt yoki Worker ilovasi orqali!</p>
+          <p>Calvero Work’da ishlash uchun sayt orqali ro'yxatdan o'tiladi!</p>
           <button onClick={handleContinue}>Davom etish</button>
           <button onClick={() => setShowConfirm(false)}>Bekor qilish</button>
         </div>
