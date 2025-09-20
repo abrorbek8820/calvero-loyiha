@@ -69,7 +69,7 @@ function Home() {
         Ish kerak
       </button>
 
-       <div className="download-section">
+      {/*} <div className="download-section">
   <p>
     Istasangiz sayt orqali foydalaning. <br />
     <strong>Qulaylik uchun Calvero Worker ilovasini yuklab oling!</strong>
@@ -77,7 +77,7 @@ function Home() {
   <a href="/CalveroWorker.apk" className="download-btn">
     ⬇️ Worker ilovasini yuklab olish
   </a>
-</div>
+</div>*/}
 
 
       </div>
