@@ -65,7 +65,7 @@ function Home() {
           ISHCHI KERAK
         </button>
 
-         <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleWorkerClick}>
+         {/*<button className={`button $ {clicked ? 'clicked' : ''}`} onClick={handleWorkerClick}>
         Ish kerak
       </button>
 
@@ -75,7 +75,7 @@ function Home() {
           <button onClick={handleContinue}>Davom etish</button>
           <button onClick={() => setShowConfirm(false)}>Bekor qilish</button>
         </div>
-      )}
+      )}*/}
 
 
       </div>
