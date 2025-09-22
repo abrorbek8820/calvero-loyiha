@@ -111,6 +111,8 @@ export default function OfferPage() {
           O‘zbekiston Respublikasining "Shaxsiy ma’lumotlarni himoya qilish"
           qonuniga muvofiq saqlanadi va uchinchi shaxslarga uzatilmaydi (faqat
           qonun talab qilgan va xizmat sifatini oshirish uchun zarur bo'lgan hollar bundan mustasno).
+
+          Diqqat! Platformada raqam va manzil ochiq ko'rsatiladi. shaxsiy raqami tarqalishini istamagan ayollar ish platforma uchun qo'shimcha raqamdan foydalanishi taklif qilinadi. Biz shaffoflikni saqlab qolamiz.
         </p>
       </section>
 

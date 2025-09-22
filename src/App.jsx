@@ -31,6 +31,7 @@ import Chat from './components/Chat/Chat.jsx';
 import ChatList from './components/ChatList.jsx';
 import ChatIcon from './components/ChatIcon.jsx';
 import Oferta from "./components/Oferta.jsx";
+import OfertaZapas from "./components/OfertaZapas.jsx";
 import PaymeDemo from "./components/PaymeDemo.jsx";
 import Delete from "./pages/Delete.jsx";
 import Yoriqnoma from "./components/Yoriqnoma.jsx";
@@ -101,6 +102,7 @@ function App() {
   {/*<Route path="/otp" element={<OtpPage setPhone={setPhone} />} />
   <Route path="/verify-code" element={phone ? <VerifyCodeForm phone={phone} /> : <Navigate to="/otp" replace />} />*/}
   <Route path="/offer" element={<Oferta />} />
+  <Route path="/offer2" element={<OfertaZapas />} />
   <Route path="/payme-test" element={<PaymeDemo />} />
   <Route path="/delete" element={<Delete />} />
   <Route path="/verify" element={<VerifyPage />} />

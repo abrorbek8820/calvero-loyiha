@@ -120,7 +120,7 @@ export default function OtpForm({ onSuccess }) {
           Men{" "}
           <button
             type="button"
-            onClick={() => navigate("/offer")}
+            onClick={() => navigate("/offer2")}
             style={{
               background: "none",
               border: "none",
