@@ -165,11 +165,11 @@ export default function Profile() {
           >
             ✉️ Xabar yozish
           </button>
-          {(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
+          {/*(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
             <button className="btn btn--neutral" onClick={openInMaps}>🗺 Xarita</button>
           ) : (
             <button className="btn btn--outline" disabled>🗺 Xarita</button>
-          )}
+          )*/}
         </div>
       </div>
 
@@ -217,11 +217,11 @@ export default function Profile() {
       <button className="btn btn--accent" onClick={() => navigate(`/chat/${worker.phone}`)}>
         ✉️ Xabar
       </button>
-      {(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
+     {/* {(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
         <button className="btn btn--neutral" onClick={openInMaps}>🗺 Xarita</button>
       ) : (
         <button className="btn btn--outline" disabled>🗺 Xarita</button>
-      )}
+      )*/}
     </div>
   </div>
 );

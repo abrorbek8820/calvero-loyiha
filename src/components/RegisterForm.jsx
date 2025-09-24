@@ -171,7 +171,7 @@ function RegisterForm() {
       document.cookie = `userPhone=${userPhoneDigits}; path=/; secure; SameSite=None; max-age=${60 * 60 * 24 * 365}`;
 
       setStatus('✅ Ma’lumotlar saqlandi');
-      navigate('/home', { replace: true });
+      navigate('/', { replace: true });
     } catch (err) {
       setStatus('❌ Server/Auth xatosi: ' + (err?.message || 'Noma’lum xato'));
     } finally {

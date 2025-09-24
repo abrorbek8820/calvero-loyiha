@@ -109,7 +109,7 @@ export default function Profil() {
 
   const handleLogout = async () => {
   const confirm = window.confirm(
-    "Tizimdan chiqsangiz balansdagi mablag‘ yo‘qoladi. Chiqishni istaysizmi?"
+    "Tizimdan chiqishni istaysizmi?"
   );
   if (!confirm) return;
 
