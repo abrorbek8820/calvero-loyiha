@@ -174,12 +174,12 @@ export default function Profile() {
       </div>
 
       <div className="profile-details">
-        <p>
+        {/*<p>
           <strong>📞 Telefon raqami:</strong>
           <span className="phone-link" onClick={handlePhoneClick} role="link" tabIndex={0}>
             +{worker.phone}
           </span>
-        </p>
+        </p>*/}
 
         <p><strong>📍 Tug‘ilgan shahar:</strong> {worker.birth_place || '—'}</p>
 
