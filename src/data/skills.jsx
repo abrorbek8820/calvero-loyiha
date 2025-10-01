@@ -8,6 +8,7 @@ export const maleSkills = [
   "Argon svarchik (аргон сварщик)",
   "Avto eshik ochish (вскрытие авто дверей)",
   "Dala ishlari (сельхоз работы)",
+  "Demontaj usta (демонтажник)",
   "Duradgor (плотник)",
   "Elektrik (электрик)",
   "Eshik ochish, zamok ustasi (вскрытие замков)",
@@ -25,6 +26,7 @@ export const maleSkills = [
   "Lazer xizmati (лазерные услуги)",
   "Mebel ustasi (мастер по мебели)",
   "Malyar (маляр)",
+  "Oshpaz (повар)",
   "Quyma pol ustasi (мастер по наливным полам)",
   "Nasos ustasi (мастер по насосам)",
   "O‘ra kavlovchi (землекоп)",
@@ -34,6 +36,7 @@ export const maleSkills = [
   "Yuk ortuvchi (грузчик)",
   "Quduq ustasi (мастер по колодцам)",
   "Quyosh panellari ustasi (мастер по солнечным панелям)",
+  "Sartarosh e (парикмахер м)",
   "Santexnik (сантехник)",
   "Svarchik (сварщик)",
   "Toker (токарь)",
@@ -41,23 +44,25 @@ export const maleSkills = [
   "Wi-Fi ustasi (мастер по Wi-Fi)",
   "Xolodelnik ustasi (мастер по холодильникам)",
   "Zina ustasi (мастер по лестницам)",
-  "Xar qanday halol ish (любая честная работа)",
+  "Yollanma ishchi (наёмный рабочий)",
 ];
 
 export const femaleSkills = [
   "Bug'alter (бухгалтер)",
   "Hamshira (медсестра)",
-  "Sartarosh (парикмахер)",
+  "Sartarosh a (парикмахер ж)",
   "Dizayner (дизайнер)",
   "Dekorator (декоратор)",
-  "Oshpaz (повар)",
+  "Manikyur-pedikyur (маникюр-педикюр)",
+  "Oshpaz (повариха)",
+  "Salatchi (салатница)",
   "Tikuvchi (швея)",
   "Enaga (няня)",
   "Qariya qarovchi (сиделка)",
   "Idish yuvuvchi (посудомойщица)",
   "Farrosh (уборщица)",
   "Dala ishlari (сельхоз работы)",
-  "Xar qanday halol ish (любая честная работа)"
+  "Yollanma ishchi (наёмная работница)"
 ];
 
 export const allSkills = Array.from(
