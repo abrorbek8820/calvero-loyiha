@@ -99,13 +99,27 @@ export default function Profile() {
 
   // Telefon bosilganda RPC + tel:
   const handlePhoneClick = async () => {
-    if (!worker) return;
-    try {
-      await supabase.rpc('increment_phone_views', { user_phone: worker.phone });
-    } finally {
-      window.location.href = `tel:+${worker.phone}`;
-    }
-  };
+  if (!worker) return;
+
+  // localStorage'dan clientPhone tekshiramiz
+  const clientPhone = localStorage.getItem("clientPhone");
+
+  if (!clientPhone) {
+    // Agar yo'q bo'lsa -> clientRegister sahifasiga yuboramiz
+    window.location.href = "/client-register";
+    return;
+  }
+
+  try {
+    // Telefon ko‘rishlar sonini oshirish
+    await supabase.rpc("increment_phone_views", { user_phone: worker.phone });
+
+    // Qo‘ng‘iroqqa yo‘naltirish
+    window.location.href = `tel:+${worker.phone}`;
+  } catch (err) {
+    console.error("Phone click error:", err);
+  }
+};
 
   const openInMaps = () => {
     if (!worker?.latitude || !worker?.longitude) return;
@@ -214,9 +228,22 @@ export default function Profile() {
     <div className="page-spacer" aria-hidden="true" />
     <div className="sticky-cta">
       <button className="btn btn--primary" onClick={handlePhoneClick}>📞 Qo‘ng‘iroq</button>
-      <button className="btn btn--accent" onClick={() => navigate(`/chat/${worker.phone}`)}>
-        ✉️ Xabar
-      </button>
+      <button
+  className="btn btn--accent"
+  onClick={() => {
+    const clientPhone = localStorage.getItem("clientPhone");
+
+    if (!clientPhone) {
+      // Agar yo'q bo'lsa -> clientRegister sahifasiga yo'naltiramiz
+      navigate("/client-register");
+    } else {
+      // Agar bor bo'lsa -> chat sahifasiga o'tamiz
+      navigate(`/chat/${worker.phone}`);
+    }
+  }}
+>
+  ✉️ Xabar
+</button>
      {/* {(typeof worker.latitude === 'number' && typeof worker.longitude === 'number') ? (
         <button className="btn btn--neutral" onClick={openInMaps}>🗺 Xarita</button>
       ) : (

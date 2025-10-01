@@ -90,10 +90,10 @@ export default function IshchiKerak() {
     setTheme(localStorage.getItem("mode") === "dark" ? "dark" : "light");
 
     const clientPhone = localStorage.getItem("clientPhone");
-    if (!clientPhone) {
+    /*if (!clientPhone) {
       navigate("/client-register");
       return;
-    }
+    }*/
 
     if (!navigator.geolocation) {
       setGeoWarning("Brauzeringiz GPS qo'llab-quvvatlamaydi");

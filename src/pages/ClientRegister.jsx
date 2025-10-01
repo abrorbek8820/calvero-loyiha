@@ -9,9 +9,7 @@ export default function ClientRegister() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("+998 "); // UI uchun formatlangan qiymat
-  const [accepted, setAccepted] = useState(
-    localStorage.getItem("offerAccepted") === "true"
-  );
+  const [accepted, setAccepted] = useState(true);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
 
@@ -115,7 +113,7 @@ export default function ClientRegister() {
 
   return (
     <div className="client-register-container">
-      <h2>Ro‘yxatdan o‘tish</h2>
+      <h2>Aloqa uchun ism va raqamingizni kiritib qo'ying</h2>
 
       <input
         type="text"

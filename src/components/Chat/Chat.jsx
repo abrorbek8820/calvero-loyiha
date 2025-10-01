@@ -187,7 +187,7 @@ useEffect(() => {
 
   // Polling
   useEffect(() => {
-    if (!sender_phone) navigate("/otp");
+    if (!sender_phone) navigate("/client-register");
   }, [sender_phone, navigate]);
 
   useEffect(() => {
