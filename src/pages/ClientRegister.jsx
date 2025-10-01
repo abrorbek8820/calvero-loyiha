@@ -153,7 +153,7 @@ export default function ClientRegister() {
       </div>
 
       <button onClick={handleRegister} disabled={isDisabled}>
-        {loading ? "Yuklanmoqda..." : "Ro‘yxatdan o‘tish"}
+        {loading ? "Yuklanmoqda..." : "Davom etish"}
       </button>
 
       {status && <p className="status">{status}</p>}
