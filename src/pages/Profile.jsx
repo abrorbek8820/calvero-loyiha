@@ -106,7 +106,7 @@ export default function Profile() {
 
   if (!clientPhone) {
     // Agar yo'q bo'lsa -> clientRegister sahifasiga yuboramiz
-    window.location.href = "/client-register";
+    navigate("/client-register");
     return;
   }
 
