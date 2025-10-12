@@ -114,6 +114,15 @@ export default function Profile() {
     // Telefon ko‘rishlar sonini oshirish
     await supabase.rpc("increment_phone_views", { user_phone: worker.phone });
 
+    // 2) Qaysi client kimning raqamini olganini loglash
+    await supabase.from("phone_view_logs").insert([
+      {
+        worker_phone: worker.phone,
+        client_phone: clientPhone,
+      },
+    ]);
+
+
     // Qo‘ng‘iroqqa yo‘naltirish
     window.location.href = `tel:+${worker.phone}`;
   } catch (err) {

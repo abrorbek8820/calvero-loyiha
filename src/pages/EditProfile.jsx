@@ -80,7 +80,7 @@ function EditProfile() {
       .from('workers')
       .update({
         name,
-        birth_place: `${birthPlace}lik`,
+        birth_place: `${birthPlace}`,
         birth_year: birthYear,
         gender,           // 'Erkak' | 'Ayol'
         skills,

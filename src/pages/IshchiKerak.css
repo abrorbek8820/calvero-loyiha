@@ -70,8 +70,8 @@ body.light .ishchi-kerak-container {
   background-color: #f0f0f0;
   font-size: 14px;
   transition: border-color 0.2s;
-  color: #111;
-  padding: 8px 12px;
+  color: #272727;
+  padding: 10px 15px;
   max-width: 170px;
 }
 
@@ -148,11 +148,10 @@ body.dark .worker-card {
   white-space: normal;
   overflow-wrap:anywhere;
   font-size: 14px;
-  color: #0288d1; /* light mode */
-  
+  color: #0288d1;
 }
 .dark-mode .worker-skill {
-  color: #4fc3f7; /* och ko‘k — dark mode */
+  color: #4fc3f7;
 }
 
 .worker-distance {
@@ -216,7 +215,7 @@ body.dark .worker-card {
 
 
 .filter-section select:focus {
-  border-color: #02abd1;
+  border-color: #00dbe3;
   outline: none;
 }
 
