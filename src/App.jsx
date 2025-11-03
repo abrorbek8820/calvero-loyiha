@@ -42,6 +42,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Login from "./admin/Login.jsx";
 import Hisob from "./admin/Hisob.jsx";
 import Decoy from "./admin/Decoy.jsx";
+import KvartiraFrame from "./lib/KvartiraFrame.jsx";
 
 
 function Protected({ children }) {
@@ -108,6 +109,8 @@ function App() {
   <Route path="/verify" element={<VerifyPage />} />
   <Route path="/otp" element={<OtpPage />} />
   <Route path="/login" element={<Login />} />
+  <Route path="/kvartira" element={<KvartiraFrame />} />
+
       <Route path="/hisob" element={<Protected><Hisob /></Protected>} />
       {/* Decoy / random paths — you can add several fixed decoys */}
       <Route path="/hdjj--%23+jdbucf" element={<Decoy />} />

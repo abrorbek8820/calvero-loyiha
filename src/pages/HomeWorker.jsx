@@ -42,9 +42,9 @@ function Home() {
     setTimeout(() => {
       // 🌐 Agar subdomen bo‘lsa — URL’ga mode ni qo‘shamiz
       if (link.includes("kvartira.calvero.work")) {
-        const connector = link.includes("?") ? "&" : "?";
-        window.location.href = `${link}${connector}mode=${mode}`;
-      } else {
+  navigate(`/kvartira?mode=${mode}`);
+}
+ else {
         navigate(link);
       }
     }, 700);
