@@ -5,10 +5,25 @@ function KvartiraFrame() {
   const params = new URLSearchParams(location.search);
 
   const mode = params.get("mode") || "light";
-  const url = decodeURIComponent(params.get("url") || "");
+  const rawUrl = decodeURIComponent(params.get("url") || "");
 
-  // Agar URL bo‘lmasa, fallback qilib kvartira bosh sahifasini ko‘rsatamiz
-  const iframeSrc = url || `https://kvartira.calvero.work/?mode=${mode}`;
+  // 🌗 mode parametrini subURL ichiga majburan qo‘shamiz
+  let iframeSrc = "";
+  if (rawUrl) {
+    // Agar rawUrl ichida allaqachon mode bo‘lsa, qayta qo‘shmaymiz
+    const hasMode = rawUrl.includes("mode=");
+    if (hasMode) {
+      iframeSrc = rawUrl;
+    } else {
+      const hasQuery = rawUrl.includes("?");
+      const connector = hasQuery ? "&" : "?";
+      iframeSrc = `${rawUrl}${connector}mode=${mode}`;
+    }
+  } else {
+    iframeSrc = `https://kvartira.calvero.work/?mode=${mode}`;
+  }
+
+  console.log("iframeSrc:", iframeSrc); // 👈 tekshirish uchun
 
   return (
     <iframe
