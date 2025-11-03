@@ -1,5 +1,5 @@
 import './HomeSinov.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
@@ -8,6 +8,14 @@ function Home() {
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(null);
   const [mode, setMode] = useState(localStorage.getItem("mode") || "light");
+  const location = useLocation();
+
+// Har safar sahifaga qaytilganda "clickedIndex" ni reset qilamiz
+useEffect(() => {
+  setClickedIndex(null);
+  // Bu animatsiyani qayta ishga tushirish uchun 100ms kechikish bilan re-render qiladi
+}, [location.key]);
+
 
   // ✅ Boshlang‘ich rejimni qo‘llash
   useEffect(() => {
@@ -38,20 +46,20 @@ function Home() {
 
   // 🚀 Tugma bosilganda navigatsiya
   const handleClick = (index, link) => {
-    setClickedIndex(index);
-    setTimeout(() => {
-      // 🌐 Agar subdomen bo‘lsa — URL’ga mode ni qo‘shamiz
-      if (link.includes("kvartira.calvero.work")) {
-  navigate(`/kvartira?mode=${mode}`);
-}
- else {
-        navigate(link);
-      }
-    }, 700);
-  };
+  setClickedIndex(index);
+  setTimeout(() => {
+    if (link.includes("kvartira.calvero.work")) {
+      // Kvartira sahifalarini iframe orqali ochamiz
+      const encoded = encodeURIComponent(link);
+      navigate(`/kvartira?url=${encoded}&mode=${mode}`);
+    } else {
+      navigate(link);
+    }
+  }, 700);
+};
 
   return (
-    <div className="container">
+    <div className="container" key={location.key}>
       {/* 🌗 Menyu */}
       <div className="menu-wrapper">
         <button
