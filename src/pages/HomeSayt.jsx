@@ -1,45 +1,66 @@
-import './Home.css';
-import { useNavigate } from 'react-router-dom';
+import './HomeSinov.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 function Home() {
   const navigate = useNavigate();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
-  const [clicked, setClicked] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [clickedIndex, setClickedIndex] = useState(null);
+  const [mode, setMode] = useState(localStorage.getItem("mode") || "light");
+  const location = useLocation();
 
-  const handleButtonClick = (action) => {
-    setClicked(true);
-    setTimeout(() =>{
-      setClicked(false);
-      action();
-    }, 1000);
-  };
+// Har safar sahifaga qaytilganda "clickedIndex" ni reset qilamiz
+useEffect(() => {
+  setClickedIndex(null);
+  // Bu animatsiyani qayta ishga tushirish uchun 100ms kechikish bilan re-render qiladi
+}, [location.key]);
 
+
+  // ✅ Boshlang‘ich rejimni qo‘llash
   useEffect(() => {
-    const mode = localStorage.getItem("mode") || "light";
-    document.body.classList.remove("light", "dark");
-    document.body.classList.add(mode);
+    applyTheme(mode);
   }, []);
 
-  const toggleMode = (mode) => {
+  // ✅ Tema qo‘llash funksiyasi
+  const applyTheme = (selectedMode) => {
     document.body.classList.remove("light", "dark");
-    document.body.classList.add(mode);
-    localStorage.setItem("mode", mode);
+    document.body.classList.add(selectedMode);
+    localStorage.setItem("mode", selectedMode);
+    setMode(selectedMode);
+  };
+
+  // ✅ Tema tanlash (kun/tun)
+  const toggleMode = (newMode) => {
+    applyTheme(newMode);
     setShowThemeMenu(false);
   };
 
-  const handleWorkerClick = () => {
-    setShowConfirm(true); // modal yoki xabar chiqadi
-  };
+  // 🔘 Tugmalar ro‘yxati
+  const buttons = [
+    { text: "ISHCHI KERAK", link: "/ishchi-kerak" },
+    { text: "ISH KERAK", link: "/ishkerak" },
+    { text: "IJARA UY KERAK", link: "https://kvartira.calvero.work/uy-kerak" },
+    { text: "MENING UYLARIM", link: "https://kvartira.calvero.work/my-houses" },
+  ];
 
-  const handleContinue = () => {
-    window.open("https://calvero.work/", "_blank"); 
-    setShowConfirm(false);
-  };
+  // 🚀 Tugma bosilganda navigatsiya
+  const handleClick = (index, link) => {
+  setClickedIndex(index);
+  setTimeout(() => {
+    if (link.includes("kvartira.calvero.work")) {
+      // Kvartira sahifalarini iframe orqali ochamiz
+      const encoded = encodeURIComponent(link);
+      navigate(`/kvartira?url=${encoded}&mode=${mode}`);
+    } else {
+      navigate(link);
+    }
+  }, 700);
+};
 
   return (
-    <div className="container">
+    <div className="container" key={location.key}>
+      {/* 🌗 Menyu */}
       <div className="menu-wrapper">
         <button
           className="menu-button"
@@ -50,39 +71,57 @@ function Home() {
 
         {showThemeMenu && (
           <div className="theme-menu active">
-            <div onClick={() => toggleMode("light")}>🌞 Kungi rejim</div>
-            <div onClick={() => toggleMode("dark")}>🌙 Tungi rejim</div>
+            <div
+              onClick={() => toggleMode("light")}
+              className={mode === "light" ? "active" : ""}
+            >
+              🌞 KUNGI REJIM
+            </div>
+            <div
+              onClick={() => toggleMode("dark")}
+              className={mode === "dark" ? "active" : ""}
+            >
+              🌙 TUNGI REJIM
+            </div>
           </div>
         )}
       </div>
 
+      {/* 🏷️ Sarlavha */}
       <div className="title-wrapper">
-        <h1 className="title">CALVERO WORK<span className="trademark sparkle">™</span></h1>
+        <h1 className="title">
+          CALVERO <span className="sub">PLATFORM</span>
+        </h1>
+        <p className="subtitle">Halol mehnat uchun yagona tizim</p>
       </div>
 
+      {/* 🔘 Tugmalar */}
       <div className="buttons-wrapper">
-        <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={(() => navigate('/ishchi-kerak'))}>
-          ISHCHI KERAK
-        </button>
-
-         <button className={`button $ {clicked ? 'clicked' : ''}`} onClick={(() => navigate('/ishkerak'))}>
-        ISH KERAK
-      </button>
-
-      {/*} <div className="download-section">
-  <p>
-    Istasangiz sayt orqali foydalaning. <br />
-    <strong>Qulaylik uchun Calvero Worker ilovasini yuklab oling!</strong>
-  </p>
-  <a href="/CalveroWorker.apk" className="download-btn">
-    ⬇️ Worker ilovasini yuklab olish
-  </a>
-</div>*/}
-
-
+        {buttons.map((btn, index) => (
+          <motion.button
+            key={index}
+            className="button"
+            initial={{ x: -200, opacity: 0 }}
+            animate={
+              clickedIndex === null
+                ? { x: 0, opacity: 1 }
+                : clickedIndex === index
+                ? { x: 0, opacity: 1, scale: 1.05 }
+                : { x: -200, opacity: 0 }
+            }
+            transition={{
+              delay: clickedIndex === null ? index * 0.2 : 0,
+              duration: 0.5,
+              ease: "easeOut",
+            }}
+            onClick={() => handleClick(index, btn.link)}
+          >
+            {btn.text}
+          </motion.button>
+        ))}
       </div>
 
-      <div className="footer">©Calvero-Work 2025</div>
+      <div className="footer">© Calvero 2025</div>
     </div>
   );
 }
